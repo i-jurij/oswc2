@@ -12,10 +12,11 @@ You need [Composer](https://getcomposer.org/) and [npm](https://nodejs.org/en/le
 
 Copy project in your path:   
 
-	git clone https://github.com/ijurij/oswc2.git
+	git clone https://github.com/i-jurij/oswc2.git
 	cd oswc2
 	composer install
 	npm install
+	npm run build
 
 Ensure the `temp/` and `log/` directories are writable.
 
