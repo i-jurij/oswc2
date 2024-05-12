@@ -2,14 +2,20 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="description" content="Description of page">
+  	<meta name="keywords" content="Keywords of page">
+	<meta name="Robots" content="INDEX, FOLLOW">
+  	<!--  <meta name="referrer" content="origin-when-cross-origin"> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<title>{ifset title}{include title|stripHtml} | {/ifset}-</title>
+	<meta name="author" content="I-Jurij">
+	<title>{ifset title}{include title|stripHtml} | {/ifset}---</title>
 
 	<!-- Google Fonts 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
 	-->
-	<link rel="stylesheet" href="{webpack css/style.min.css}">
+	<link rel="stylesheet" href="{webpack css/main.css}">
+	<link rel="icon" href="{webpack images/favicon.png}" />
 
 </head>
 
@@ -19,7 +25,7 @@
 	{include content}
 
 	{block scripts}
-		<script src="{webpack js/bundle.js}"></script>
+		<script src="{webpack js/main.js}"></script>
 	{/block}
 </body>
 </html>

@@ -3,15 +3,18 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
-    entry: './resources/js/app.js',
+    entry: {
+        main: ['./resources/js/main.js', './resources/css/main.css'],
+        admin: ['./resources/admin/js/admin.js', './resources/admin/css/admin.css'],
+    },
     mode: (process.env.NODE_ENV === 'production') ? 'production' : 'development',
     resolve: {
         extensions: ['*', '.js', '.jsx']
     },
     output: {
         path: path.join(__dirname, 'www', 'assets'),
-        filename: 'js/bundle.js',
-        clean: true,
+        filename: 'js/[name].js',
+        // clean: true, // folder from path cleaning
     },
     devServer: {
         static: path.join(__dirname, 'www/'),
@@ -19,41 +22,43 @@ module.exports = {
             publicPath: '/assets/'
         },
         port: 3000,
-        hot: "only",
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+            "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+        },
+        hot: true,
         client: {
-            // Показывает ошибки при компиляции в самом браузере
             overlay: {
-                // Ошибки
                 errors: true,
-                // Предупреждения
                 warnings: false,
             },
-            // Показывает процесс компиляции
             progress: true
         },
     },
-    /*
-    //// load css into DOM (one js file) ////
-    module: {
-        rules: [
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
-            },
-        ],
-    },
-    //// end load css into DOM (one js file) ////
-    */
-    //// css as separate file ////
     module: {
         rules: [
             {
                 test: /.s?css$/,
                 use: [
-                    MiniCssExtractPlugin.loader, // CSS to separate file
-                    'css-loader', // CSS to CommonJS
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
                     // 'sass-loader' // for sass, compile SCSS to CSS
                 ],
+            },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif|ico|webp)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'images/[name][hash][ext]'
+                },
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'fonts/[hash][ext][query]'
+                },
             },
         ],
     },
@@ -74,8 +79,7 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'css/style.min.css',
+            filename: 'css/[name].css',
         }),
     ],
-    //// end css as different file ////
 };

@@ -1,0 +1,117 @@
+@import '~normalize.css';
+@import '~milligram/dist/milligram.min.css';
+
+@font-face {
+    font-family: "system";
+    font-style: normal;
+    font-weight: 400;
+    src: local(".SFNS-Regular"), local(".SFNSText-Regular"), local(".HelveticaNeueDeskInterface-Regular"), local(".LucidaGrandeUI"), local("Segoe UI"), local("Ubuntu"), local("Cantarell"), local("Roboto-Regular"), local("DroidSans"), local("Tahoma");
+}
+
+@font-face {
+    font-family: "system";
+    font-style: italic;
+    font-weight: 400;
+    src: local(".SFNS-Italic"), local(".SFNSText-Italic"), local(".HelveticaNeueDeskInterface-Italic"), local(".LucidaGrandeUI"), local("Segoe UI Italic"), local("Ubuntu Italic"), local("Cantarell Italic"), local("Roboto-Italic"), local("DroidSans"), local("Tahoma");
+}
+
+@font-face {
+    font-family: 'Nautilus Pompilius';
+    src: url('../fonts/nautiluspompilius.woff2') format('woff2'), url('../fonts/nautiluspompilius.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+:root {
+    color-scheme: light dark;
+    --big-fontsize: 1.5rem;
+    --base-fontsize: 1.2rem;
+    --middle-fontsize: 1.1rem;
+    --small-fontsize: 1rem;
+    /*    --base-lineheight: 1.8rem; */
+
+    --radius: 0.4rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bgcolor: #9F091F;
+        --bgcolor-content: #282C34;
+        --bgcolor-button-active: black;
+
+        --fontcolor-light: #d7d7d7;
+        --fontcolor-dark: #1CBADF;
+
+        --fontshadow: 1px 1px 1px rgba(0, 0, 0, 0.9);
+        --boxshadow: rgba(0, 0, 0, 0.6) 0px 2px 2px 0px, rgba(0, 0, 0, 0.6) 0px 3px 1px -2px, rgba(0, 0, 0, 0.6) 0px 1px 5px 0px;
+        --boxshadow-active: rgba(0, 0, 0, 0.24) 1px 3px 3px 1px, rgba(0, 0, 0, 0.3) 1px 4px 2px -3px, rgba(0, 0, 0, 0.2) 1px 2px 6px 1px;
+
+        --date_time_item_back: #535353;
+        --date_time_item_back-active: #9F091F;
+        --date_time_item_back-disabled: #353941;
+        --date_time_item_color-disabled: #676767;
+
+        --button-disabled-color: Maroon;
+
+        --table-bgcolor1: #282C34;
+        --table-bgcolor2: #161B23;
+
+        --table-border: 1px solid #000;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bgcolor: #BE4874;
+        --bgcolor-content: rgba(245, 243, 246, 1);
+        --bgcolor-button-active: white;
+
+        --fontcolor-light: #494949;
+        --fontcolor-dark: #1CBADF;
+
+        --fontshadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        --boxshadow: rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+        --boxshadow-active: rgba(0, 0, 0, 0.24) 1px 3px 3px 1px, rgba(0, 0, 0, 0.3) 1px 4px 2px -3px, rgba(0, 0, 0, 0.2) 1px 2px 6px 1px;
+
+        --date_time_item_back: #E5E5E5;
+        --date_time_item_back-active: #C3C9DF;
+        --date_time_item_back-disabled: #ECECEC;
+        --date_time_item_color-disabled: #A9A0A0;
+
+        --button-disabled-color: MediumVioletRed;
+
+        --table-bgcolor1: #fff;
+        --table-bgcolor2: #F7F7F7;
+        --table-border: 1px solid #C4C4C4;
+    }
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bgcolor-content, white);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: "system", "Arial", "Roboto", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: var(--base-fontsize);
+    /* line-height: var(--base-lineheight);*/
+    max-width: 1640px;
+    /* margin: 0 auto; */
+    text-align: center;
+    color: var(--fontcolor-light, red);
+}
+
+a,
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Nautilus Pompilius', cursive;
+    color: var(--fontcolor-light, red);
+}
