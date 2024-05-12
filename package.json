@@ -1,0 +1,25 @@
+{
+  "name": "nette-webpack",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "build": "cross-env NODE_ENV=production webpack"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "css-loader": "^7.1.1",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "html-webpack-plugin": "^5.6.0",
+    "mini-css-extract-plugin": "^2.9.0",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "dependencies": {
+    "milligram": "^1.4.1",
+    "nette-forms": "^3.3.6",
+    "normalize.css": "^8.0.1"
+  }
+}

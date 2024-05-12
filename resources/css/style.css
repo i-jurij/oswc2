@@ -1,0 +1,25 @@
+@import '~normalize.css';
+@import '~milligram/dist/milligram.min.css';
+
+@font-face {
+    font-family: "system";
+    font-style: normal;
+    font-weight: 400;
+    src: local(".SFNS-Regular"), local(".SFNSText-Regular"), local(".HelveticaNeueDeskInterface-Regular"), local(".LucidaGrandeUI"), local("Segoe UI"), local("Ubuntu"), local("Cantarell"), local("Roboto-Regular"), local("DroidSans"), local("Tahoma");
+}
+
+@font-face {
+    font-family: "system";
+    font-style: italic;
+    font-weight: 400;
+    src: local(".SFNS-Italic"), local(".SFNSText-Italic"), local(".HelveticaNeueDeskInterface-Italic"), local(".LucidaGrandeUI"), local("Segoe UI Italic"), local("Ubuntu Italic"), local("Cantarell Italic"), local("Roboto-Italic"), local("DroidSans"), local("Tahoma");
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: "system", "Arial", "Roboto", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}

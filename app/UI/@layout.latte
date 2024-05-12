@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{ifset title}{include title|stripHtml} | {/ifset}CMS</title>
+
+	<!-- Google Fonts 
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+	-->
+	<link rel="stylesheet" href="{webpack css/style.min.css}">
+
+</head>
+
+<body>
+	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
+	{include content}
+
+	{block scripts}
+		<script src="{webpack js/bundle.js}"></script>
+	{/block}
+</body>
+</html>
