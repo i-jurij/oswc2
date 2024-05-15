@@ -14,7 +14,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'www', 'assets'),
         filename: 'js/[name].js',
-        // clean: true, // folder from path cleaning
+        clean: true, // folder from path cleaning
     },
     devServer: {
         static: path.join(__dirname, 'www/'),
@@ -38,6 +38,12 @@ module.exports = {
     },
     module: {
         rules: [
+            /*
+            {
+                test: /\.(html)$/,
+                use: ['html-loader']
+            },
+            */
             {
                 test: /.s?css$/,
                 use: [
@@ -48,10 +54,11 @@ module.exports = {
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif|ico|webp)$/i,
-                type: 'asset/resource',
+                type: 'asset',
                 generator: {
-                    filename: 'images/[name][hash][ext]'
+                    filename: 'images/[hash][ext][query]'
                 },
+                parser: { dataUrlCondition: { maxSize: 8 * 1024 } }, // Limit to 8KB
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,

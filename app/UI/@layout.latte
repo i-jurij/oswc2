@@ -3,27 +3,44 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<meta name="description" content="Description of page">
-  	<meta name="keywords" content="Keywords of page">
-	<meta name="Robots" content="INDEX, FOLLOW">
+	<meta name="description" content="{default $description='Description'}{$description}">
+  	<meta name="keywords" content="{default $keywords='Keywords'}{$keywords}">
+	<meta name="Robots" content="{default $robots = 'INDEX, FOLLOW'}{$robots}">
   	<!--  <meta name="referrer" content="origin-when-cross-origin"> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="author" content="I-Jurij">
-	<title>{ifset title}{include title|stripHtml} | {/ifset}---</title>
-
+	 <title>{default $title = "Title"}{$title}</title> 
 	<!-- Google Fonts 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
 	-->
 	<link rel="stylesheet" href="{webpack css/main.css}">
-	<link rel="icon" href="{webpack images/favicon.png}" />
+	<link rel="icon" href="{$basePath}/images/favicon.ico">
 
 </head>
 
 <body>
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+	<div class="wrapper">
+		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+		
+		{include header from 'layout-header.latte'}
 
-	{include content}
+		<div class="main ">
+		<section class="main_section">
+			<div class="flex flex_top">
+				<div class="content title">
+					<h2>{$title}</h2>
+				</div>
+				{ifset content}
+					{include content}
+				{else}
+					{default $content = "Some content"}{$content}
+				{/ifset}
+			</div>
+		</section>
+		</div>
 
+		{include footer from 'layout-footer.latte'}
+	</div>
 	{block scripts}
 		<script src="{webpack js/main.js}"></script>
 	{/block}

@@ -1,8 +1,5 @@
-import '../css/main.css';
-import '../images/favicon.png';
-
-// import src from "./avatar.png";
-// const Profile = () => <img src={src} />;
+// import img from '.. /img/simao.jpg';
+// document.body.style.background = `url(${img}) `
 
 // import naja from 'naja';
 import netteForms from 'nette-forms';

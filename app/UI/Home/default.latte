@@ -1,11 +1,52 @@
-{* This is the welcome page, you can delete it *}
+{layout '../@layout.latte'}
+
+{var $title = "Simple CMS"}
+{var $description = "Simple CMS"}
+{var $keywords = "Keywords of main page"}
+{var $robots = "INDEX,FOLLOW"}
+{var $data['content'] = 'CONTENT FOR DEL IN FUTURE'}
 
 {block content}
-<div id="banner">
-	<h1 n:block=title>OSWC2</h1>
-</div>
+	{default $page_alias = 'ddd'}
+	{default $page_title = 'Empty title'}
+	{default $page_descr = 'Not a single page exists'}
 
-<div id="content">
-	<h2>Article name</h2>
-	<p class="">Content of article</p>
-</div>
+	{if $page_alias === 'ddd'}{$url = ''}{else}{$url = $page_alias}{/if}
+	{if is_readable('{$basePath}/images/pages/{$page_alias}.jpg')}
+		{default $img = 'images/pages/{$page_alias}.jpg'}
+	{else}
+		{default $img = 'images/ddd.jpg'}
+	{/if}
+
+	{capture $page}
+		<article class="main_section_article ">
+			<a class="main_section_article_content_a" href="{$baseUrl}/{$url}" >
+				<div class="main_section_article_imgdiv">
+					<img src="{$basePath}/{$img}" alt="Фото {default $page_title}{$page_title}" class="main_section_article_imgdiv_img" />
+				</div>
+
+				<div class="main_section_article_content">
+					<h2>{$page_title}</h2>
+					<span>{$page_descr}</span>
+				</div>
+			</a>
+		</article>
+	{/capture}
+
+	{ifset $pages_data}
+		{foreach $pages_data as $page_data}
+			{$page_alias = $page_data['alias'] }
+			{$page_title = $page_data['title']}
+			{$page_descr = $page_data['description']}
+			{$page}
+		{/foreach}
+	{else}
+	    {ifset $pages}
+			{foreach $pages as $key => $value}
+				{$value}<br>
+			{/foreach}
+		{/ifset}
+		{$page}
+		{*default $content = "Content of main page"}{$content*}
+	{/ifset}
+{/block}
