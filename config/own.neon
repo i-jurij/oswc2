@@ -1,0 +1,6 @@
+constants:
+	APPDIR: %appDir%
+security:
+	users:
+		admin: password
+        

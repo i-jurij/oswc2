@@ -1,16 +1,14 @@
 	{*layout '@layout.latte'*}
 	{block footer}
-		<footer class="foot">
-			<div class="foot_div">
-				{include contacts from 'layout-contacts.latte'}
-			</div>
-			<div class="foot_div">
-			{if date('Y') != '2024' }
-				2024 - {date('Y') . PHP_EOL}
-			{else}
-				{date('Y') . PHP_EOL}
-			{/if}
-			<br /><small id="mail">Copyright © <a href="https://github.com/i-jurij" >I-Jurij</a></small>
-			</div>
+		<footer class="" id="main_footer">
+			{include contacts from 'layout-contacts.latte'}
+			<div class="content has-text-centered">
+				{if date('Y') != '2024' }
+					2024 - {date('Y') . PHP_EOL}
+				{else}
+					{date('Y') . PHP_EOL}
+				{/if}
+				<br /><small id="mail">Copyright © <a href="https://github.com/i-jurij" >I-Jurij</a></small>
+			</div>	
 		</footer>
 	{/block}

@@ -18,7 +18,8 @@
     "webpack-dev-server": "^5.0.4"
   },
   "dependencies": {
-    "milligram": "^1.4.1",
+    "all": "^0.0.0",
+    "bulma": "^1.0.0",
     "nette-forms": "^3.3.6",
     "normalize.css": "^8.0.1"
   }

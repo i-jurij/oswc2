@@ -5,7 +5,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<meta name="description" content="{default $description='Description'}{$description}">
   	<meta name="keywords" content="{default $keywords='Keywords'}{$keywords}">
-	<meta name="Robots" content="{default $robots = 'INDEX, FOLLOW'}{$robots}">
+	<meta name="Robots" content="{default $robots = 'NOINDEX, NOFOLLOW'}{$robots}">
   	<!--  <meta name="referrer" content="origin-when-cross-origin"> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="author" content="I-Jurij">
@@ -13,33 +13,24 @@
 	<!-- Google Fonts 
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
 	-->
-	<link rel="stylesheet" href="{webpack css/main.css}">
+	<link rel="stylesheet" href="{webpack css/admin.css}">
 	<link rel="icon" href="{$basePath}/images/favicon.ico">
 
 </head>
 
 <body>
-
-	<div n:if="$user->isLoggedIn()" style="text-align:right;">
-		<a n:href="Sign:out">Выйти</a>
-	</div>
-
-	<section class="container hero is-fullheight" id="main">
-		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type" style="text-align:right;">{$flash->message}</div>
-		{include header from 'layout-header.latte'}
-		<div class="container">
-			<div  id="main_section">
-				<h1 class="bgcontent_pad_rad_center">{$title}</h1>
-				<div class="has-text-centered">
-					{include content}	
-				</div>
-			</div>
-
-		</div>
-		{include footer from 'layout-footer.latte'}
-	</section>
+	<div class="wrapper">
+		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+        vhgjkl;	
+        {*}
+		{if $user->isLoggedIn()}
+			<a n:href="Sign:out">Выйти</a>
+		{else}
+			<a n:href="Sign:in" style="background:var(--bgcolor);">Войти</a>
+		{/if}
+		*}
 	{block scripts}
-		<script src="{webpack js/main.js}"></script>
+		<script src="{webpack js/admin.js}"></script>
 	{/block}
 </body>
 </html>

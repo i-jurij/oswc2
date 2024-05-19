@@ -19,29 +19,32 @@
         {var $data['telegram'] = [0 => 'tg']}
         {var $data['vk'] = [0 => 'vk']}
         {var $data['tlf'] = ['+7999 777 66 55']}
+        {var $data['adres'] = ['City, Street, House']}
     {/ifset}
-    <div class="he_soz_tlf flex">
-        <div class="he_soz">
-            {ifset $data['telegram']}
-                    <a href="tg://resolve?domain={$data['telegram'][0]}" title="Telegram" class="he_soz-tg" target="_blank" rel="noopener"></a>
-            {/ifset}
-            {ifset $data['vk']}
-                    <a href="https://vk.com/{$data['vk'][0]}" title="Вконтакте" class="he_soz-vk" target="_blank" rel="noopener"></a>
-            {/ifset}
-        </div>
 
-        <div class="he_tlf">
+<header class="level" id="header">
+    <div class="level-item has-text-centered">
+            <div class="he_soz">
+                {ifset $data['telegram']}
+                        <a href="tg://resolve?domain={$data['telegram'][0]}" title="Telegram" class="he_soz-tg" target="_blank" rel="noopener"></a>
+                {/ifset}
+                {ifset $data['vk']}
+                        <a href="https://vk.com/{$data['vk'][0]}" title="Вконтакте" class="he_soz-vk" target="_blank" rel="noopener"></a>
+                {/ifset}
+            </div>
             {ifset $data['tlf']}
                 {foreach $data['tlf'] as $tlf}
                     <a href="tel:{$tlf}">{$tlf}</a><br />
                 {/foreach}
             {/ifset}
-        </div>
     </div>
-
-    {ifset $data['adres']}
-        <div class="he_adres">
+    <div class="level-item has-text-centered">
+        <h1 class="" id="main_title">OSWC2</h1>
+    </div>
+    <div class="level-item has-text-centered">
+        {ifset $data['adres']}
             <a class="he_adres_a" href="{$baseUrl}/map/">{$data['adres'][0]}</a>
-        </div>
-    {/ifset}
+        {/ifset}
+    </div>
+</header>
 {/block}
