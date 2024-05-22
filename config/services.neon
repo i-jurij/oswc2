@@ -1,5 +1,6 @@
 services:
 	- App\Core\RouterFactory::createRouter
+	- App\Model\PagesListFacade(@database.pages_sqlite.connection)
 
 
 search:

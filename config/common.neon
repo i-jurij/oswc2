@@ -9,9 +9,19 @@ application:
 
 
 database:
-	dsn: 'sqlite::memory:'
-	user:
-	password:
+	default:
+		dsn: 'mysql:host=127.0.0.1;dbname=xxx'
+		user: 'xxx'
+		password: 'xxx'
+		options:
+			lazy: yes
+	pages_sqlite:
+		#dsn: 'sqlite::memory:'
+		dsn: "sqlite:%appDir%/Model/pages_sqlite.db"
+		user:
+		password:
+		options:
+			lazy: yes
 
 
 latte:

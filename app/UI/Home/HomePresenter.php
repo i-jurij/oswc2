@@ -12,18 +12,26 @@ use Nette\Utils\Finder;
  */
 final class HomePresenter extends Nette\Application\UI\Presenter
 {
+    public function __construct(private \App\Model\PagesListFacade $db_pages)
+    {
+    }
+
     public function renderDefault()
     {
-        $this->template->pages = Finder::findDirectories('*')->in(APPDIR.'/UI/Home/Pages');
+        $db_data = $this->db_pages->getPagesData();
+        if (count($db_data) > 0) {
+            $this->template->pages_data = $db_data;
+        }
     }
 }
 class HomeTemplate extends Nette\Bridges\ApplicationLatte\Template
 {
-    public Finder $pages;
+    // public Finder $pages;
     public Nette\Security\User $user;
     public string $basePath;
     public string $baseUrl;
     public array $flashes;
     public object $presenter;
     public object $control;
+    public array $pages_data;
 }

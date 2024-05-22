@@ -28,8 +28,8 @@
 		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type" style="text-align:right;">{$flash->message}</div>
 		{include header from 'layout-header.latte'}
 		<div class="container">
-			<div  id="main_section">
-				<h1 class="bgcontent_pad_rad_center">{$title}</h1>
+			<div id="main_section">
+				<h1 class="bgcontent_pad_rad_center" id="main_title">{$title}</h1>
 				<div class="has-text-centered">
 					{include content}	
 				</div>
