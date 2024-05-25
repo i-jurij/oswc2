@@ -20,27 +20,31 @@
 
 <body>
 
-	<div n:if="$user->isLoggedIn()" style="text-align:right;">
-		<a n:href="Sign:out">Выйти</a>
+	<div class="header_main">
+		<div n:if="$user->isLoggedIn()" style="text-align:right;">
+			<a n:href="Sign:out">Выйти</a>
+		</div>
+
+		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type" style="text-align:right;">
+			{$flash->message}
+		</div>
+		{include header from 'layout-header.latte'}
+		<main class="main_section">
+			<h1 class="m05p05 rounded center shadow bgcontent main_title">{$title}</h1>
+			<div class="center">
+				{include content}	
+			</div>
+		</main>
 	</div>
 
-	<section class="container hero is-fullheight" id="main">
-		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type" style="text-align:right;">{$flash->message}</div>
-		{include header from 'layout-header.latte'}
-		<div class="container">
-			<div id="main_section">
-				<h1 class="bgcontent_pad_rad_center" id="main_title">{$title}</h1>
-				<div class="has-text-centered">
-					{include content}	
-				</div>
-			</div>
+	<div class="spacer"></div>
 
-		</div>
+	<footer class="main_footer">
 		{include footer from 'layout-footer.latte'}
 		<div !n:if="$user->isLoggedIn()">
 			<a n:href="Sign:in" style="color:var(--bgcolor-content);">Enter</a>
 		</div>
-	</section>
+	</footer>
 
 	{block scripts}
 		<script src="{webpack js/main.js}"></script>
