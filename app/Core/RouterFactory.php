@@ -17,6 +17,9 @@ final class RouterFactory
         $router->addRoute('sign:in', 'Sign:in');
         $router->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
 
+        /* for my router
+        $router[] = new Route('/<param .+>', 'Homepage:default');
+        */
         return $router;
     }
 }

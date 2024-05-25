@@ -1,8 +1,8 @@
 	{*layout '@layout.latte'*}
 	{block footer}
-		<footer class="" id="main_footer">
+		<footer class="main_footer">
 			{include contacts from 'layout-contacts.latte'}
-			<div class="content has-text-centered">
+			<div class="">
 				{if date('Y') != '2024' }
 					2024 - {date('Y') . PHP_EOL}
 				{else}

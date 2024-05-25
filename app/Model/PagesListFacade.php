@@ -16,7 +16,9 @@ final class PagesListFacade
             $pages_sqlite->transaction(function ($pages_sqlite) {
                 $pages_sqlite->query('CREATE TABLE IF NOT EXISTS  pages(
                 "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-                "alias" VARCHAR(100) UNIQUE NOT NULL, 
+                "alias" VARCHAR(100) UNIQUE NOT NULL,
+                "route" VARCHAR(100),
+                "path" VARCHAR(100), 
                 "title" VARCHAR(100), 
                 "description" VARCHAR(255), 
                 "keywords" VARCHAR(500), 

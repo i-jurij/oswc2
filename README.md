@@ -33,12 +33,24 @@ For Apache or Nginx users, configure a virtual host pointing to your project's `
 **Important Note:** Ensure `app/`, `config/`, `log/`, and `temp/` directories are not web-accessible.
 Refer to [security warning](https://nette.org/security-warning) for more details.
 
-## Webpack
+## CSS 
+App use [bulma](https://bulma.io/documentation/) - a CSS framework.  
 
+## Webpack
     `npm run dev` - mode development (rereads js and css on the fly, address is host_ip:3000/assets),   
     `npm run build` - mode production for prepare js and css into www/assets.   
 
-Entry is `resources/js/app.js` and `resources/css/style.css`, all other js files and css files must be imported into them.   
+Entry is `resources/js/app.js` and `resources/css/style.css`, all other js files and css files can be imported into them.  
 
-## CSS 
-App use [milligram](https://milligram.io) - a minimalist CSS framework.  
+## Work
+### Config   
+Configs files are located in "app/config". Read this [documentation](https://doc.nette.org/en/configuring).   
+Config `pages_sqlite` is require for page menu on main page and admin pages.  
+
+### Routing
+"app/Core/RouterFactory.php", [documentation](https://doc.nette.org/en/application/routing)  
+Application use three main routes: "Home", "Sign" and "Admin".   
+??? And "Home::Pages::OtherPresenters::method", "Admin::Pages::OtherPresenters::method".   
+
+### Models
+`PagesListFacade` - create table pages (for menu at main page).   

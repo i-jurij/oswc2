@@ -37,7 +37,11 @@
 
 		</div>
 		{include footer from 'layout-footer.latte'}
+		<div !n:if="$user->isLoggedIn()">
+			<a n:href="Sign:in" style="color:var(--bgcolor-content);">Enter</a>
+		</div>
 	</section>
+
 	{block scripts}
 		<script src="{webpack js/main.js}"></script>
 	{/block}

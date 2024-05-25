@@ -89,4 +89,7 @@ module.exports = {
             filename: 'css/[name].css',
         }),
     ],
+    stats: {
+        errorDetails: true,
+    },
 };
