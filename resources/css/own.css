@@ -99,7 +99,7 @@ body {
 body {
     font-family: "content", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     /* font-family: system-ui, sans-serif; */
-    max-width: 2480px;
+    max-width: 1920px;
     margin: 0 auto;
     color: var(--fontcolor-light, red);
     padding: 1rem;
@@ -300,6 +300,16 @@ h1,
     color: var(--fontcolor-light);
     text-decoration: underline;
     text-decoration-style: dotted;
+}
+
+.form {
+    width: 100%;
+    max-width: 22rem;
+    margin: 1rem auto 0 auto;
+    padding: 1rem 1rem 1rem 1rem;
+    border-radius: 0.4rem;
+    background: var(--bgcolor-content) none repeat scroll 0% 0%;
+    box-shadow: var(--boxshadow);
 }
 
 /* ----------- resolution up to 1920px ----------------- */

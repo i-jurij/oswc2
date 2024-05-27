@@ -4,7 +4,6 @@ namespace App\UI\Sign;
 
 use Nette;
 use Nette\Application\UI\Form;
-use Nette\Utils\Html;
 
 final class SignPresenter extends Nette\Application\UI\Presenter
 {
@@ -14,35 +13,48 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
         // setup custom rendering
         $renderer = $form->getRenderer();
-        $renderer->wrappers['form']['container'] = Html::el('div')->id('form');
         $renderer->wrappers['group']['container'] = null;
-        $renderer->wrappers['group']['label'] = 'h3';
-        $renderer->wrappers['pair']['container'] = null;
-        $renderer->wrappers['controls']['container'] = 'dl';
-        $renderer->wrappers['control']['container'] = 'dd';
+        $renderer->wrappers['controls']['container'] = 'div';
+        $renderer->wrappers['pair']['container'] = 'div';
+        $renderer->wrappers['label']['container'] = 'p';
+        $renderer->wrappers['control']['container'] = null;
         $renderer->wrappers['control']['.odd'] = 'odd';
-        $renderer->wrappers['label']['container'] = 'dt';
-        $renderer->wrappers['label']['suffix'] = ':';
-        $renderer->wrappers['control']['requiredsuffix'] = " \u{2022}";
 
+        $form->setHtmlAttribute('id', 'enter_to_admin')
+            ->setHtmlAttribute('class', 'form');
         $form->addText('username', 'Имя:')
-            ->setRequired('Пожалуйста, введите ваше имя.');
+            ->setRequired('Пожалуйста, введите ваше имя.')
+            ->addRule($form::MinLength, 'Имя длиной не менее %d символов', 3)
+            ->addRule($form::Pattern, 'Имя только из букв, цифр, дефисов и подчеркиваний', '^[a-zA-Zа-яА-ЯёЁ0-9\-_]{3,25}$')
+            ->setMaxLength(25);
 
         $form->addPassword('password', 'Пароль:')
-            ->setRequired('Пожалуйста, введите ваш пароль.');
+            ->setRequired('Пожалуйста, введите ваш пароль.')
+            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', 4)
+            ->setMaxLength(120);
 
         $form->addSubmit('send', 'Войти');
 
-        $form->onSuccess[] = $this->signInFormSucceeded(...);
+        $form->onSuccess[] = $this->processForm(...);
 
         return $form;
     }
 
-    private function signInFormSucceeded(Form $form, \stdClass $data): void
+    private function processForm(Form $form, \stdClass $data): void
     {
         try {
             $this->getUser()->login($data->username, $data->password);
-            $this->redirect('Home:');
+            /*
+            if ($this->getUser()->isInRole('user')) {
+                $this->redirect('Home:');
+            } elseif ($this->getUser()->isInRole('master')
+                || $this->getUser()->isInRole('moder')
+                || $this->getUser()->isInRole('admin')
+            ) {
+                $this->redirect('Admin:');
+            }
+            */
+            $this->redirect('Admin:');
         } catch (Nette\Security\AuthenticationException $e) {
             $form->addError('Неправильные логин или пароль.');
         }
