@@ -38,11 +38,16 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bgcolor: #9F091F;
-        --bgcolor-content: #282C34;
-        --bgcolor-button-active: black;
+        --bgcolor: #126c04;
+        --bgcolor-content: #2a3428;
+        --bgcolor-button: #126c04;
+        --color-button: #9eb183;
+        --bgcolor-button-active: #000000;
+        --color-button-active: #9eb183;
+        --input_bgcolor: black;
 
-        --fontcolor-light: #E5B5BE;
+        --button-disabled-color: black;
+        --fontcolor-light: #c0ccb9;
         --fontcolor-dark: #1CBADF;
 
         --fontshadow: 1px 1px 1px rgba(0, 0, 0, 0.9);
@@ -54,8 +59,6 @@
         --date_time_item_back-disabled: #353941;
         --date_time_item_color-disabled: #676767;
 
-        --button-disabled-color: Maroon;
-
         --table-bgcolor1: #282C34;
         --table-bgcolor2: #161B23;
 
@@ -65,14 +68,19 @@
 
 @media (prefers-color-scheme: light) {
     :root {
-        --bgcolor: #BE4874;
-        --bgcolor-content: rgba(245, 243, 246, 1);
-        --bgcolor-button-active: white;
+        --bgcolor: rgb(56, 133, 27);
+        --bgcolor-content: rgb(244, 246, 243);
+        --bgcolor-button: rgb(56, 133, 27);
+        --color-button: rgba(245, 243, 246, 1);
+        --bgcolor-button-active: rgb(33, 102, 12);
+        --color-button-active: rgb(251, 249, 248);
+        --input_bgcolor: white;
 
-        --fontcolor-light: #BE4874;
+        --button-disabled-color: rgb(212, 212, 212);
+        --fontcolor-light: #37a030;
         --fontcolor-dark: #1CBADF;
 
-        --fontshadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        --fontshadow: 1px 1px 1px rgba(255, 255, 255, 0.99);
         --boxshadow: rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
         --boxshadow-active: rgba(0, 0, 0, 0.24) 1px 3px 3px 1px, rgba(0, 0, 0, 0.3) 1px 4px 2px -3px, rgba(0, 0, 0, 0.2) 1px 2px 6px 1px;
 
@@ -80,8 +88,6 @@
         --date_time_item_back-active: #C3C9DF;
         --date_time_item_back-disabled: #ECECEC;
         --date_time_item_color-disabled: #A9A0A0;
-
-        --button-disabled-color: MediumVioletRed;
 
         --table-bgcolor1: #fff;
         --table-bgcolor2: #F7F7F7;
@@ -99,6 +105,7 @@ body {
 body {
     font-family: "content", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     /* font-family: system-ui, sans-serif; */
+    text-shadow: var(--fontshadow);
     max-width: 1920px;
     margin: 0 auto;
     color: var(--fontcolor-light, red);
@@ -124,6 +131,98 @@ a {
 h1,
 .h1 {
     font-size: var(--biggest-fontsize);
+}
+
+.pseudo {
+    box-shadow: 0 0 0;
+}
+
+button,
+.button {
+    background: var(--bgcolor-button);
+    color: var(--color-button, white);
+    box-shadow: var(--boxshadow);
+    overflow: hidden;
+}
+
+button:hover,
+.button:hover,
+button:focus,
+.button:focus,
+button:active,
+.button:active {
+    background-color: var(--bgcolor-button-active);
+    color: var(--color-button-active, white);
+    box-shadow: var(--boxshadow);
+}
+
+button:disabled,
+.button:disabled {
+    background-color: var(--bgcolor-content);
+    color: var(--button-disabled-color);
+    box-shadow: var(--boxshadow);
+}
+
+input[type="number"],
+input[type="time"],
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="password"],
+textarea {
+    display: inline-block;
+    background: var(--input_bgcolor);
+    background-clip: padding-box;
+    font-family: inherit;
+    font-size: var(--base-fontsize);
+    border: 1px solid #999;
+    border-radius: var(--radius);
+    width: auto;
+}
+
+input[type="number"]:invalid,
+input[type="time"]:invalid,
+input[type="text"]:invalid,
+input[type="tel"]:invalid,
+input[type="email"]:invalid,
+input[type="password"]:invalid,
+textarea:invalid {
+    border-bottom: 2px solid red;
+}
+
+input[type="number"]:valid,
+input[type="time"]:valid,
+input[type="text"]:valid,
+input[type="tel"]:valid,
+input[type="email"]:valid,
+input[type="password"]:valid,
+textarea:valid {
+    border-bottom: 2px solid green;
+}
+
+.select {
+    /* width: 100%; */
+    border: 1px solid #999;
+    border-radius: var(--radius);
+    padding-left: 5px;
+    padding: 10px;
+    font-size: var(--base-fontsize);
+    font-family: inherit;
+    color: inherit;
+    background-color: var(--input_bgcolor);
+    background-image: none;
+}
+
+.select>option {
+    font-size: var(--base-fontsize);
+    font-family: inherit;
+    color: inherit;
+    background-color: var(--input_bgcolor);
+    background-image: none;
+    font-size: var(--base-fontsize);
+    /*height: 50px;
+    padding: 15px;*/
+    border: 1px solid #999;
 }
 
 .bgcontent {
@@ -222,10 +321,12 @@ h1,
 
 .he_soz .he_soz-vk::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'%3E%3Cpath fill='%232787f5' d='M545 117.7c3.7-12.5 0-21.7-17.8-21.7h-58.9c-15 0-21.9 7.9-25.6 16.7 0 0-30 73.1-72.4 120.5-13.7 13.7-20 18.1-27.5 18.1-3.7 0-9.4-4.4-9.4-16.9V117.7c0-15-4.2-21.7-16.6-21.7h-92.6c-9.4 0-15 7-15 13.5 0 14.2 21.2 17.5 23.4 57.5v86.8c0 19-3.4 22.5-10.9 22.5-20 0-68.6-73.4-97.4-157.4-5.8-16.3-11.5-22.9-26.6-22.9H38.8c-16.8 0-20.2 7.9-20.2 16.7 0 15.6 20 93.1 93.1 195.5C160.4 378.1 229 416 291.4 416c37.5 0 42.1-8.4 42.1-22.9 0-66.8-3.4-73.1 15.4-73.1 8.7 0 23.7 4.4 58.7 38.1 40 40 46.6 57.9 69 57.9h58.9c16.8 0 25.3-8.4 20.4-25-11.2-34.9-86.9-106.7-90.3-111.5-8.7-11.2-6.2-16.2 0-26.2.1-.1 72-101.3 79.4-135.6z'/%3E%3C/svg%3E");
+    filter: hue-rotate(240deg);
 }
 
 .he_soz .he_soz-tg::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2327a7e7' d='M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z'/%3E%3C/svg%3E");
+    filter: hue-rotate(250deg);
 }
 
 .he_soz .he_soz-youtube::before {
@@ -306,10 +407,10 @@ h1,
     width: 100%;
     max-width: 22rem;
     margin: 1rem auto 0 auto;
-    padding: 1rem 1rem 1rem 1rem;
-    border-radius: 0.4rem;
-    background: var(--bgcolor-content) none repeat scroll 0% 0%;
-    box-shadow: var(--boxshadow);
+    /*padding: 1rem 1rem 1rem 1rem;*/
+    /*border-radius: 0.4rem;*/
+    /*background: var(--bgcolor-content) none repeat scroll 0% 0%;*/
+    /*box-shadow: var(--boxshadow);*/
 }
 
 /* ----------- resolution up to 1920px ----------------- */

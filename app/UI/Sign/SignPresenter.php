@@ -4,24 +4,24 @@ namespace App\UI\Sign;
 
 use Nette;
 use Nette\Application\UI\Form;
+use Nette\Utils\Html;
 
 final class SignPresenter extends Nette\Application\UI\Presenter
 {
-    protected function createComponentSignInForm(): Form
+    protected function createComponentForm(): Form
     {
         $form = new Form();
 
         // setup custom rendering
         $renderer = $form->getRenderer();
-        $renderer->wrappers['group']['container'] = null;
+        $renderer->wrappers['group']['container'] = 'div class="bgcontent shadow round m1 p2"';
         $renderer->wrappers['controls']['container'] = 'div';
         $renderer->wrappers['pair']['container'] = 'div';
         $renderer->wrappers['label']['container'] = 'p';
         $renderer->wrappers['control']['container'] = null;
-        $renderer->wrappers['control']['.odd'] = 'odd';
 
-        $form->setHtmlAttribute('id', 'enter_to_admin')
-            ->setHtmlAttribute('class', 'form');
+        $form->addGroup('--- 👥 ---');
+
         $form->addText('username', 'Имя:')
             ->setRequired('Пожалуйста, введите ваше имя.')
             ->addRule($form::MinLength, 'Имя длиной не менее %d символов', 3)
@@ -33,7 +33,62 @@ final class SignPresenter extends Nette\Application\UI\Presenter
             ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', 4)
             ->setMaxLength(120);
 
+        return $form;
+    }
+
+    protected function createComponentSignInForm(): Form
+    {
+        $form = $this->createComponentForm();
+        $form->setHtmlAttribute('id', 'enter_to_admin')
+            ->setHtmlAttribute('class', 'form');
+
+        // $form->addHidden('userid');
+
         $form->addSubmit('send', 'Войти');
+
+        $form->addGroup('--- ✍ ---');
+        $url_reg = $this->link('Sign:register');
+        $form->addButton('register', Html::el('div')->setHtml('<a href="'.$url_reg.'">Зарегистрироваться</a>'))
+            ->setHtmlAttribute('class', 'pseudo');
+
+        $form->addGroup('--- § ---');
+        $url_politic = $this->link('Home:politic');
+        $form->addButton('politic', Html::el('div')->setHtml('<a href="'.$url_politic.'">Политика обработки персональных данных</a>'))
+            ->setHtmlAttribute('class', 'pseudo');
+
+        $form->onSuccess[] = $this->processForm(...);
+
+        return $form;
+    }
+
+    public function createComponentSignRegisterForm()
+    {
+        $form = $this->createComponentForm();
+
+        $form->setHtmlAttribute('id', 'register')
+            ->setHtmlAttribute('class', 'form');
+
+        $form->addPassword('passwordVerify', 'Повторите пароль:')
+            ->setRequired('Введите пароль ещё раз, чтобы проверить опечатку')
+            ->addRule($form::Equal, 'Несоответствие пароля', $form['password'])
+            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', 4)
+            ->setMaxLength(120)
+            ->setOmitted();
+
+        $form->addEmail('email', 'Эл.почта:')
+            ->setEmptyValue('user@user.com');
+
+        $form->addSubmit('send', 'Зарегистрироваться');
+
+        $form->addGroup('--- 🔓 ---');
+        $url_reg = $this->link('Sign:in');
+        $form->addButton('register', Html::el('div')->setHtml('<a href="'.$url_reg.'">Войти</a>'))
+            ->setHtmlAttribute('class', 'pseudo');
+
+        $form->addGroup('--- § ---');
+        $url_politic = $this->link('Home:politic');
+        $form->addButton('politic', Html::el('div')->setHtml('<a href="'.$url_politic.'">Политика обработки персональных данных</a>'))
+            ->setHtmlAttribute('class', 'pseudo');
 
         $form->onSuccess[] = $this->processForm(...);
 

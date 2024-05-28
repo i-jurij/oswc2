@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\UI\Home;
 
+use App\Model\PagesListFacade;
+use Michelf\MarkdownExtra;
 use Nette;
 use Nette\Utils\Finder;
+use Nette\Utils\Html;
 
 /**
  * @property HomeTemplate $template
  */
 final class HomePresenter extends Nette\Application\UI\Presenter
 {
-    public function __construct(private \App\Model\PagesListFacade $db_pages)
+    public function __construct(private PagesListFacade $db_pages)
     {
     }
 
@@ -23,10 +26,31 @@ final class HomePresenter extends Nette\Application\UI\Presenter
             $this->template->pages_data = $db_data;
         }
     }
+
+    public function renderPolitic()
+    {
+        $path = realpath('../resources/politic.md');
+        if (\is_readable($path)) {
+            $my_text = \file_get_contents($path);
+            $my_html = MarkdownExtra::defaultTransform($my_text);
+
+            $this->template->pages_data = [Html::el('div')
+                ->setAttribute('class', 'm1 p2 rounded shadow bgcontent ')
+                ->appendAttribute('style', 'columns', 'auto 24em')
+                ->appendAttribute('style', 'text-align', 'justify')
+                ->addHtml($my_html)];
+        }
+        /*
+        $file = Finder::findFiles('politic.html')->in($path); // ->collect();
+        foreach ($file as $key => $value) {
+            $this->template->pages_data[$key] = $value;
+        }
+        */
+        // $this->setView($db_data);
+    }
 }
 class HomeTemplate extends Nette\Bridges\ApplicationLatte\Template
 {
-    // public Finder $pages;
     public Nette\Security\User $user;
     public string $basePath;
     public string $baseUrl;
