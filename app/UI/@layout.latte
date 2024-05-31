@@ -25,8 +25,8 @@
 			<a n:href="Sign:out">Выйти</a>
 		</div>
 
-		<div n:foreach="$flashes as $flash" n:class="flash, $flash->type" style="text-align:right;">
-			{$flash->message}
+		<div n:foreach="$flashes as $flash" class="flash {$flash->type}">
+			<div class="flash_child">{$flash->message}</div>
 		</div>
 		{include header from 'layout-header.latte'}
 		<main class="main_section">

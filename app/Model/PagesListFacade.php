@@ -14,7 +14,7 @@ final class PagesListFacade
         $this->check_table = $pages_sqlite->fetch('SELECT count(*) FROM sqlite_master WHERE type=? AND name=?', 'table', 'pages');
         if ($this->check_table['count(*)'] == 0) {
             $pages_sqlite->transaction(function ($pages_sqlite) {
-                $pages_sqlite->query('CREATE TABLE IF NOT EXISTS  pages(
+                $pages_sqlite->query('CREATE TABLE IF NOT EXISTS pages(
                 "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
                 "alias" VARCHAR(100) UNIQUE NOT NULL,
                 "route" VARCHAR(100),

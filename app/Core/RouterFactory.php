@@ -14,8 +14,8 @@ final class RouterFactory
     public static function createRouter(): RouteList
     {
         $router = new RouteList();
-        $router->addRoute('register', 'Register:');
         $router->addRoute('signin', 'Sign:in');
+        $router->addRoute('register', 'Sign:register:');
         $router->addRoute('politic', 'Home:politic');
         $router->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
 

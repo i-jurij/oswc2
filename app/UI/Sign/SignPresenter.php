@@ -47,8 +47,8 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->addSubmit('send', 'Войти');
 
         $form->addGroup('--- ✍ ---');
-        $url_reg = $this->link('Sign:register');
-        $form->addButton('register', Html::el('div')->setHtml('<a href="'.$url_reg.'">Зарегистрироваться</a>'))
+        $url_reg = $this->link('Sign:up');
+        $form->addButton('signup', Html::el('div')->setHtml('<a href="'.$url_reg.'">Зарегистрироваться</a>'))
             ->setHtmlAttribute('class', 'pseudo');
 
         $form->addGroup('--- § ---');
@@ -56,16 +56,16 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->addButton('politic', Html::el('div')->setHtml('<a href="'.$url_politic.'">Политика обработки персональных данных</a>'))
             ->setHtmlAttribute('class', 'pseudo');
 
-        $form->onSuccess[] = $this->processForm(...);
+        $form->onSuccess[] = $this->userLogin(...);
 
         return $form;
     }
 
-    public function createComponentSignRegisterForm()
+    public function createComponentSignUpForm()
     {
         $form = $this->createComponentForm();
 
-        $form->setHtmlAttribute('id', 'register')
+        $form->setHtmlAttribute('id', 'signup')
             ->setHtmlAttribute('class', 'form');
 
         $form->addPassword('passwordVerify', 'Повторите пароль:')
@@ -90,14 +90,15 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->addButton('politic', Html::el('div')->setHtml('<a href="'.$url_politic.'">Политика обработки персональных данных</a>'))
             ->setHtmlAttribute('class', 'pseudo');
 
-        $form->onSuccess[] = $this->processForm(...);
+        $form->onSuccess[] = $this->processSignUpForm(...);
 
         return $form;
     }
 
-    private function processForm(Form $form, \stdClass $data): void
+    private function userLogin(Form $form, \stdClass $data): void
     {
         try {
+            // create if not exist tables users, roles, permissions
             $this->getUser()->login($data->username, $data->password);
             /*
             if ($this->getUser()->isInRole('user')) {
@@ -112,6 +113,16 @@ final class SignPresenter extends Nette\Application\UI\Presenter
             $this->redirect('Admin:');
         } catch (Nette\Security\AuthenticationException $e) {
             $form->addError('Неправильные логин или пароль.');
+        }
+    }
+
+    private function processSignUpForm(Form $form, \stdClass $data): void
+    {
+        try {
+            // register user
+            $this->flashMessage('Вы зарегистрированы. На ваш электронный адрес выслано письмо с ссылкой для подтверждения электронного адреса.', 'info');
+        } catch (Exception $e) {
+            $form->addError('Unknown error.');
         }
     }
 

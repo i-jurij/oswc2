@@ -29,7 +29,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
     public function renderPolitic()
     {
-        $path = realpath('../resources/politic.md');
+        $path = APPDIR.'/../resources/politic.md';
         if (\is_readable($path)) {
             $my_text = \file_get_contents($path);
             $my_html = MarkdownExtra::defaultTransform($my_text);

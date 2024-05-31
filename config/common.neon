@@ -17,9 +17,7 @@ database:
 			lazy: yes
 	pages_sqlite:
 		#dsn: 'sqlite::memory:'
-		dsn: "sqlite:%appDir%/Model/pages_sqlite.db"
-		user:
-		password:
+		dsn: "sqlite:%appDir%/Db/pages_sqlite.db"
 		options:
 			lazy: yes
 
