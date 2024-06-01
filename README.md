@@ -43,6 +43,18 @@ App use [bulma](https://bulma.io/documentation/) - a CSS framework.
 Entry is `resources/js/app.js` and `resources/css/style.css`, all other js files and css files can be imported into them.  
 
 ## Work
+### Start
+First run console command into project folder:  
+```php ./bin/start.php migrate```  
+for created db tables "users", "roles", "permissions", "roles_permissions" and "pages".  
+
+Then run:  
+```php ./bin/start.php useradd <username> <password> <email> <role>```  
+for user add (at least one user with admin role needed). 
+If you plan to use password recovery via email - set email, but this not required.  
+
+In the future, users can be added from the admin panel.  
+
 ### Config   
 Configs files are located in "app/config". Read this [documentation](https://doc.nette.org/en/configuring).   
 Config `pages_sqlite` is require for page menu on main page and admin pages.  
@@ -53,4 +65,4 @@ Application use three main routes: "Home", "Sign" and "Admin".
 ??? And "Home::Pages::OtherPresenters::method", "Admin::Pages::OtherPresenters::method".   
 
 ### Models
-`PagesListFacade` - create table pages (for menu at main page).   
+`PagesListFacade` - get data from table pages (for menu at main page).   

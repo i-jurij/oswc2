@@ -7,6 +7,7 @@ if (PHP_SAPI === 'cli') {
 
     $container = App\Bootstrap::boot()
         ->createContainer();
+    // var_dump($container);
 
     if (!isset($argv[1])) {
         echo '
@@ -14,14 +15,24 @@ if (PHP_SAPI === 'cli') {
             "php start.php migrate"
 
             2. Create user (admin is needed), run:
-            "php start.php useradd <username> <password> <email>"
+            "php start.php useradd <username> <password> <email> <role>"
             ';
         exit(1);
     } elseif ($argc == 2 && !empty($argv[1]) && $argv[1] === 'migrate') {
         try {
-            var_dump($argv[1]);
+            $db = $container->getByName('database.sqlite.connection');
 
-            // echo "Migrate was executed. Database and table was created.\n";
+            $db->transaction(function ($db) {
+                $path = APPDIR.'/../bin/start_sql.php';
+                if (include $path) {
+                    foreach ($sqls as $sql) {
+                        $db->query($sql);
+                    }
+                }
+            });
+
+            echo "Migrate was executed. Database and table was created.\n";
+
             exit(1);
         } catch (Exception $e) {
             echo "Error: '.$e.'.\n";

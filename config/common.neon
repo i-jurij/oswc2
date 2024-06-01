@@ -9,18 +9,18 @@ application:
 
 
 database:
-	default:
+	sqlite:
+		dsn: "sqlite:%appDir%/Db/sqlite.db"
+		# autowired: true
+		options:
+			lazy: yes
+	mysql:
 		dsn: 'mysql:host=127.0.0.1;dbname=xxx'
 		user: 'xxx'
 		password: 'xxx'
+		# autowired: false
 		options:
 			lazy: yes
-	pages_sqlite:
-		#dsn: 'sqlite::memory:'
-		dsn: "sqlite:%appDir%/Db/pages_sqlite.db"
-		options:
-			lazy: yes
-
 
 latte:
 	strictTypes: yes

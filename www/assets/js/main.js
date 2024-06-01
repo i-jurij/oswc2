@@ -824,7 +824,7 @@ function delFlash(delay_in_seconds) {
     }, delay_in_seconds * 1000);
 }
 // adding delFlash to pages
-document.addEventListener('DOMContentLoaded', delFlash(5));
+document.addEventListener('DOMContentLoaded', delFlash(10));
 })();
 
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
