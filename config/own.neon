@@ -2,7 +2,5 @@ constants:
 	APPDIR: %appDir%
 routing:
 	# cache: true
-security:
-	users:
-		admin: password
+
         

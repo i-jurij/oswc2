@@ -120,7 +120,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
     {
         try {
             // register user
-            $this->flashMessage('Вы зарегистрированы. На ваш электронный адрес выслано письмо с ссылкой для подтверждения электронного адреса.', 'info');
+            $this->flashMessage('На ваш электронный адрес выслано письмо. Для завершения регистрации следуйте инструкции в письме.', 'info');
         } catch (Exception $e) {
             $form->addError('Unknown error.');
         }

@@ -46,12 +46,13 @@ Entry is `resources/js/app.js` and `resources/css/style.css`, all other js files
 ### Start
 First run console command into project folder:  
 ```php ./bin/start.php migrate```  
-for created db tables "users", "roles", "permissions", "roles_permissions" and "pages".  
+for created db tables "users", "roles", "permissions", "roles_permissions" and "pages". 
+It safely for data in existing tables.  
 
 Then run:  
 ```php ./bin/start.php useradd <username> <password> <email> <role>```  
-for user add (at least one user with admin role needed). 
-If you plan to use password recovery via email - set email, but this not required.  
+for user add (at least one user with admin role needed).  
+Password minimal length = 7 (it can be change in app/Model/UserFacade.php).  
 
 In the future, users can be added from the admin panel.  
 

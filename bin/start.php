@@ -11,11 +11,11 @@ if (PHP_SAPI === 'cli') {
 
     if (!isset($argv[1])) {
         echo '
-            1. Create database and table "users", "role", "permissions", "role_permissions", run:
+            1. Create table "users", "role", "permissions", "role_permissions", "pages", run:
             "php start.php migrate"
 
             2. Create user (admin is needed), run:
-            "php start.php useradd <username> <password> <email> <role>"
+            "php start.php useradd <username> <password> <role>"
             ';
         exit(1);
     } elseif ($argc == 2 && !empty($argv[1]) && $argv[1] === 'migrate') {
@@ -23,10 +23,17 @@ if (PHP_SAPI === 'cli') {
             $db = $container->getByName('database.sqlite.connection');
 
             $db->transaction(function ($db) {
-                $path = APPDIR.'/../bin/start_sql.php';
-                if (include $path) {
-                    foreach ($sqls as $sql) {
-                        $db->query($sql);
+                $path_create = APPDIR.'/../bin/create_sql.php';
+                $path_insert = APPDIR.'/../bin/insert_sql.php';
+                if (include $path_create) {
+                    foreach ($create_sqls as $key => $sql) {
+                        $check_table = $db->fetch('SELECT count(*) FROM sqlite_master WHERE type=? AND name=?', 'table', $key);
+                        if ($check_table['count(*)'] === 0) {
+                            $db->query($sql);
+                            if ((include $path_insert) && isset($insert_sqls[$key])) {
+                                $db->query($insert_sqls[$key]);
+                            }
+                        }
                     }
                 }
             });
@@ -39,12 +46,12 @@ if (PHP_SAPI === 'cli') {
             exit(1);
         }
     } elseif ($argc == 5 && $argv[1] === 'useradd') {
-        [,, $name, $password, $email] = $argv;
+        [,, $name, $password, $role] = $argv;
 
         $manager = $container->getByType(App\Model\UserFacade::class);
 
         try {
-            $manager->add($name, $email, $password);
+            $manager->shortAdd($name, $password, $role);
             echo "User $name was added.\n";
         } catch (App\Model\DuplicateNameException $e) {
             echo "Error: duplicate name.\n";
