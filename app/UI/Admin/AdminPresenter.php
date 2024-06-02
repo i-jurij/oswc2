@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Admin;
 
+use App\UI\Accessory\RequireLoggedUser;
 use Nette;
 
 /**
@@ -11,6 +12,9 @@ use Nette;
  */
 final class AdminPresenter extends Nette\Application\UI\Presenter
 {
+    // Incorporates methods to check user login status
+    use RequireLoggedUser;
+
     public function __construct()
     {
     }

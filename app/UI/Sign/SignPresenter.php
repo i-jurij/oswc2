@@ -46,7 +46,6 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
         $form->addPassword('password', 'Пароль:')
             ->setRequired('Пожалуйста, введите ваш пароль.')
-            ->setOption('description', sprintf('at least %d characters', $this->userFacade::PasswordMinLength))
             ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userFacade::PasswordMinLength)
             ->setMaxLength(120);
 
