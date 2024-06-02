@@ -251,7 +251,7 @@ textarea:valid {
 }
 
 .flash {
-    padding: 2rem;
+    padding: 1rem;
     margin: 1rem auto;
     text-align: center;
     vertical-align: middle;
@@ -260,7 +260,7 @@ textarea:valid {
 }
 
 .flash.info {
-    background-color: rgb(55, 103, 225);
+    background-color: var(--bgcolor);
 
 }
 

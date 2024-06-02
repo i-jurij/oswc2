@@ -2,16 +2,32 @@
 
 namespace App\UI\Sign;
 
+use App\Model\UserFacade;
+use App\UI\Accessory\FormFactory;
 use Nette;
+use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Utils\Html;
 
 final class SignPresenter extends Nette\Application\UI\Presenter
 {
+    /**
+     * Stores the previous page hash to redirect back after successful login.
+     */
+    #[Persistent]
+    public string $backlink = '';
+
+    // Dependency injection of form factory and user management facade
+    public function __construct(
+        private UserFacade $userFacade,
+        private FormFactory $formFactory,
+    ) {
+    }
+
     protected function createComponentForm(): Form
     {
-        $form = new Form();
-
+        // $form = new Form();
+        $form = $this->formFactory->create();
         // setup custom rendering
         $renderer = $form->getRenderer();
         $renderer->wrappers['group']['container'] = 'div class="bgcontent shadow round m1 p2"';
@@ -30,7 +46,8 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
         $form->addPassword('password', 'Пароль:')
             ->setRequired('Пожалуйста, введите ваш пароль.')
-            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', 4)
+            ->setOption('description', sprintf('at least %d characters', $this->userFacade::PasswordMinLength))
+            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userFacade::PasswordMinLength)
             ->setMaxLength(120);
 
         return $form;
@@ -71,7 +88,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->addPassword('passwordVerify', 'Повторите пароль:')
             ->setRequired('Введите пароль ещё раз, чтобы проверить опечатку')
             ->addRule($form::Equal, 'Несоответствие пароля', $form['password'])
-            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', 4)
+            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userFacade::PasswordMinLength)
             ->setMaxLength(120)
             ->setOmitted();
 
@@ -98,8 +115,8 @@ final class SignPresenter extends Nette\Application\UI\Presenter
     private function userLogin(Form $form, \stdClass $data): void
     {
         try {
-            // create if not exist tables users, roles, permissions
             $this->getUser()->login($data->username, $data->password);
+            $this->restoreRequest($this->backlink);
             /*
             if ($this->getUser()->isInRole('user')) {
                 $this->redirect('Home:');
