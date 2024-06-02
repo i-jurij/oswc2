@@ -85,6 +85,28 @@ final class UserFacade implements Nette\Security\Authenticator
             throw new DuplicateNameException();
         }
     }
+
+    public function add(string $username, string $password, string $role): void
+    {
+        // Validate the email format
+        Nette\Utils\Validators::assert($email, 'email');
+
+        // Attempt to insert the new user into the database
+        try {
+            $this->sqlite->table(self::TableName)->insert([
+                self::ColumnName => $username,
+                self::ColumnPasswordHash => $this->passwords->hash($password),
+                self::ColumnPhone => $phone,
+                self::ColumnEmail => $email,
+                self::ColumnAuthToken => $token,
+                self::ColumnRole => $role,
+                self::ColumnCreatedAt => $created_at,
+                self::ColumnUpdatedAt => $updated_at,
+            ]);
+        } catch (Nette\Database\UniqueConstraintViolationException $e) {
+            throw new DuplicateNameException();
+        }
+    }
 }
 
 /**

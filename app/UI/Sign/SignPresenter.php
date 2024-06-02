@@ -62,10 +62,12 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
         $form->addSubmit('send', 'Войти');
 
+        /*
         $form->addGroup('--- ✍ ---');
         $url_reg = $this->link('Sign:up');
         $form->addButton('signup', Html::el('div')->setHtml('<a href="'.$url_reg.'">Зарегистрироваться</a>'))
             ->setHtmlAttribute('class', 'pseudo');
+        */
 
         $form->addGroup('--- § ---');
         $url_politic = $this->link('Home:politic');
