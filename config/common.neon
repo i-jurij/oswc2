@@ -24,7 +24,9 @@ database:
 
 latte:
 	strictTypes: yes
-
+	extensions: 
+		- Kravcik\LatteFontAwesomeIcon\Extension(defaultStyle: fas, defaultFixedWidth: false, defaultElement: i)
+		# - Kravcik\LatteFontAwesomeIcon\Extension
 
 session:
 	expiration: 14 days

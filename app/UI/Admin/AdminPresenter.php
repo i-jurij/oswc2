@@ -21,11 +21,13 @@ final class AdminPresenter extends Nette\Application\UI\Presenter
 
     public function renderDefault()
     {
+        // $this->setLayout('layoutAdmin');
         $this->template->pages_data = ['0' => ['alias' => 'admin_first_alias',
                                                 'title' => 'admin first title',
                                                 'decription' => 'admin first decription',
                                             ],
         ];
+
         // $this->redirect('Admin:Dashboard:');
     }
 }

@@ -71,10 +71,6 @@ final class UserFacade implements Nette\Security\Authenticator
      */
     public function shortAdd(string $username, string $password, string $role): void
     {
-        // Validate the email format
-        // Nette\Utils\Validators::assert($email, 'email');
-
-        // Attempt to insert the new user into the database
         try {
             $this->sqlite->table(self::TableName)->insert([
                 self::ColumnName => $username,
@@ -88,10 +84,9 @@ final class UserFacade implements Nette\Security\Authenticator
 
     public function add(string $username, string $password, string $role): void
     {
-        // Validate the email format
         Nette\Utils\Validators::assert($email, 'email');
-
-        // Attempt to insert the new user into the database
+        // auth_token generated eg
+        // $token = rand();
         try {
             $this->sqlite->table(self::TableName)->insert([
                 self::ColumnName => $username,
@@ -100,12 +95,15 @@ final class UserFacade implements Nette\Security\Authenticator
                 self::ColumnEmail => $email,
                 self::ColumnAuthToken => $token,
                 self::ColumnRole => $role,
-                self::ColumnCreatedAt => $created_at,
-                self::ColumnUpdatedAt => $updated_at,
+                // self::ColumnCreatedAt => $created_at,
+                // self::ColumnUpdatedAt => $updated_at,
             ]);
         } catch (Nette\Database\UniqueConstraintViolationException $e) {
             throw new DuplicateNameException();
         }
+
+        // email or sms to new user with auth_token for verification
+        // $this->email->to()->text('form with links to verification cli or accessory);
     }
 }
 
