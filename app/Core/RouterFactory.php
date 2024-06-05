@@ -16,6 +16,7 @@ final class RouterFactory
         $router = new RouteList();
         $router->addRoute('signin', 'Sign:in');
         $router->addRoute('signup', 'Sign:up');
+        $router->addRoute('signout', 'Sign:out');
         $router->addRoute('politic', 'Home:politic');
         $router->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
 

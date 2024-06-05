@@ -1,5 +1,6 @@
 {block nav}
-<nav class="navbar navbar-expand-sm">
+
+<nav class="navbar navbar-expand-sm bg-body-tertiary sticky-top">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse-1" aria-controls="navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -9,23 +10,28 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{$baseUrl}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Docs</a>
-                </li>
                 <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Product
-                </a>
-                <ul class="dropdown-menu mt-lg-2 rounded-top-0">
-                    <li><a class="dropdown-item" href="#">Page builder</a></li>
-                    <li><a class="dropdown-item" href="#">Form builder</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Plan and pricing</a></li>
-                </ul>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Product
+                    </a>
+                    <ul class="dropdown-menu mt-lg-2 rounded-top-0">
+                        <li><a class="dropdown-item" href="#">Page builder</a></li>
+                        <li><a class="dropdown-item" href="#">Form builder</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Plan and pricing</a></li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled">Blog</a>
-                </li>
+                {if ($user->isInRole('admin') || $user->isInRole('moder'))}
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" n:href=":Admin:Users:">Users</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link">Logs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link">Cache</a>
+                    </li>
+                {/if}
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search docs" aria-label="Search">
@@ -34,15 +40,20 @@
 
         </div>
             <!-- right nav--->
-            <ul class="navbar-nav justify-content-end">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{$user->getIdentity()->username}</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" n:href="Sign:out">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
+        <ul class="navbar-nav ms-2 justify-content-end w-">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{$user->getIdentity()->username}</a>
+                <ul class="dropdown-menu w-auto">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <span data-feather="users"></span>
+                            Profile
+                        </a>
+                    </li>
+                    <li><a class="dropdown-item" n:href=":Sign:out">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </nav>
 

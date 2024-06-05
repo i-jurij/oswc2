@@ -1,0 +1,18 @@
+{*layout '../@layout.latte'*}
+
+{var $title = "Users editing"}
+{var $description = "Users editing"}
+{var $keywords = "Users editing"}
+{var $robots = "NOINDEX,NOFOLLOW"}
+
+{block content}
+	{ifset $pages_data}
+		{foreach $pages_data as $page_data}
+			{$page_data['alias']}<br />
+			{$page_data['title']}<br />
+			{$page_data['decription']}<br />
+		{/foreach}
+	{else}
+		You is not autorized
+	{/ifset}	
+{/block}

@@ -27,7 +27,6 @@ final class AdminPresenter extends Nette\Application\UI\Presenter
                                                 'decription' => 'admin first decription',
                                             ],
         ];
-
         // $this->redirect('Admin:Dashboard:');
     }
 }
