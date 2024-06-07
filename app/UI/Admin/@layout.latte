@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="dark">
+<html data-bs-theme="auto">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -20,6 +20,20 @@
 </head>
 
 <body class="">
+<script>
+;(function () {
+    const htmlElement = document.querySelector("html")
+    if(htmlElement.getAttribute("data-bs-theme") === 'auto') {
+        function updateTheme() {
+            document.querySelector("html").setAttribute("data-bs-theme",
+                window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme)
+        updateTheme()
+    }
+})()
+</script>
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
 	<div class="container-fluid">
     	<div class="row">
