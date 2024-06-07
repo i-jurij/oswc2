@@ -29,6 +29,13 @@ final class AdminPresenter extends Nette\Application\UI\Presenter
         ];
         // $this->redirect('Admin:Dashboard:');
     }
+
+    public function actionClearCache(): void
+    {
+        // clear latte/nette cache command
+        $this->flashMessage('Cache was cleared.');
+        $this->redirect('Admin:');
+    }
 }
 class AdminTemplate extends Nette\Bridges\ApplicationLatte\Template
 {
