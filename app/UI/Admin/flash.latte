@@ -3,16 +3,16 @@
     <div class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Message:</h5>
-            <button type="button" class="btn-close flash_close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-            <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary flash_close" data-bs-dismiss="modal">Close</button>
-        </div>
+            <div class="modal-header">
+                <h5 class="modal-title">Message:</h5>
+                <button type="button" class="btn-close flash_close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div n:foreach="$flashes as $flash" class="modal-body text-center">
+                {$flash->message}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary flash_close" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
     </div>
