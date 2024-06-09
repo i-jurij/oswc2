@@ -2,5 +2,9 @@ constants:
 	APPDIR: %appDir%
 routing:
 	# cache: true
+extensions:
+	captcha: NgatNgay\NetteFormCaptcha\DI\CaptchaExtension
 
-        
+captcha:
+    autoload: yes
+    type: image # numeric | text | image     

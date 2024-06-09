@@ -1,36 +1,18 @@
 parameters:
 
-
 application:
 	errorPresenter:
 		4xx: Error:Error4xx
 		5xx: Error:Error5xx
-	mapping: App\UI\*\**Presenter
-
-
-database:
-	sqlite:
-		dsn: "sqlite:%appDir%/Db/sqlite.db"
-		# autowired: true
-		options:
-			lazy: yes
-	mysql:
-		dsn: 'mysql:host=127.0.0.1;dbname=xxx'
-		user: 'xxx'
-		password: 'xxx'
-		# autowired: false
-		options:
-			lazy: yes
+	mapping: 
+		App\UI\*\**Presenter
 
 latte:
 	strictTypes: yes
 	extensions: 
-		- Kravcik\LatteFontAwesomeIcon\Extension(defaultStyle: fas, defaultFixedWidth: false, defaultElement: i)
-		# - Kravcik\LatteFontAwesomeIcon\Extension
 
 session:
 	expiration: 14 days
-
 
 di:
 	export:

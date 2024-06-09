@@ -229,6 +229,10 @@ textarea:valid {
     background-color: var(--bgcolor-content);
 }
 
+.bgcolor {
+    background-color: var(--bgcolor);
+}
+
 .center {
     text-align: center;
 }

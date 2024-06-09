@@ -25,6 +25,7 @@ class Bootstrap
         $configurator->setTimeZone('Europe/Moscow');
 
         $configurator->addConfig($appDir.'/config/common.neon');
+        $configurator->addConfig($appDir.'/config/db.neon');
         $configurator->addConfig($appDir.'/config/services.neon');
         $configurator->addConfig($appDir.'/config/webpack.neon');
         $configurator->addConfig($appDir.'/config/own.neon');

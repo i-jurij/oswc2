@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79b3df30efd09b0034a9c10ffba8b681",
+    "content-hash": "5b9dec6e03b5560d9643b071e425355b",
     "packages": [
         {
             "name": "contributte/webpack",
@@ -84,55 +84,61 @@
             "time": "2024-01-05T12:59:56+00:00"
         },
         {
-            "name": "kravcik/latte-font-awesome-icon",
-            "version": "dev-main",
+            "name": "gregwar/captcha",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kravcik/latte-font-awesome-icon.git",
-                "reference": "f046f7bb9002571a8f187de70bfeb7c06ff22160"
+                "url": "https://github.com/Gregwar/Captcha.git",
+                "reference": "229d3cdfe33d6f1349e0aec94a26e9205a6db08e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kravcik/latte-font-awesome-icon/zipball/f046f7bb9002571a8f187de70bfeb7c06ff22160",
-                "reference": "f046f7bb9002571a8f187de70bfeb7c06ff22160",
+                "url": "https://api.github.com/repos/Gregwar/Captcha/zipball/229d3cdfe33d6f1349e0aec94a26e9205a6db08e",
+                "reference": "229d3cdfe33d6f1349e0aec94a26e9205a6db08e",
                 "shasum": ""
             },
             "require": {
-                "latte/latte": "^3",
-                "nette/utils": "^4",
-                "php": "^8.0"
+                "ext-gd": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.3.0",
+                "symfony/finder": "*"
             },
             "require-dev": {
-                "modul-is/coding-standard": "^4",
-                "nette/caching": "^3.2",
-                "nette/robot-loader": "^4",
-                "nette/tester": "^2.4",
-                "phpstan/phpstan": "^1",
-                "tracy/tracy": "^2.9"
+                "phpunit/phpunit": "^6.4"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Kravcik\\LatteFontAwesomeIcon\\": "src/"
+                    "Gregwar\\": "src/Gregwar"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "description": "Simple {icon} macro for Latte, which allow short entry of font-awesome icons.",
-            "homepage": "https://github.com/kravcik/latte-font-awesome-icon",
+            "authors": [
+                {
+                    "name": "Grégoire Passault",
+                    "email": "g.passault@gmail.com",
+                    "homepage": "http://www.gregwar.com/"
+                },
+                {
+                    "name": "Jeremy Livingston",
+                    "email": "jeremy.j.livingston@gmail.com"
+                }
+            ],
+            "description": "Captcha generator",
+            "homepage": "https://github.com/Gregwar/Captcha",
             "keywords": [
-                "font awesome",
-                "latte",
-                "macro",
-                "nette"
+                "bot",
+                "captcha",
+                "spam"
             ],
             "support": {
-                "issues": "https://github.com/kravcik/latte-font-awesome-icon/issues",
-                "source": "https://github.com/kravcik/latte-font-awesome-icon/tree/v1.0.1"
+                "issues": "https://github.com/Gregwar/Captcha/issues",
+                "source": "https://github.com/Gregwar/Captcha/tree/v1.2.1"
             },
-            "time": "2023-09-18T08:57:07+00:00"
+            "time": "2023-09-26T13:45:37+00:00"
         },
         {
             "name": "latte/latte",
@@ -1445,6 +1451,114 @@
             "time": "2024-01-17T16:50:36+00:00"
         },
         {
+            "name": "ngatngay/nette-form-captcha",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ngatngay/nette-form-captcha.git",
+                "reference": "7a17fdefce0e40573df821e0afc8533732080f57"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ngatngay/nette-form-captcha/zipball/7a17fdefce0e40573df821e0afc8533732080f57",
+                "reference": "7a17fdefce0e40573df821e0afc8533732080f57",
+                "shasum": ""
+            },
+            "require": {
+                "gregwar/captcha": "*",
+                "nette/di": "^3.0",
+                "nette/forms": "^3.1",
+                "php": ">=8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "NgatNgay",
+                    "email": "pmt.coder@gmail.com"
+                }
+            ],
+            "description": "Nette Form Captcha",
+            "support": {
+                "issues": "https://github.com/ngatngay/nette-form-captcha/issues",
+                "source": "https://github.com/ngatngay/nette-form-captcha/tree/master"
+            },
+            "time": "2021-10-31T05:58:05+00:00"
+        },
+        {
+            "name": "symfony/finder",
+            "version": "v7.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/finder.git",
+                "reference": "fbb0ba67688b780efbc886c1a0a0948dcf7205d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/fbb0ba67688b780efbc886c1a0a0948dcf7205d6",
+                "reference": "fbb0ba67688b780efbc886c1a0a0948dcf7205d6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "symfony/filesystem": "^6.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Finder\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Finds files and directories via an intuitive fluent interface",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/finder/tree/v7.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-05-31T14:57:53+00:00"
+        },
+        {
             "name": "tracy/tracy",
             "version": "v2.10.7",
             "source": {
@@ -1661,7 +1775,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kravcik/latte-font-awesome-icon": 20
+        "ngatngay/nette-form-captcha": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

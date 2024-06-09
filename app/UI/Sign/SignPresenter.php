@@ -30,21 +30,23 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form = $this->formFactory->create();
         // setup custom rendering
         $renderer = $form->getRenderer();
-        $renderer->wrappers['group']['container'] = 'div class="bgcontent shadow round m1 p2"';
+        $renderer->wrappers['group']['container'] = 'div class="bgcontent shadow round m1 pt1 pb2 px2"';
         $renderer->wrappers['controls']['container'] = 'div';
         $renderer->wrappers['pair']['container'] = 'div';
         $renderer->wrappers['label']['container'] = 'p';
         $renderer->wrappers['control']['container'] = null;
 
-        $form->addGroup('--- 👥 ---');
-
-        $form->addText('username', 'Имя:')
+        // $form->addGroup('--- 👥 ---');
+        $form->addGroup('');
+        $form->addText('username', '')
+            ->setHtmlAttribute('placeholder', 'Name:')
             ->setRequired('Пожалуйста, введите ваше имя.')
             ->addRule($form::MinLength, 'Имя длиной не менее %d символов', 3)
             ->addRule($form::Pattern, 'Имя только из букв, цифр, дефисов и подчеркиваний', '^[a-zA-Zа-яА-ЯёЁ0-9\-_]{3,25}$')
             ->setMaxLength(25);
 
-        $form->addPassword('password', 'Пароль:')
+        $form->addPassword('password', '')
+            ->setHtmlAttribute('placeholder', 'Password:')
             ->setRequired('Пожалуйста, введите ваш пароль.')
             ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userFacade::PasswordMinLength)
             ->setMaxLength(120);
@@ -58,16 +60,9 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->setHtmlAttribute('id', 'enter_to_admin')
             ->setHtmlAttribute('class', 'form');
 
-        // $form->addHidden('userid');
+        $form->addCaptcha('captcha', '');
 
         $form->addSubmit('send', 'Войти');
-
-        /*
-        $form->addGroup('--- ✍ ---');
-        $url_reg = $this->link('Sign:up');
-        $form->addButton('signup', Html::el('div')->setHtml('<a href="'.$url_reg.'">Зарегистрироваться</a>'))
-            ->setHtmlAttribute('class', 'pseudo');
-        */
 
         $form->addGroup('--- § ---');
         $url_politic = $this->link('Home:politic');
@@ -86,16 +81,18 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->setHtmlAttribute('id', 'signup')
             ->setHtmlAttribute('class', 'form');
 
-        $form->addPassword('passwordVerify', 'Повторите пароль:')
+        $form->addPassword('passwordVerify', '')
+            ->setHtmlAttribute('placeholder', 'Confirm password:')
             ->setRequired('Введите пароль ещё раз, чтобы проверить опечатку')
             ->addRule($form::Equal, 'Несоответствие пароля', $form['password'])
             ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userFacade::PasswordMinLength)
             ->setMaxLength(120)
             ->setOmitted();
 
-        $form->addEmail('email', 'Эл.почта:')
-            ->setEmptyValue('user@user.com');
+        $form->addEmail('email', '')
+            ->setHtmlAttribute('placeholder', 'Email:');
 
+        $form->addCaptcha('captcha', '');
         $form->addSubmit('send', 'Зарегистрироваться');
 
         $form->addGroup('--- 🔓 ---');
@@ -148,6 +145,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
     {
         $this->getUser()->logout(true);
         $this->flashMessage('Вы вышли.');
-        $this->redirect('Home:');
+        // $this->redirect('Home:');
+        $this->forward('Home:');
     }
 }
