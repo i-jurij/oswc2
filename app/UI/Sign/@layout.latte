@@ -38,6 +38,14 @@
 
 	{block scripts}
 		<script src="{webpack js/main.js}"></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {   
+				let captcha = document.querySelector('input[name="captcha[question]"]');     
+				if (captcha){
+					captcha.placeholder = 'Captcha:';
+				}
+			});
+		</script>
 	{/block}
 </body>
 </html>

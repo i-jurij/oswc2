@@ -18,18 +18,6 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     public function __construct()
     {
     }
-
-    public function renderDefault()
-    {
-        // $this->setLayout('../@layout');
-        if ($this->getUser()->isInRole('admin') || $this->getUser()->isInRole('moder')) { // is the admin role assigned to the user?
-            $this->template->pages_data = ['0' => ['alias' => 'users',
-                                          'title' => 'Users editing',
-                                          'decription' => 'Users editing',
-                                      ],
-            ];
-        }
-    }
 }
 /*
 class UsersTemplate extends Nette\Bridges\ApplicationLatte\Template

@@ -278,6 +278,10 @@ textarea:valid {
 
 }
 
+.error {
+    color: red;
+}
+
 .flash_child {
     flex: 1 1 auto;
 }

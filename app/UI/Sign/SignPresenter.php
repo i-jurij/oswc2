@@ -60,7 +60,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->setHtmlAttribute('id', 'enter_to_admin')
             ->setHtmlAttribute('class', 'form');
 
-        $form->addCaptcha('captcha', '');
+        $form->addCaptcha('captcha', 'Captcha error. Re-enter captcha.');
 
         $form->addSubmit('send', 'Войти');
 
@@ -92,7 +92,8 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->addEmail('email', '')
             ->setHtmlAttribute('placeholder', 'Email:');
 
-        $form->addCaptcha('captcha', '');
+        $form->addCaptcha('captcha', 'Captcha error. Re-enter captcha.');
+
         $form->addSubmit('send', 'Зарегистрироваться');
 
         $form->addGroup('--- 🔓 ---');

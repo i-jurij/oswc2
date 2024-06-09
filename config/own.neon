@@ -6,5 +6,8 @@ extensions:
 	captcha: NgatNgay\NetteFormCaptcha\DI\CaptchaExtension
 
 captcha:
-    autoload: yes
-    type: image # numeric | text | image     
+	autoload: yes
+	type: image # numeric | text | image
+	questions:
+		"Question Cx1?": "Cx1"
+		"Question EnterTheText2?": "EnterTheText2"       
