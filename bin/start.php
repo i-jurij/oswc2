@@ -46,15 +46,15 @@ if (PHP_SAPI === 'cli') {
             exit(1);
         }
     } elseif ($argc == 5 && $argv[1] === 'useradd') {
-        [,, $name, $password, $role] = $argv;
+        [,, $username, $password, $role] = $argv;
 
-        $manager = $container->getByType(App\Model\UserFacade::class);
+        $user = $container->getByType(App\Model\UserFacade::class);
 
         try {
-            $manager->shortAdd($name, $password, $role);
-            echo "User $name was added.\n";
+            $user->shortAdd($username, $password, $role);
+            echo "User $username was added.\n";
         } catch (App\Model\DuplicateNameException $e) {
-            echo "Error: duplicate name.\n";
+            echo "Error: duplicate username.\n";
             exit(1);
         }
     } else {

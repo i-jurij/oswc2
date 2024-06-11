@@ -16,6 +16,7 @@ $roles_permissions = 'CREATE TABLE IF NOT EXISTS "roles_permissions"
 $users = 'CREATE TABLE IF NOT EXISTS "users" 
 	(	"id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 		"username" TEXT NOT NULL UNIQUE ON CONFLICT ROLLBACK, 
+		"image" TEXT,
 		"password" TEXT NOT NULL, 
 		"phone" TEXT UNIQUE ON CONFLICT ROLLBACK, 
 		"phone_verified" INTEGER DEFAULT 0,
@@ -37,6 +38,7 @@ $users_updated_at_trigger = 'CREATE TRIGGER update_users_updated_at
 $clients = 'CREATE TABLE IF NOT EXISTS "clients" 
 	(	"id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 		"name" TEXT, 
+		"image" TEXT,
 		"phone" TEXT NOT NULL UNIQUE ON CONFLICT ROLLBACK, 
 		"phone_verified" INTEGER DEFAULT 0,
 		"email" UNIQUE ON CONFLICT ROLLBACK, 

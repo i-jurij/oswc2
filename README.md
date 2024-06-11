@@ -48,6 +48,7 @@ First run console command into project folder:
 ```php ./bin/start.php migrate```  
 for created db tables "users", "roles", "permissions", "roles_permissions" and "pages". 
 It safely for data in existing tables.  
+SQL query for tables created is in file "create_sql.php".   
 
 Then run:  
 ```php ./bin/start.php useradd <username> <password> <email> <role>```  
@@ -55,6 +56,8 @@ for user add (at least one user with admin role needed).
 Password minimal length = 7 (it can be change in app/Model/UserFacade.php).  
 
 In the future, users can be added from the admin panel.  
+
+***If you change columns of table "users" in file "create_sql.php" change it in app/Model/UsersTableColumns too***
 
 ### Config   
 Configs files are located in "app/config". Read this [documentation](https://doc.nette.org/en/configuring).   

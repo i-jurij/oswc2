@@ -18,6 +18,11 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     public function __construct()
     {
     }
+
+    public function actionProfile($id)
+    {
+        $this->template->user_data = [0 => 'lll'];
+    }
 }
 /*
 class UsersTemplate extends Nette\Bridges\ApplicationLatte\Template

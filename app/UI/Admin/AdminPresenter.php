@@ -6,6 +6,7 @@ namespace App\UI\Admin;
 
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
+use Nette\Security\User;
 
 /**
  * @property AdminTemplate $template
@@ -39,7 +40,7 @@ final class AdminPresenter extends Nette\Application\UI\Presenter
 }
 class AdminTemplate extends Nette\Bridges\ApplicationLatte\Template
 {
-    public Nette\Security\User $user;
+    public User $user;
     public string $basePath;
     public string $baseUrl;
     public array $flashes;

@@ -1,0 +1,22 @@
+{var $title = "Users profile"}
+{var $description = "Users profile"}
+{var $keywords = "Users profile"}
+{var $robots = "NOINDEX,NOFOLLOW"}
+
+{block content}
+
+	{*ifset $user_data*}
+		{foreach $user->getIdentity()->getRoles() as $key => $value}
+            {if is_array($value)}
+                {$key}: 
+                    {foreach $value as $va}
+                       {*php print_r($va)*}
+                       
+                    {/foreach}<br />
+            {elseif is_string($value)}
+                {$key}: {$value}<br />
+            {/if}
+			
+		{/foreach}
+	{*/ifset*}	
+{/block}
