@@ -171,13 +171,14 @@ input[type="email"],
 input[type="password"],
 textarea {
     display: inline-block;
+    margin: 1rem auto;
     background: var(--input_bgcolor);
     background-clip: padding-box;
     font-family: inherit;
     font-size: var(--base-fontsize);
     border: 1px solid #999;
     border-radius: var(--radius);
-    width: auto;
+    width: 100%;
 }
 
 input[type="number"]:invalid,
@@ -273,18 +274,32 @@ textarea:valid {
 
 }
 
+.flash_child {
+    flex: 1 1 auto;
+}
+
 .flash.error {
     background-color: rgb(181, 0, 0);
 
 }
 
+ul.error,
 span.error {
+    margin: 1rem auto;
+    padding: 0;
+    background-color: var(--bgcolor-content);
     list-style: none;
     color: red;
 }
 
-.flash_child {
-    flex: 1 1 auto;
+.form {
+    width: 100%;
+    max-width: 22rem;
+    margin: 1rem auto 0 auto;
+    padding: 1rem;
+    background-color: var(--bgcolor-content);
+    border-radius: var(--radius);
+    box-shadow: var(--boxshadow);
 }
 
 .header {
@@ -442,12 +457,6 @@ span.error {
     color: var(--fontcolor-light);
     text-decoration: underline;
     text-decoration-style: dotted;
-}
-
-.form {
-    width: 100%;
-    max-width: 22rem;
-    margin: 1rem auto 0 auto;
 }
 
 /* ----------- resolution up to 1920px ----------------- */

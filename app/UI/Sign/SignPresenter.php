@@ -30,10 +30,10 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form = $this->formFactory->create();
         // setup custom rendering
         $renderer = $form->getRenderer();
-        $renderer->wrappers['group']['container'] = 'div class="bgcontent shadow round m1 pt1 pb2 px2"';
+        $renderer->wrappers['group']['container'] = 'div class="my1 mx-auto pb2 px2"';
         $renderer->wrappers['controls']['container'] = 'div';
         $renderer->wrappers['pair']['container'] = 'div';
-        $renderer->wrappers['label']['container'] = 'p';
+        $renderer->wrappers['label']['container'] = null;
         $renderer->wrappers['control']['container'] = null;
 
         // $form->addGroup('--- 👥 ---');
@@ -60,8 +60,10 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->setHtmlAttribute('id', 'enter_to_admin')
             ->setHtmlAttribute('class', 'form');
 
-        $form->addCaptcha('captcha', 'Captcha error. Re-enter captcha.');
+        $form->addGroup('');
+        // $form->addCaptcha('captcha', 'Captcha error. Re-enter captcha.');
 
+        $form->addGroup('');
         $form->addSubmit('send', 'Войти');
 
         $form->addGroup('--- § ---');
@@ -92,8 +94,10 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->addEmail('email', '')
             ->setHtmlAttribute('placeholder', 'Email:');
 
+        $form->addGroup('');
         $form->addCaptcha('captcha', 'Captcha error. Re-enter captcha.');
 
+        $form->addGroup('');
         $form->addSubmit('send', 'Зарегистрироваться');
 
         $form->addGroup('--- 🔓 ---');

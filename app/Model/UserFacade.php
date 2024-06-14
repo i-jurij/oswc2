@@ -46,8 +46,6 @@ final class UserFacade extends UsersTableColumns
     public function add(string $username, string $password, string $role): void
     {
         Validators::assert($email, 'email');
-        // auth_token generated eg
-        // $token = rand();
         try {
             $this->sqlite->table(self::TableName)->insert([
                 self::ColumnName => $username,
@@ -55,7 +53,7 @@ final class UserFacade extends UsersTableColumns
                 self::ColumnPhone => $phone,
                 self::ColumnEmail => $email,
                 self::ColumnRole => $role,
-                self::ColumnAuthToken => $this->token,
+                self::ColumnAuthToken => $this->token(),
                 // self::ColumnCreatedAt => $created_at,
                 // self::ColumnUpdatedAt => $updated_at,
             ]);
