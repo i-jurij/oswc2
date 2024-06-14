@@ -7,13 +7,14 @@ namespace App\Model;
 use Nette;
 use Nette\Database\Explorer;
 use Nette\Security\AuthenticationException;
+use Nette\Security\IIdentity;
 use Nette\Security\Passwords;
 use Nette\Security\SimpleIdentity;
 
 /**
  * Manages user-related operations such as authentication and adding new users.
  */
-final class MyAuthenticator extends UsersTableColumns implements Nette\Security\Authenticator
+final class MyAuthenticator extends UsersTableColumns implements Nette\Security\Authenticator, Nette\Security\IdentityHandler
 {
     // Dependency injection of database explorer and password utilities
     public function __construct(
@@ -48,6 +49,28 @@ final class MyAuthenticator extends UsersTableColumns implements Nette\Security\
         $arr = $row->toArray();
         unset($arr[self::ColumnPasswordHash]);
 
-        return new Nette\Security\SimpleIdentity($row[self::ColumnId], $row[self::ColumnRole], $arr);
+        return new SimpleIdentity($row[self::ColumnId], null, $arr);
+        // return new Nette\Security\SimpleIdentity($row[self::ColumnId], $row[self::ColumnRole], $arr);
+    }
+
+    public function sleepIdentity(IIdentity $identity): SimpleIdentity
+    {
+        // мы возвращаем идентификатор прокси, где в качестве идентификатора выступает auth_token
+        return new SimpleIdentity($identity->{self::ColumnAuthToken});
+    }
+
+    public function wakeupIdentity(IIdentity $identity): ?SimpleIdentity
+    {
+        // заменить идентификатор прокси на полный идентификатор, как в authenticate()
+        $row = $this->sqlite->table(self::TableName)
+            ->where(self::ColumnAuthToken, $identity->getId())
+            ->fetch();
+
+        $arr = $row->toArray();
+        unset($arr[self::ColumnPasswordHash]);
+
+        return $row
+            ? new SimpleIdentity($row[self::ColumnId], null, $arr)
+            : null;
     }
 }

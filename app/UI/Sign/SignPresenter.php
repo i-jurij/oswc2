@@ -20,7 +20,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
     // Dependency injection of form factory and user management facade
     public function __construct(
         private UserFacade $userFacade,
-        private FormFactory $formFactory,
+        private FormFactory $formFactory
     ) {
     }
 
@@ -126,6 +126,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
                 $this->redirect('Admin:');
             }
             */
+
             $this->redirect('Admin:');
         } catch (Nette\Security\AuthenticationException $e) {
             $form->addError('Неправильные логин или пароль.');
@@ -146,7 +147,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
     {
         $this->getUser()->logout(true);
         $this->flashMessage('Вы вышли.');
-        // $this->redirect('Home:');
-        $this->forward('Home:');
+        $this->redirect('Home:');
+        // $this->forward('Home:');
     }
 }

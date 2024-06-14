@@ -278,7 +278,8 @@ textarea:valid {
 
 }
 
-.error {
+span.error {
+    list-style: none;
     color: red;
 }
 

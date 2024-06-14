@@ -19,7 +19,7 @@ final class UserFacade extends UsersTableColumns
 
     // Dependency injection of database explorer and password utilities
     public function __construct(
-        private Nette\Database\Explorer $sqlite,
+        public Nette\Database\Explorer $sqlite,
         private Passwords $passwords,
     ) {
     }
@@ -35,12 +35,14 @@ final class UserFacade extends UsersTableColumns
                 self::ColumnName => $username,
                 self::ColumnPasswordHash => $this->passwords->hash($password),
                 self::ColumnRole => $role,
+                self::ColumnAuthToken => $this->token(),
             ]);
         } catch (UniqueConstraintViolationException $e) {
             throw new DuplicateNameException();
         }
     }
 
+    #[Requires(methods: 'POST', sameOrigin: true)]
     public function add(string $username, string $password, string $role): void
     {
         Validators::assert($email, 'email');
@@ -52,8 +54,8 @@ final class UserFacade extends UsersTableColumns
                 self::ColumnPasswordHash => $this->passwords->hash($password),
                 self::ColumnPhone => $phone,
                 self::ColumnEmail => $email,
-                self::ColumnAuthToken => $token,
                 self::ColumnRole => $role,
+                self::ColumnAuthToken => $this->token,
                 // self::ColumnCreatedAt => $created_at,
                 // self::ColumnUpdatedAt => $updated_at,
             ]);
@@ -63,6 +65,11 @@ final class UserFacade extends UsersTableColumns
 
         // email or sms to new user with auth_token for verification
         // $this->email->to()->text('form with links to verification cli or accessory);
+    }
+
+    public function token()
+    {
+        return Nette\Utils\Random::generate(15);
     }
 }
 

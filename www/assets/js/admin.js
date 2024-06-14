@@ -81,6 +81,24 @@ __webpack_require__.d(lib_namespaceObject, {
   write: () => (write)
 });
 
+// NAMESPACE OBJECT: ./node_modules/bootstrap/dist/js/bootstrap.esm.js
+var bootstrap_esm_namespaceObject = {};
+__webpack_require__.r(bootstrap_esm_namespaceObject);
+__webpack_require__.d(bootstrap_esm_namespaceObject, {
+  Alert: () => (Alert),
+  Button: () => (Button),
+  Carousel: () => (Carousel),
+  Collapse: () => (Collapse),
+  Dropdown: () => (Dropdown),
+  Modal: () => (Modal),
+  Offcanvas: () => (Offcanvas),
+  Popover: () => (Popover),
+  ScrollSpy: () => (ScrollSpy),
+  Tab: () => (Tab),
+  Toast: () => (Toast),
+  Tooltip: () => (Tooltip)
+});
+
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/enums.js
 var enums_top = 'top';
 var bottom = 'bottom';
@@ -6534,7 +6552,7 @@ defineJQueryPlugin(Toast);
 ;// CONCATENATED MODULE: ./resources/admin/js/admin.js
 
 
-window.Modal = Modal;
+window.bootstrap = bootstrap_esm_namespaceObject;
 //import("bootstrap");
 })();
 
