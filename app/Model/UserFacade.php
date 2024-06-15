@@ -24,6 +24,15 @@ final class UserFacade extends UsersTableColumns
     ) {
     }
 
+    public function getAllUsersData(): Nette\Database\Table\Selection
+    {
+        return $table = $this->sqlite->table(self::TableName);
+    }
+
+    public function getUserData()
+    {
+    }
+
     /**
      * Add a new user to the database.
      * Throws a DuplicateNameException if the username is already taken.

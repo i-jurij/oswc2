@@ -6,13 +6,20 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-	{ifset $pages_data}
-		{foreach $pages_data as $page_data}
-			{$page_data['alias']}<br />
-			{$page_data['title']}<br />
-			{$page_data['decription']}<br />
+	<h2>User</h2>
+	<div class="btn-group" role="group" aria-label="Basic outlined example">
+		<button type="button" class="btn btn-outline-primary">Add</button>
+		<button type="button" class="btn btn-outline-primary">Delete</button>
+		<button type="button" class="btn btn-outline-primary">Edit</button>
+	</div>
+
+	<div>
+		{foreach $users_data as $id => $row}
+			{$id}:<br />
+			{foreach $row as $key => $value}
+				{$key}: {$value}<br />
+			{/foreach}
 		{/foreach}
-	{else}
-		You is not autorized
-	{/ifset}	
+	</div>
+
 {/block}

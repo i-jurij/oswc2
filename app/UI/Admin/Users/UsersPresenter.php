@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Admin\Users;
 
+use App\Model\UserFacade;
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
 
@@ -15,13 +16,31 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     // Incorporates methods to check user login status
     use RequireLoggedUser;
 
-    public function __construct()
+    public function __construct(protected UserFacade $userfacade)
     {
+    }
+
+    public function renderDefault()
+    {
+        try {
+            $this->template->users_data = $this->userfacade->getAllUsersData();
+        } catch (Exception $e) {
+            $this->flashMessage($e->getMessage(), 'warning');
+        }
     }
 
     public function actionProfile($id)
     {
-        $this->template->user_data = [0 => 'lll'];
+        $this->template->user_data = $this->getUser()->getIdentity()->getData();
+    }
+
+    public function actionProfileUpdate($id)
+    {
+        // update profile throw UserFacade? and show profile again with updated data;
+    }
+
+    protected function getUsersData()
+    {
     }
 }
 /*

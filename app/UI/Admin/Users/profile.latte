@@ -5,18 +5,20 @@
 
 {block content}
 
-	{*ifset $user_data*}
-		{foreach $user->getIdentity()->getRoles() as $key => $value}
-            {if is_array($value)}
-                {$key}: 
-                    {foreach $value as $va}
-                       {*php print_r($va)*}
-                       
-                    {/foreach}<br />
-            {elseif is_string($value)}
-                {$key}: {$value}<br />
-            {/if}
-			
-		{/foreach}
-	{*/ifset*}	
+        {ifset $user_data}
+            {foreach $user_data as $key => $value}
+                {if is_array($value)}
+                    {$key}: 
+                        {foreach $value as $va}
+                        {php print_r($va)}
+                        
+                        {/foreach}<br />
+                {elseif is_string($value)}
+                    {$key}: {$value}<br />
+                {/if}
+                
+            {/foreach}
+        {/ifset}	
+        <button type="button" class="btn btn-primary">Update profile</button>
+
 {/block}

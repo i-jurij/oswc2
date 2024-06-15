@@ -49,7 +49,7 @@ final class MyAuthenticator extends UsersTableColumns implements Nette\Security\
         $arr = $row->toArray();
         unset($arr[self::ColumnPasswordHash]);
 
-        return new SimpleIdentity($row[self::ColumnId], null, $arr);
+        return new SimpleIdentity($row[self::ColumnId], $row[self::ColumnRole], $arr);
         // return new Nette\Security\SimpleIdentity($row[self::ColumnId], $row[self::ColumnRole], $arr);
     }
 
@@ -70,7 +70,7 @@ final class MyAuthenticator extends UsersTableColumns implements Nette\Security\
         unset($arr[self::ColumnPasswordHash]);
 
         return $row
-            ? new SimpleIdentity($row[self::ColumnId], null, $arr)
+            ? new SimpleIdentity($row[self::ColumnId], $row[self::ColumnRole], $arr)
             : null;
     }
 }
