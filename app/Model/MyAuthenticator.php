@@ -65,9 +65,10 @@ final class MyAuthenticator extends UsersTableColumns implements Nette\Security\
         $row = $this->sqlite->table(self::TableName)
             ->where(self::ColumnAuthToken, $identity->getId())
             ->fetch();
-
-        $arr = $row->toArray();
-        unset($arr[self::ColumnPasswordHash]);
+        if (!empty($row)) {
+            $arr = $row->toArray();
+            unset($arr[self::ColumnPasswordHash]);
+        }
 
         return $row
             ? new SimpleIdentity($row[self::ColumnId], $row[self::ColumnRole], $arr)

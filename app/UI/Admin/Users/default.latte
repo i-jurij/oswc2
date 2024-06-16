@@ -7,13 +7,13 @@
 
 {block content}
 	<h2>User</h2>
-	<div class="btn-group" role="group" aria-label="Basic outlined example">
-		<button type="button" class="btn btn-outline-primary">Add</button>
+	<div class="btn-group mt-2 mb-3" role="group" aria-label="User action buttons">
+		<a n:href=":Admin:Users:add" class="btn btn-outline-primary">Add</a>
 		<button type="button" class="btn btn-outline-primary">Delete</button>
 		<button type="button" class="btn btn-outline-primary">Edit</button>
 	</div>
 
-	<div>
+	<div class="users">
 		{foreach $users_data as $id => $row}
 			{$id}:<br />
 			{foreach $row as $key => $value}
@@ -22,4 +22,27 @@
 		{/foreach}
 	</div>
 
+	<div class="pagination btn-toolbar mt-4" role="paginator" aria-label="Paginator for users data">
+		{if $page > 1}
+			<div class="btn-group me-2" role="group" aria-label="First group">
+				<a n:href="default, 1" class="btn btn-outline-primary"><<</a>
+				&nbsp;
+				<a n:href="default, $page - 1" class="btn btn-outline-primary"><</a>
+				&nbsp;
+			</div>
+		{/if}
+
+		<div class="btn-group me-2" role="group" aria-label="Second group">
+			<button class="btn btn-outline-primary active" aria-current="page">{$page} из {$lastPage}</button>
+		</div>
+
+		{if $page < $lastPage}
+			<div class="btn-group" role="group" aria-label="Third group">
+				&nbsp;
+				<a n:href="default, $page + 1" class="btn btn-outline-primary">></a>
+				&nbsp;
+				<a n:href="default, $lastPage" class="btn btn-outline-primary">>></a>
+			</div>
+		{/if}
+	</div>
 {/block}

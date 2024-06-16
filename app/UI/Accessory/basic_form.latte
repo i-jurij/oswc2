@@ -1,0 +1,13 @@
+<form n:name=$form class="form">
+	<ul class="errors" n:ifcontent>
+		<li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
+	</ul>
+
+	<div n:foreach="$form->getControls() as $input"
+		n:if="$input->getOption(type) !== hidden"
+		class="mb-3">
+		{label $input /}
+		{input $input}
+		{inputError $input}
+	</div>
+</form>

@@ -1,0 +1,61 @@
+{var $description = "User add"}
+{var $keywords = "User add"}
+{var $robots = "NOINDEX,NOFOLLOW"}
+
+{block content}
+    <div class="">
+        {*include ../../Accessory/basic_form.latte, form: userAddForm*}
+        <form n:name=userAddForm class="form" style="max-width: 22rem;">
+        	<ul class="error text-warning fst-italic" n:ifcontent>
+                <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
+            </ul>
+
+            <div class="form-floating mb-1">
+                <input n:name=username size=20 autofocus class="form-control">
+                <label n:name=username class="form-label">Username:</label>
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError username}</p>
+            </div>
+
+            <div class="form-floating mb-1">
+                <input n:name=password class="form-control">
+                <label n:name=password class="form-label">Password:</label>
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError password}</p>
+            </div>
+
+            <div class="form-floating mb-1">
+                <input n:name=passwordVerify class="form-control">
+                <label n:name=passwordVerify class="form-label">PasswordVerify:</label>
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError passwordVerify}</p>
+            </div>
+
+            <div class="form-floating mb-1">
+                <input n:name=phone class="form-control" placeholder="+7 888 999 99 99">
+                <label n:name=phone class="form-label">Phone:</label>
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError phone}</p>
+            </div>
+
+            <div class="form-floating mb-1">
+                <input n:name=email class="form-control" placeholder="name@example.com">
+                <label n:name=email class="form-label">Email:</label>
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError email}</p>
+            </div>
+
+            <div class="form-floating mb-1">
+                <input n:name=role class="form-control">
+                <label n:name=role class="form-label">Role:</label>
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError role}</p>
+            </div>
+
+            <div class="my-2 py-2">
+                <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                <label class="form-check-label" for="invalidCheck">
+                    Agree to terms and conditions
+                </label>
+            </div>
+
+            <div class="my-2 py-2">
+                <input n:name=send class="btn btn-primary">
+            </div>
+        </form>
+
+    </div>

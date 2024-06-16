@@ -24,39 +24,9 @@ final class SignPresenter extends Nette\Application\UI\Presenter
     ) {
     }
 
-    protected function createComponentForm(): Form
-    {
-        // $form = new Form();
-        $form = $this->formFactory->create();
-        // setup custom rendering
-        $renderer = $form->getRenderer();
-        $renderer->wrappers['group']['container'] = 'div class="my1 mx-auto pb2 px2"';
-        $renderer->wrappers['controls']['container'] = 'div';
-        $renderer->wrappers['pair']['container'] = 'div';
-        $renderer->wrappers['label']['container'] = null;
-        $renderer->wrappers['control']['container'] = null;
-
-        // $form->addGroup('--- 👥 ---');
-        $form->addGroup('');
-        $form->addText('username', '')
-            ->setHtmlAttribute('placeholder', 'Name:')
-            ->setRequired('Пожалуйста, введите ваше имя.')
-            ->addRule($form::MinLength, 'Имя длиной не менее %d символов', 3)
-            ->addRule($form::Pattern, 'Имя только из букв, цифр, дефисов и подчеркиваний', '^[a-zA-Zа-яА-ЯёЁ0-9\-_]{3,25}$')
-            ->setMaxLength(25);
-
-        $form->addPassword('password', '')
-            ->setHtmlAttribute('placeholder', 'Password:')
-            ->setRequired('Пожалуйста, введите ваш пароль.')
-            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userFacade::PasswordMinLength)
-            ->setMaxLength(120);
-
-        return $form;
-    }
-
     protected function createComponentSignInForm(): Form
     {
-        $form = $this->createComponentForm();
+        $form = $this->formFactory->createLoginForm();
         $form->setHtmlAttribute('id', 'enter_to_admin')
             ->setHtmlAttribute('class', 'form');
 
@@ -78,7 +48,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
     public function createComponentSignUpForm()
     {
-        $form = $this->createComponentForm();
+        $form = $this->formFactory->createLoginForm();
 
         $form->setHtmlAttribute('id', 'signup')
             ->setHtmlAttribute('class', 'form');
