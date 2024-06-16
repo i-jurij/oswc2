@@ -81,8 +81,13 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     {
         // $data->name contains name
         // $data->password contains password
-        $this->userfacade->add($data);
-        $this->flashMessage('You have successfully user add.');
+        try {
+            $this->userfacade->add($data);
+            $this->flashMessage('You have successfully user add.', 'text-success');
+        } catch (\Exception $e) {
+            $this->flashMessage("Such a name, email or number is already in the database.\nError: ".$e->getMessage(), 'text-danger');
+        }
+
         $this->redirect(':Admin:Users:');
     }
 }
