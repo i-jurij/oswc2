@@ -6,43 +6,107 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-	<h2>User</h2>
-	<div class="btn-group mt-2 mb-3" role="group" aria-label="User action buttons">
-		<a n:href=":Admin:Users:add" class="btn btn-outline-primary">Add</a>
-		<button type="button" class="btn btn-outline-primary">Delete</button>
-		<button type="button" class="btn btn-outline-primary">Edit</button>
+<style>
+    #web {
+		display: block;
+	}
+    #mobile {
+		display: none;
+	}
+
+    @media screen and (max-width: 1024px) {
+        #web {
+			display: none;
+		}
+        #mobile {
+			display: inline-flex;
+		}
+    }
+</style>
+<div class="container-fluid">
+	<div class="text-center" aria-label="User add buttons">
+		<a n:href=":Admin:Users:add" class="btn btn-outline-primary">Add user</a>
+		<p class="mt-2 text-danger">Don't remove all users with admin role if you not have access to console!</p>
 	</div>
 
-	<div class="users">
+  	<div id="mobile" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2 g-lg-3">
 		{foreach $users_data as $id => $row}
-			{$id}:<br />
-			{foreach $row as $key => $value}
-				{$key}: {$value}<br />
-			{/foreach}
+			<div class="col">
+				<div class="p-2 border">
+					{foreach $row as $key => $value}
+						{$key}: <br />{$value}<br /><br />
+					{/foreach}
+				</div>
+			</div>
 		{/foreach}
+	</div>
+		
+	<form method="post" id="postUsersForm"></form>
+
+	<div id="web" class="table-responsive">	
+		<table class="table table-striped table-hover table-bordered table-sm caption-top">
+            <caption>List of users</caption>
+            <thead>
+                <tr>
+                     <th scope="col">N</th>
+                     <th scope="col">Photo</th>
+                     <th scope="col">Name</th>
+					 <th scope="col">Actions</th>
+                     <th scope="col">Phone</th>
+					 <th scope="col">Phone verify</th>
+                     <th scope="col">Email</th>
+					 <th scope="col">Email verify</th>
+                     <th scope="col">Role</th>
+                     <th scope="col">CreatedAt</th>
+					 <th scope="col">UpdatedAt</th>
+                </tr>
+            </thead>
+            <tbody class="text_left">
+				{php $key = 0}
+				{foreach $users_data as $id => $row}
+					<tr>
+						<th scope="row">{php $key++}{$key}</th>	
+                        <td><img src="{$basePath}/{$row['image']}" alt="Photo {$row['username']}" /></td>
+                        <td>{$row['username']}</td>
+						<td>
+							<button class="btn btn-link" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
+							<button class="btn btn-link" form="postUsersForm" formaction="{link :Admin:Users:delete $row['id']}">Delete</button>
+						</td>
+						<td>{$row['phone']}</td>
+						<td>{$row['phone_verified']}</td>
+						<td>{$row['email']}</td>
+						<td>{$row['email_verified']}</td>
+						<td>{$row['role']}</td>
+						<td>{$row['created_at']}</td>
+						<td>{$row['updated_at']}</td>
+					</tr>
+				{/foreach}
+            </tbody>
+		</table>
 	</div>
 
 	<div class="pagination btn-toolbar mt-4" role="paginator" aria-label="Paginator for users data">
 		{if $page > 1}
 			<div class="btn-group me-2" role="group" aria-label="First group">
-				<a n:href="default, 1" class="btn btn-outline-primary"><<</a>
+				<a n:href="default, 1" class="btn btn-outline-info"><<</a>
 				&nbsp;
-				<a n:href="default, $page - 1" class="btn btn-outline-primary"><</a>
+				<a n:href="default, $page - 1" class="btn btn-outline-info"><</a>
 				&nbsp;
 			</div>
 		{/if}
 
 		<div class="btn-group me-2" role="group" aria-label="Second group">
-			<button class="btn btn-outline-primary active" aria-current="page">{$page} из {$lastPage}</button>
+			<button class="btn btn-outline-info active" aria-current="page">{$page} из {$lastPage}</button>
 		</div>
 
 		{if $page < $lastPage}
 			<div class="btn-group" role="group" aria-label="Third group">
 				&nbsp;
-				<a n:href="default, $page + 1" class="btn btn-outline-primary">></a>
+				<a n:href="default, $page + 1" class="btn btn-outline-info">></a>
 				&nbsp;
-				<a n:href="default, $lastPage" class="btn btn-outline-primary">>></a>
+				<a n:href="default, $lastPage" class="btn btn-outline-info">>></a>
 			</div>
 		{/if}
 	</div>
+</div>
 {/block}

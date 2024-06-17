@@ -6,6 +6,7 @@ namespace App\Model;
 
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
+use Nette\Database\Table\Selection;
 use Nette\Database\UniqueConstraintViolationException;
 use Nette\Security\Passwords;
 use Nette\Utils\Validators;
@@ -19,26 +20,52 @@ final class UserFacade extends UsersTableColumns
 
     // Minimum password length requirement for users
     public const PasswordMinLength = 7;
+    protected string $columns = self::ColumnId.','.
+            self::ColumnName.','.
+            self::ColumnImage.','.
+            self::ColumnPhone.','.
+            self::ColumnPhoneVerified.','.
+            self::ColumnEmail.','.
+            self::ColumnEmailVerified.','.
+            self::ColumnRole.','.
+            self::ColumnCreatedAt.','.
+            self::ColumnUpdatedAt;
+    protected Selection $table;
 
     // Dependency injection of database explorer and password utilities
     public function __construct(
         public Nette\Database\Explorer $sqlite,
         private Passwords $passwords,
     ) {
+        $this->table = $this->sqlite->table(self::TableName);
     }
 
-    public function getAllUsersData(): Nette\Database\Table\Selection
+    public function getAllUsersData(): Selection
     {
-        return $table = $this->sqlite->table(self::TableName);
+        $users_data = $this->table->select($this->columns);
+
+        return $users_data;
     }
 
-    public function getUserData()
+    public function getUserData($id)
     {
+        $user_data = $this->table->select($this->columns)->where('id', $id);
+
+        return $user_data;
+    }
+
+    public function deleteUserData($id): void
+    {
+        try {
+            $user_data = $this->table->where('id', $id)->delete();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public function countUsers()
     {
-        return $count = count($this->sqlite->table(self::TableName));
+        return $count = count($this->table);
     }
 
     /**
@@ -65,9 +92,7 @@ final class UserFacade extends UsersTableColumns
         if (!empty($data->email)) {
             Validators::assert($data->email, 'email');
         }
-
         // $email = !empty($data->email) ? $data->email : $data->username.'@'.$data->username.'.com';
-
         $insert_array = [
                 self::ColumnName => $data->username,
                 self::ColumnPasswordHash => $this->passwords->hash($data->password),
@@ -81,16 +106,11 @@ final class UserFacade extends UsersTableColumns
         $insert_array = array_filter($insert_array);
         try {
             $this->sqlite->table(self::TableName)->insert($insert_array);
+            // email or sms to new user with auth_token for verification
+            // $this->email->to()->text('form with links to verification cli or accessory);
         } catch (Exception $e) {
             throw new Exception();
         }
-        /*
-        catch (UniqueConstraintViolationException $e) {
-            throw new DuplicateNameException();
-        }
-        */
-        // email or sms to new user with auth_token for verification
-        // $this->email->to()->text('form with links to verification cli or accessory);
     }
 
     public function token()

@@ -10,6 +10,7 @@ class UsersTableColumns
     public const TableName = 'users';
     protected const ColumnId = 'id';
     protected const ColumnName = 'username';
+    protected const ColumnImage = 'image';
     protected const ColumnPasswordHash = 'password';
     protected const ColumnPhone = 'phone';
     protected const ColumnPhoneVerified = 'phone_verified';

@@ -32,9 +32,25 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $this->template->lastPage = $lastPage;
     }
 
-    public function actionProfile($id): void
+    public function actionProfile(): void
     {
         $this->template->user_data = $this->getUser()->getIdentity()->getData();
+    }
+
+    public function actionEdit(int $id): void
+    {
+        $this->template->user_data = $this->userfacade->getUserData($id);
+    }
+
+    public function actionDelete(int $id): void
+    {
+        try {
+            $this->userfacade->deleteUserData($id);
+            $this->flashMessage('User deleted.');
+        } catch (\Throwable $th) {
+            $this->flashMessage($th);
+        }
+        $this->redirect(':Admin:Users:');
     }
 
     public function actionProfileUpdate($id): void
