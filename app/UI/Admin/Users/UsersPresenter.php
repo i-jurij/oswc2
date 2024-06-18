@@ -27,7 +27,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     {
         $users_data = $this->userfacade->getAllUsersData();
         $lastPage = 0;
-        $this->template->users_data = $users_data->page($page, 5, $lastPage);
+        $this->template->users_data = $users_data->page($page, 8, $lastPage);
         $this->template->page = $page;
         $this->template->lastPage = $lastPage;
     }
@@ -79,11 +79,20 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
         $form->addEmail('email', '');
 
+        $roles = $this->userfacade->sqlite->table('roles');
+        foreach ($roles as $role) {
+            $roles_array[$role['id']] = $role['role_name'];
+        }
+        $form->addSelect('role', 'Role:', $roles_array)
+            ->setDefaultValue('user')
+            ->setPrompt('Choose the role');
+        /*
         $form->addText('role', 'Role:')
-            ->setHtmlAttribute('placeholder', 'Role:')
-            ->addRule($form::MinLength, '>= %d characters', 3)
-            ->addRule($form::Pattern, 'Role only letters', '^[a-zA-Zа-яА-ЯёЁ]{3,25}$')
-            ->setMaxLength(25);
+        ->setHtmlAttribute('placeholder', 'Role:')
+        ->addRule($form::MinLength, '>= %d characters', 3)
+        ->addRule($form::Pattern, 'Role only letters', '^[a-zA-Zа-яА-ЯёЁ]{3,25}$')
+        ->setMaxLength(25);
+        */
 
         $form->addGroup('');
         $form->addSubmit('send', 'Add user');

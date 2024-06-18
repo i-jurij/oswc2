@@ -11,7 +11,7 @@
 		<a n:href=":Admin:Users:add" class="btn btn-outline-primary">Add user</a>
 	</div>
 
-	<p class="my-3 mx-auto p-2 text-center text-danger border">Don't remove all users with admin role if you not have access to console!</p>
+	<p class="my-3 mx-auto p-2 text-center text-danger border border-danger">Don't remove all users with admin role if you not have access to console!</p>
   	
 	<div class="d-xl-none row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2 g-lg-3">
 		{foreach $users_data as $id => $row}
@@ -48,13 +48,39 @@
             <tbody class="text_left">
 				{php $key = 0}
 				{foreach $users_data as $id => $row}
+					{if !empty($row['image'])}
+						{php $img=$row['image']}
+					{else}
+						{php $img='images/ddd_thumb.png'}
+					{/if}
 					<tr>
 						<th scope="row">{php $key++}{$key}</th>	
-                        <td><img src="{$basePath}/{$row['image']}" alt="Photo {$row['username']}" /></td>
+                        <td><img src="{$baseUrl}/{$img}" alt="Photo {$row['username']}" style="width:64px;"/></td>
                         <td>{$row['username']}</td>
 						<td>
 							<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
-							<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:delete $row['id']}">Delete</button>
+							<button type="button" class="btn btn-outline-primary d-block m-2" data-bs-toggle="modal" data-bs-target="#{$row['username']}{$row['id']}">
+								Delete
+							</button>
+							<!-- Modal -->
+							<div class="modal fade" id="{$row['username']}{$row['id']}" tabindex="-1" aria-labelledby="{$row['username']}" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="{$row['username']}">Warning!</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p>Do you really want to delete the user "{$row['username']}" with role "{$row['role']}"?</p>
+								</div>
+								<div class="modal-footer btn-toolbar justify-content-between">
+									<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:delete $row['id']}">Delete</button>
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								</div>
+								</div>
+							</div>
+							</div>
+		
 						</td>
 						<td>{$row['phone']}</td>
 						<td>{$row['phone_verified']}</td>

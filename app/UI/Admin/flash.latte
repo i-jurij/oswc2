@@ -1,6 +1,6 @@
 {block flash}
     {if !empty($flashes)}
-    <div class="modal" tabindex="-1">
+    <div class="modal flash" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -20,7 +20,7 @@
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {   
-            let flash = document.querySelector('.modal');     
+            let flash = document.querySelector('.modal.flash');     
             if (flash){
                 const modal = new bootstrap.Modal(flash);
 			    modal.show();

@@ -20,16 +20,6 @@ final class UserFacade extends UsersTableColumns
 
     // Minimum password length requirement for users
     public const PasswordMinLength = 7;
-    protected string $columns = self::ColumnId.','.
-            self::ColumnName.','.
-            self::ColumnImage.','.
-            self::ColumnPhone.','.
-            self::ColumnPhoneVerified.','.
-            self::ColumnEmail.','.
-            self::ColumnEmailVerified.','.
-            self::ColumnRole.','.
-            self::ColumnCreatedAt.','.
-            self::ColumnUpdatedAt;
     protected Selection $table;
 
     // Dependency injection of database explorer and password utilities
@@ -42,7 +32,7 @@ final class UserFacade extends UsersTableColumns
 
     public function getAllUsersData(): Selection
     {
-        $users_data = $this->table->select($this->columns);
+        $users_data = $this->table->select($this->getColumns());
 
         return $users_data;
     }
@@ -72,13 +62,17 @@ final class UserFacade extends UsersTableColumns
      * Add a new user to the database.
      * Throws a DuplicateNameException if the username is already taken.
      */
-    public function shortAdd(string $username, string $password, string $role): void
+    public function shortAdd(string $username, string $password): void
     {
         try {
+            $role_admin_id = $this->sqlite->table('roles')
+                ->select('id')
+                ->where('role_name', 'admin')
+                ->fetch();
             $this->sqlite->table(self::TableName)->insert([
                 self::ColumnName => $username,
                 self::ColumnPasswordHash => $this->passwords->hash($password),
-                self::ColumnRole => $role,
+                self::ColumnRoleId => $role_admin_id['id'],
                 self::ColumnAuthToken => $this->token(),
             ]);
         } catch (UniqueConstraintViolationException $e) {
@@ -96,9 +90,10 @@ final class UserFacade extends UsersTableColumns
         $insert_array = [
                 self::ColumnName => $data->username,
                 self::ColumnPasswordHash => $this->passwords->hash($data->password),
+                self::ColumnImage => $data->image ?? null,
                 self::ColumnPhone => $data->phone ?? null,
                 self::ColumnEmail => $data->email ?? null,
-                self::ColumnRole => $data->role ?? null,
+                self::ColumnRoleId => $data->role ?? null,
                 self::ColumnAuthToken => $this->token(),
                 // self::ColumnCreatedAt => $created_at,
                 // self::ColumnUpdatedAt => $updated_at,

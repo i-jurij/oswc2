@@ -8,8 +8,8 @@ function start()
             1. Create table "users", "role", "permissions", "role_permissions", "pages", run:
             "php start.php migrate"
 
-            2. Create user (admin is needed), run:
-            "php start.php useradd <username> <password> <role>"
+            2. Create user (with role "admin"), run:
+            "php start.php useradd <username> <password>"
             ';
     exit(1);
 }
@@ -48,16 +48,17 @@ function userAdd($container, $db, $argv)
 {
     $user_add_to_db = $container->getByType(App\Model\UserFacade::class);
     $table = $user_add_to_db::TableName;
-    $rolecolumn = $user_add_to_db::ColumnRole;
+    $rolecolumn = $user_add_to_db::ColumnRoleId;
 
     // check if at least one users with admin role isset
     // $admin_isset = $db->fetch("SELECT count(*) FROM $table WHERE $rolecolumn='admin' LIMIT 1");
-    $admin_isset = $user_add_to_db->sqlite->table($table)->select('count(*)')->where($rolecolumn, 'admin')->fetch();
+    $admin = $user_add_to_db->sqlite->table('roles')->select('id')->where('role_name', 'admin')->fetch();
+    $admin_isset = $user_add_to_db->sqlite->table($table)->select('count(*)')->where($rolecolumn, $admin['id'])->fetch();
 
     if (empty($admin_isset['count(*)'])) {
         try {
-            [,, $username, $password, $role] = $argv;
-            $user_add_to_db->shortAdd($username, $password, $role);
+            [,, $username, $password] = $argv;
+            $user_add_to_db->shortAdd($username, $password);
             echo "User $username was added.\n";
             exit(1);
         } catch (App\Model\DuplicateNameException $e) {
@@ -82,7 +83,7 @@ if (PHP_SAPI === 'cli') {
         start();
     } elseif ($argc == 2 && !empty($argv[1]) && $argv[1] === 'migrate') {
         migrate($db);
-    } elseif ($argc == 5 && $argv[1] === 'useradd') {
+    } elseif ($argc == 4 && $argv[1] === 'useradd') {
         userAdd($container, $db, $argv);
     } else {
         echo "Somethig wrong :( \n";

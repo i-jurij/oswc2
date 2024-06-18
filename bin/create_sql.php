@@ -23,7 +23,7 @@ $users = 'CREATE TABLE IF NOT EXISTS "users"
 		"email" TEXT UNIQUE DEFAULT null, 
 		"email_verified" INTEGER DEFAULT 0, 
 		"auth_token" TEXT, 
-		"role" TEXT,
+		"role_id" INTEGER,
 		"created_at" TEXT NOT NULL DEFAULT current_timestamp,
 		"updated_at" TEXT NOT NULL DEFAULT current_timestamp
 	)';

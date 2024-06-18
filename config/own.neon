@@ -1,5 +1,6 @@
 constants:
 	APPDIR: %appDir%
+	DEFAULT_IMAGE: 'images/ddd.jpg' # in www folder
 routing:
 	# cache: true
 extensions:

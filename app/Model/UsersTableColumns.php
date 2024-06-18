@@ -8,16 +8,30 @@ class UsersTableColumns
 {
     // Database table and column names
     public const TableName = 'users';
-    protected const ColumnId = 'id';
-    protected const ColumnName = 'username';
-    protected const ColumnImage = 'image';
-    protected const ColumnPasswordHash = 'password';
-    protected const ColumnPhone = 'phone';
-    protected const ColumnPhoneVerified = 'phone_verified';
-    protected const ColumnEmail = 'email';
-    protected const ColumnEmailVerified = 'email_verified';
-    protected const ColumnAuthToken = 'auth_token';
-    public const ColumnRole = 'role';
-    protected const ColumnCreatedAt = 'created_at';
-    protected const ColumnUpdatedAt = 'updated_at';
+    public const ColumnId = 'id';
+    public const ColumnName = 'username';
+    public const ColumnImage = 'image';
+    public const ColumnPasswordHash = 'password';
+    public const ColumnPhone = 'phone';
+    public const ColumnPhoneVerified = 'phone_verified';
+    public const ColumnEmail = 'email';
+    public const ColumnEmailVerified = 'email_verified';
+    public const ColumnAuthToken = 'auth_token';
+    public const ColumnRoleId = 'role_id';
+    public const ColumnCreatedAt = 'created_at';
+    public const ColumnUpdatedAt = 'updated_at';
+
+    public function getColumns()
+    {
+        return (string) $columns = self::ColumnId.','.
+             self::ColumnName.','.
+             self::ColumnImage.','.
+             self::ColumnPhone.','.
+             self::ColumnPhoneVerified.','.
+             self::ColumnEmail.','.
+             self::ColumnEmailVerified.','.
+             self::ColumnRoleId.','.
+             self::ColumnCreatedAt.','.
+             self::ColumnUpdatedAt;
+    }
 }
