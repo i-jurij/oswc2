@@ -6,30 +6,14 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-<style>
-    #web {
-		display: block;
-	}
-    #mobile {
-		display: none;
-	}
-
-    @media screen and (max-width: 1024px) {
-        #web {
-			display: none;
-		}
-        #mobile {
-			display: inline-flex;
-		}
-    }
-</style>
 <div class="container-fluid">
 	<div class="text-center" aria-label="User add buttons">
 		<a n:href=":Admin:Users:add" class="btn btn-outline-primary">Add user</a>
-		<p class="mt-2 text-danger">Don't remove all users with admin role if you not have access to console!</p>
 	</div>
 
-  	<div id="mobile" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2 g-lg-3">
+	<p class="my-3 mx-auto p-2 text-center text-danger border">Don't remove all users with admin role if you not have access to console!</p>
+  	
+	<div class="d-xl-none row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2 g-lg-3">
 		{foreach $users_data as $id => $row}
 			<div class="col">
 				<div class="p-2 border">
@@ -43,8 +27,8 @@
 		
 	<form method="post" id="postUsersForm"></form>
 
-	<div id="web" class="table-responsive">	
-		<table class="table table-striped table-hover table-bordered table-sm caption-top">
+	<div class="d-none d-xl-table table-responsive">	
+		<table class="table table-striped table-bordered table-sm caption-top">
             <caption>List of users</caption>
             <thead>
                 <tr>
@@ -69,8 +53,8 @@
                         <td><img src="{$basePath}/{$row['image']}" alt="Photo {$row['username']}" /></td>
                         <td>{$row['username']}</td>
 						<td>
-							<button class="btn btn-link" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
-							<button class="btn btn-link" form="postUsersForm" formaction="{link :Admin:Users:delete $row['id']}">Delete</button>
+							<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
+							<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:delete $row['id']}">Delete</button>
 						</td>
 						<td>{$row['phone']}</td>
 						<td>{$row['phone_verified']}</td>
