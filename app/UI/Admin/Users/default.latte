@@ -71,7 +71,7 @@
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
-									<p>Do you really want to delete the user "{$row['username']}" with role "{$row['role']}"?</p>
+									<p>Do you really want to delete the user "{$row['username']}" with role "{$row['role_id']}"?</p>
 								</div>
 								<div class="modal-footer btn-toolbar justify-content-between">
 									<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:delete $row['id']}">Delete</button>
@@ -86,7 +86,7 @@
 						<td>{$row['phone_verified']}</td>
 						<td>{$row['email']}</td>
 						<td>{$row['email_verified']}</td>
-						<td>{$row['role']}</td>
+						<td>{$row->ref("roles",'role_id')->role_name}</td>
 						<td>{$row['created_at']}</td>
 						<td>{$row['updated_at']}</td>
 					</tr>

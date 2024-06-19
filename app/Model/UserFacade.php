@@ -6,6 +6,7 @@ namespace App\Model;
 
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
+use Nette\Database\Explorer;
 use Nette\Database\Table\Selection;
 use Nette\Database\UniqueConstraintViolationException;
 use Nette\Security\Passwords;
@@ -24,7 +25,7 @@ final class UserFacade extends UsersTableColumns
 
     // Dependency injection of database explorer and password utilities
     public function __construct(
-        public Nette\Database\Explorer $sqlite,
+        public Explorer $sqlite,
         private Passwords $passwords,
     ) {
         $this->table = $this->sqlite->table(self::TableName);

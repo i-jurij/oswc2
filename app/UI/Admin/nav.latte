@@ -4,9 +4,9 @@
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
         <ul class="nav col-12 col-md-auto order-last order-md-first me-md-auto mb-2 justify-content-center mb-sm-0">
           <li>
-            <a href="{$baseUrl}" class="nav-link px-2 link-body-emphasis">
+            <a n:href=":Admin:" class="nav-link px-2 link-body-emphasis">
               <i class="bi bi-house"></i>
-              <span>Home</span>
+              <span>Main</span>
             </a>
           </li>
           {if ($user->isInRole('admin') || $user->isInRole('moder'))}

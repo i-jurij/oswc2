@@ -6,14 +6,20 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-            Content area... <br>
-			{ifset $pages_data}
-				{foreach $pages_data as $page_data}
-					{$page_data['alias']}<br />
-					{$page_data['title']}<br />
-					{$page_data['decription']}<br />
-				{/foreach}
-			{else}
-				admin page is empty
-			{/ifset}
+	<div n:inner-foreach="$user->getIdentity()->getData() as $key => $item">
+		<p>
+			<span>{$key}: </span>
+			<span>{$item}</span>
+		</p>
+	</div>
+	
+	{ifset $pages_data}
+		{foreach $pages_data as $page_data}
+			{$page_data['alias']}<br />
+			{$page_data['title']}<br />
+			{$page_data['decription']}<br />
+		{/foreach}
+	{else}
+		admin page is empty
+	{/ifset}
 {/block}

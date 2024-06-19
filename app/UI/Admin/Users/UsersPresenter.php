@@ -84,8 +84,9 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
             $roles_array[$role['id']] = $role['role_name'];
         }
         $form->addSelect('role', 'Role:', $roles_array)
-            ->setDefaultValue('user')
-            ->setPrompt('Choose the role');
+            ->setPrompt('Choose the role')
+            ->setRequired('You must choose the role');
+        // ->setDefaultValue('user')
         /*
         $form->addText('role', 'Role:')
         ->setHtmlAttribute('placeholder', 'Role:')
