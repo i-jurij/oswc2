@@ -4,21 +4,35 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-    <h2>Profile</h2>
-        {ifset $user_data}
-            {foreach $user_data as $key => $value}
-                {if is_array($value)}
-                    {$key}: 
-                        {foreach $value as $va}
-                        {php print_r($va)}
-                        
-                        {/foreach}<br />
-                {elseif is_string($value)}
-                    {$key}: {$value}<br />
-                {/if}
-                
-            {/foreach}
-        {/ifset}	
-        <button type="button" class="btn btn-primary">Update profile</button>
+    <div class="card" style="max-width: 540px;">
+    <h2 class="text-center my-3">Profile</h2>
+    <div class="row g-0">
+        <div class="col-md-4">
+            {if !empty($user_data['image'])}
+                <img src="{$baseUrl}/{$user_data['image']}" class="card-img-top" alt="Photo {$user_data['username']}">
+            {else}
+                <img src="{$baseUrl}/images/ddd.jpg" class="card-img-top" alt="Photo {$user_data['username']}">
+            {/if}
+        </div>    
+
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">Username: {$user_data['username']}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Phone: {$user_data['phone']}</li>
+                <li class="list-group-item">Phone verified: {$user_data['phone_verified']}</li>
+                <li class="list-group-item">Email: {$user_data['email']} </li>
+                <li class="list-group-item">Email verified: {$user_data['email_verified']} </li>
+                <li class="list-group-item">Role: {$user_data['role_id']} </li>
+                <li class="list-group-item">Created_at: {$user_data['created_at']} </li>
+                <li class="list-group-item">Updated_at: {$user_data['updated_at']} </li>
+            </ul>
+            <div class="card-body">
+                <a n:href=":Admin:Users:edit $user_data['id']" type="button" class="btn btn-primary">Edit profile</a>
+            </div>
+        </div>
+    </div>
+    </div>
 
 {/block}

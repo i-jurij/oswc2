@@ -5,5 +5,15 @@
 
 {block content}
 <div class="container">
-User edit page
+    <form action=":Admin:Users:update">
+        <h2>User "{$user_data['username']}" data editing</h2>
+        {ifset $user_data}
+            {foreach $user_data as $key => $value}
+                {if $key != 'auth_token'}
+                    {$key}: {$value}<br />
+                {/if}
+            {/foreach}
+        {/ifset}	
+        <button type="submit" type="button" class="btn btn-primary">Edit profile</button>
+    </form>
 </div>

@@ -40,7 +40,7 @@ final class UserFacade extends UsersTableColumns
 
     public function getUserData($id)
     {
-        $user_data = $this->table->select($this->columns)->where('id', $id);
+        $user_data = $this->table->select($this->getColumns())->get($id);
 
         return $user_data;
     }

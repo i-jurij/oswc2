@@ -42,6 +42,11 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $this->template->user_data = $this->userfacade->getUserData($id);
     }
 
+    public function actionUpdate($id): void
+    {
+        // update profile throw UserFacade? and show profile again with updated data;
+    }
+
     public function actionDelete(int $id): void
     {
         try {
@@ -51,11 +56,6 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
             $this->flashMessage($th);
         }
         $this->redirect(':Admin:Users:');
-    }
-
-    public function actionProfileUpdate($id): void
-    {
-        // update profile throw UserFacade? and show profile again with updated data;
     }
 
     public function createComponentUserAddForm()
