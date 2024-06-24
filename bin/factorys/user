@@ -10,12 +10,10 @@ function create(object $user_factory, int $int = 0): void
 {
     for ($i = 0; $i < $int; ++$i) {
         $user = $user_factory->seedUser();
-
+        $user_factory->saveUser($user);
         foreach ($user as $key => $value) {
             echo $key.': '.$value."\n";
         }
-
-        $user_factory->saveUser($user);
     }
 }
 

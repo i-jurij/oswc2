@@ -6,6 +6,9 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
+	<pre>
+	{php print_r($user->getIdentity()->getRoles())}
+	</pre>
 	<div n:inner-foreach="$user->getIdentity()->getData() as $key => $item">
 		<p>
 			<span>{$key}: </span>

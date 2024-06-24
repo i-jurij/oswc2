@@ -66,15 +66,20 @@ final class UserFacade extends UsersTableColumns
     public function shortAdd(string $username, string $password): void
     {
         try {
-            $role_admin_id = $this->sqlite->table('roles')
+            $role_admin_id = $this->sqlite->table('role')
                 ->select('id')
                 ->where('role_name', 'admin')
                 ->fetch();
-            $this->sqlite->table(self::TableName)->insert([
+            $row = $this->sqlite->table(self::TableName)->insert([
                 self::ColumnName => $username,
                 self::ColumnPasswordHash => $this->passwords->hash($password),
-                self::ColumnRoleId => $role_admin_id['id'],
                 self::ColumnAuthToken => $this->token(),
+            ]);
+
+            // insert into users_roles users (first admin user) id, role "admin" id
+            $this->sqlite->table('role_user')->insert([
+                'user_id' => $row->id,
+                'role_id' => $role_admin_id['id'],
             ]);
         } catch (UniqueConstraintViolationException $e) {
             throw new DuplicateNameException();
@@ -94,14 +99,22 @@ final class UserFacade extends UsersTableColumns
                 self::ColumnImage => $data->image ?? null,
                 self::ColumnPhone => $data->phone ?? null,
                 self::ColumnEmail => $data->email ?? null,
-                self::ColumnRoleId => $data->role ?? null,
                 self::ColumnAuthToken => $this->token(),
                 // self::ColumnCreatedAt => $created_at,
                 // self::ColumnUpdatedAt => $updated_at,
         ];
         $insert_array = array_filter($insert_array);
         try {
-            $this->sqlite->table(self::TableName)->insert($insert_array);
+            $new_user = $this->sqlite->table(self::TableName)->insert($insert_array);
+
+            if (\is_array($data->role)) {
+                foreach ($data->role as $key => $value) {
+                    $this->sqlite->table('role_user')->insert([
+                        'user_id' => $new_user->id,
+                        'role_id' => $value,
+                    ]);
+                }
+            }
             // email or sms to new user with auth_token for verification
             // $this->email->to()->text('form with links to verification cli or accessory);
         } catch (Exception $e) {

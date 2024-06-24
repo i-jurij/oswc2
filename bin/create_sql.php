@@ -1,19 +1,19 @@
 <?php
 
-$roles = 'CREATE TABLE IF NOT EXISTS "roles" 
+$role = 'CREATE TABLE IF NOT EXISTS "role" 
 	(	"id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 		"role_name" TEXT UNIQUE  ON CONFLICT ROLLBACK NOT NULL
 	)';
-$permissions = 'CREATE TABLE IF NOT EXISTS "permissions" 
+$permission = 'CREATE TABLE IF NOT EXISTS "permission" 
 	(	"id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 		"perm_mod" TEXT KEY NOT NULL, "perm_desc" TEXT NOT NULL
 	)';
-$roles_permissions = 'CREATE TABLE IF NOT EXISTS "roles_permissions" 
+$role_permission = 'CREATE TABLE IF NOT EXISTS "role_permission" 
 	(	"role_id" INTEGER NOT NULL, 
-		"perm_id" INTEGER NOT NULL,
-		PRIMARY KEY ("role_id", "perm_id")
+		"permission_id" INTEGER NOT NULL,
+		PRIMARY KEY ("role_id", "permission_id")
 	)';
-$users = 'CREATE TABLE IF NOT EXISTS "users" 
+$user = 'CREATE TABLE IF NOT EXISTS "user" 
 	(	"id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 		"username" TEXT NOT NULL UNIQUE ON CONFLICT ROLLBACK, 
 		"image" TEXT,
@@ -23,12 +23,16 @@ $users = 'CREATE TABLE IF NOT EXISTS "users"
 		"email" TEXT UNIQUE DEFAULT null, 
 		"email_verified" INTEGER DEFAULT 0, 
 		"auth_token" TEXT, 
-		"role_id" INTEGER,
 		"created_at" TEXT NOT NULL DEFAULT current_timestamp,
 		"updated_at" TEXT NOT NULL DEFAULT current_timestamp
 	)';
-
-$clients = 'CREATE TABLE IF NOT EXISTS "clients" 
+$role_user = 'CREATE TABLE IF NOT EXISTS "role_user" 
+	(	
+		"role_id" INTEGER NOT NULL, 
+		"user_id" INTEGER NOT NULL,
+		PRIMARY KEY ("role_id", "user_id")
+	)';
+$client = 'CREATE TABLE IF NOT EXISTS "client" 
 	(	"id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 		"name" TEXT, 
 		"image" TEXT,
@@ -41,7 +45,7 @@ $clients = 'CREATE TABLE IF NOT EXISTS "clients"
 		"updated_at" TEXT NOT NULL DEFAULT current_timestamp
 	)';
 
-$pages = 'CREATE TABLE IF NOT EXISTS pages
+$page = 'CREATE TABLE IF NOT EXISTS page
 	(	"id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
 		"alias" VARCHAR(100) UNIQUE  ON CONFLICT ROLLBACK NOT NULL,
 		"route" VARCHAR(100),
@@ -60,12 +64,11 @@ $pages = 'CREATE TABLE IF NOT EXISTS pages
 	)';
 
 $create_sqls = [
-    'roles' => $roles,
-    'permissions' => $permissions,
-    'roles_permissions' => $roles_permissions,
-    'users' => $users,
-
-    'pages' => $pages,
-
-    'clients' => $clients,
+    'role' => $role,
+    'permission' => $permission,
+    'role_permission' => $role_permission,
+    'user' => $user,
+    'role_user' => $role_user,
+    'page' => $page,
+    'client' => $client,
 ];

@@ -24,7 +24,12 @@
                 <li class="list-group-item">Phone verified: {$user_data['phone_verified']}</li>
                 <li class="list-group-item">Email: {$user_data['email']} </li>
                 <li class="list-group-item">Email verified: {$user_data['email_verified']} </li>
-                <li class="list-group-item">Role: {$user_data['role_id']} </li>
+                <li class="list-group-item">
+                    <span>Roles: </span>
+                    <span n:foreach="$user->getIdentity()->getRoles() as $item" >
+                        {$item}{if !$iterator->last}, {/if}
+                    </span>
+                </li>
                 <li class="list-group-item">Created_at: {$user_data['created_at']} </li>
                 <li class="list-group-item">Updated_at: {$user_data['updated_at']} </li>
             </ul>

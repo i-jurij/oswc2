@@ -7,7 +7,7 @@ namespace App\Model;
 class UsersTableColumns
 {
     // Database table and column names
-    public const TableName = 'users';
+    public const TableName = 'user';
     public const ColumnId = 'id';
     public const ColumnName = 'username';
     public const ColumnImage = 'image';
@@ -17,7 +17,6 @@ class UsersTableColumns
     public const ColumnEmail = 'email';
     public const ColumnEmailVerified = 'email_verified';
     public const ColumnAuthToken = 'auth_token';
-    public const ColumnRoleId = 'role_id';
     public const ColumnCreatedAt = 'created_at';
     public const ColumnUpdatedAt = 'updated_at';
 
@@ -30,7 +29,6 @@ class UsersTableColumns
              self::ColumnPhoneVerified.','.
              self::ColumnEmail.','.
              self::ColumnEmailVerified.','.
-             self::ColumnRoleId.','.
              self::ColumnCreatedAt.','.
              self::ColumnUpdatedAt;
     }

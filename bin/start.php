@@ -5,7 +5,7 @@ declare(strict_types=1);
 function start()
 {
     echo '
-            1. Create table "users", "role", "permissions", "role_permissions", "pages", run:
+            1. Create table "user", "role", "permission" etc, run:
             "php start.php migrate"
 
             2. Create user (with role "admin"), run:
@@ -44,16 +44,14 @@ function migrate($db)
     }
 }
 
-function userAdd($container, $db, $argv)
+function userAdd($container, $argv)
 {
     $user_add_to_db = $container->getByType(App\Model\UserFacade::class);
     $table = $user_add_to_db::TableName;
-    $rolecolumn = $user_add_to_db::ColumnRoleId;
+    $admin = $user_add_to_db->sqlite->table('role')->select('id')->where('role_name', 'admin')->fetch();
 
     // check if at least one users with admin role isset
-    // $admin_isset = $db->fetch("SELECT count(*) FROM $table WHERE $rolecolumn='admin' LIMIT 1");
-    $admin = $user_add_to_db->sqlite->table('roles')->select('id')->where('role_name', 'admin')->fetch();
-    $admin_isset = $user_add_to_db->sqlite->table($table)->select('count(*)')->where($rolecolumn, $admin['id'])->fetch();
+    $admin_isset = $user_add_to_db->sqlite->table('role_user')->select('count(*)')->where('role_id', $admin['id'])->fetch();
 
     if (empty($admin_isset['count(*)'])) {
         try {
@@ -84,7 +82,7 @@ if (PHP_SAPI === 'cli') {
     } elseif ($argc == 2 && !empty($argv[1]) && $argv[1] === 'migrate') {
         migrate($db);
     } elseif ($argc == 4 && $argv[1] === 'useradd') {
-        userAdd($container, $db, $argv);
+        userAdd($container, $argv);
     } else {
         echo "Somethig wrong :( \n";
         exit(1);

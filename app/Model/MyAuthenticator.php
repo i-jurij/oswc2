@@ -20,7 +20,7 @@ final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Secur
     public function __construct(
         private Explorer $sqlite,
         private Passwords $passwords,
-        private UsersTableColumns $uTC
+        private UsersTableColumns $u_T_C
     ) {
     }
 
@@ -31,52 +31,70 @@ final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Secur
     public function authenticate(string $username, string $password): SimpleIdentity
     {
         // Fetch the user details from the database by username
-        $user = $this->sqlite->table($this->uTC::TableName)
-            ->where($this->uTC::ColumnName, $username)
+        $user = $this->sqlite->table($this->u_T_C::TableName)
+            ->where($this->u_T_C::ColumnName, $username)
             ->fetch();
 
         // Authentication checks
         if (!$user) {
-            throw new AuthenticationException('The username is incorrect.', $this->uTC::IdentityNotFound);
-        } elseif (!$this->passwords->verify($password, $user[$this->uTC::ColumnPasswordHash])) {
+            throw new AuthenticationException('The username is incorrect.', $this->u_T_C::IdentityNotFound);
+        } elseif (!$this->passwords->verify($password, $user[$this->u_T_C::ColumnPasswordHash])) {
             throw new AuthenticationException('The password is incorrect.', self::InvalidCredential);
-        } elseif ($this->passwords->needsRehash($user[$this->uTC::ColumnPasswordHash])) {
+        } elseif ($this->passwords->needsRehash($user[$this->u_T_C::ColumnPasswordHash])) {
             $user->update([
-                $this->uTC::ColumnPasswordHash => $this->passwords->hash($password),
+                $this->u_T_C::ColumnPasswordHash => $this->passwords->hash($password),
             ]);
         }
-        $role = $user->ref('roles', 'role_id'); // sql query to table roles because role_name is need in identity
+
         // Return user identity without the password hash
         $arr = $user->toArray();
-        $arr['role_id'] = $role->role_name;
-        unset($arr[$this->uTC::ColumnPasswordHash]);
+        unset($arr[$this->u_T_C::ColumnPasswordHash]);
 
-        return new SimpleIdentity($user[$this->uTC::ColumnId], $role->role_name, $arr);
-        // return new Nette\Security\SimpleIdentity($row[$this->uTC::ColumnId], $row[$this->uTC::ColumnRole], $arr);
+        $roles = $this->getRoless($user[$this->u_T_C::ColumnId]);
+
+        return new SimpleIdentity($user[$this->u_T_C::ColumnId], $roles, $arr);
+        // return new Nette\Security\SimpleIdentity($row[$this->u_T_C::ColumnId], $row[$this->u_T_C::ColumnRole], $arr);
     }
 
     public function sleepIdentity(IIdentity $identity): SimpleIdentity
     {
         // мы возвращаем идентификатор прокси, где в качестве идентификатора выступает auth_token
-        return new SimpleIdentity($identity->{$this->uTC::ColumnAuthToken});
+        return new SimpleIdentity($identity->{$this->u_T_C::ColumnAuthToken});
     }
 
     public function wakeupIdentity(IIdentity $identity): ?SimpleIdentity
     {
         // заменить идентификатор прокси на полный идентификатор, как в authenticate()
-        $row = $this->sqlite->table($this->uTC::TableName)
-            ->where($this->uTC::ColumnAuthToken, $identity->getId())
+        $row = $this->sqlite->table($this->u_T_C::TableName)
+            ->where($this->u_T_C::ColumnAuthToken, $identity->getId())
             ->fetch();
-
         if (!empty($row)) {
-            $role = $row->ref('roles', 'role_id');
             $arr = $row->toArray();
-            $arr['role_id'] = $role->role_name;
-            unset($arr[$this->uTC::ColumnPasswordHash]);
+            unset($arr[$this->u_T_C::ColumnPasswordHash]);
+            $roles = $this->getRoless($row[$this->u_T_C::ColumnId]);
         }
 
         return $row
-            ? new SimpleIdentity($row[$this->uTC::ColumnId], $role->role_name, $arr)
+            ? new SimpleIdentity($row[$this->u_T_C::ColumnId], $roles, $arr)
             : null;
+    }
+
+    protected function getRoless($user_id)
+    {
+        $roles_ids_sql = $this->sqlite->table('role_user')
+            ->select('role_id')
+            ->where('user_id', $user_id);
+        foreach ($roles_ids_sql as $role_id) {
+            $roles_ids[] = $role_id['role_id'];
+        }
+        $roles_sql = $this->sqlite->table('role')
+            ->select('role_name')
+            ->where('id', $roles_ids);
+
+        foreach ($roles_sql as $role) {
+            $roles[] = $role['role_name'];
+        }
+
+        return $roles;
     }
 }
