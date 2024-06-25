@@ -6,6 +6,7 @@ namespace App\UI\Admin\Users;
 
 use App\Model\UserFacade;
 use App\UI\Accessory\FormFactory;
+use App\UI\Accessory\GetRoless;
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
 use Nette\Application\UI\Form;
@@ -15,6 +16,7 @@ use Nette\Application\UI\Form;
  */
 final class UsersPresenter extends Nette\Application\UI\Presenter
 {
+    use GetRoless;
     // Incorporates methods to check user login status
     use RequireLoggedUser;
 
@@ -26,10 +28,17 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     public function renderDefault(int $page = 1): void
     {
         $users_data = $this->userfacade->getAllUsersData();
+        $this->template->count = count($users_data);
+
         $lastPage = 0;
         $this->template->users_data = $users_data->page($page, 8, $lastPage);
         $this->template->page = $page;
         $this->template->lastPage = $lastPage;
+
+        foreach ($users_data as $user) {
+            $roles[$user->id] = $this->roleWithUserId($this->userfacade->sqlite, $user->id);
+        }
+        $this->template->users_roles = $roles;
     }
 
     public function actionProfile(): void

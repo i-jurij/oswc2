@@ -4,12 +4,12 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-    <div class="card" style="max-width: 540px;">
+    <div class="card mx-auto" style="max-width: 540px;">
     <h2 class="text-center my-3">Profile</h2>
     <div class="row g-0">
-        <div class="col-md-4">
+        <div class="col-md-4 mx-auto">
             {if !empty($user_data['image'])}
-                <img src="{$baseUrl}/{$user_data['image']}" class="card-img-top" alt="Photo {$user_data['username']}">
+                <img src="{$baseUrl}/{$user_data['image']}" class="card-img-top " alt="Photo {$user_data['username']}">
             {else}
                 <img src="{$baseUrl}/images/ddd.jpg" class="card-img-top" alt="Photo {$user_data['username']}">
             {/if}
@@ -20,18 +20,30 @@
                 <h5 class="card-title">Username: {$user_data['username']}</h5>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Phone: {$user_data['phone']}</li>
-                <li class="list-group-item">Phone verified: {$user_data['phone_verified']}</li>
-                <li class="list-group-item">Email: {$user_data['email']} </li>
-                <li class="list-group-item">Email verified: {$user_data['email_verified']} </li>
                 <li class="list-group-item">
-                    <span>Roles: </span>
+                    <span class="text-muted">Phone: </span>{$user_data['phone']}
+                </li>
+                <li class="list-group-item">
+                    <span class="text-muted">Phone verified: </span>{$user_data['phone_verified']}
+                </li>
+                <li class="list-group-item">
+                    <span class="text-muted">Email: </span>{$user_data['email']} 
+                </li>
+                <li class="list-group-item">
+                    <span class="text-muted">Email verified: </span>{$user_data['email_verified']} 
+                </li>
+                <li class="list-group-item">
+                    <span class="text-muted">Roles: </span>
                     <span n:foreach="$user->getIdentity()->getRoles() as $item" >
                         {$item}{if !$iterator->last}, {/if}
                     </span>
                 </li>
-                <li class="list-group-item">Created_at: {$user_data['created_at']} </li>
-                <li class="list-group-item">Updated_at: {$user_data['updated_at']} </li>
+                <li class="list-group-item">
+                    <span class="text-muted">Created_at: </span>{$user_data['created_at']} 
+                </li>
+                <li class="list-group-item">
+                    <span class="text-muted">Updated_at: </span>{$user_data['updated_at']} 
+                </li>
             </ul>
             <div class="card-body">
                 <a n:href=":Admin:Users:edit $user_data['id']" type="button" class="btn btn-primary">Edit profile</a>

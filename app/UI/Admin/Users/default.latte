@@ -13,23 +13,82 @@
 
 	<p class="my-3 mx-auto p-2 text-center text-danger border border-danger">Don't remove all users with admin role if you not have access to console!</p>
   	
+	<form method="post" id="postUsersForm"></form>
+
 	<div class="d-xl-none row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2 g-lg-3">
-		{foreach $users_data as $id => $row}
-			<div class="col">
-				<div class="p-2 border">
-					{foreach $row as $key => $value}
-						{$key}: <br />{$value}<br /><br />
-					{/foreach}
+		{foreach $users_data as $row}
+		    <div class="card mx-auto" style="max-width: 540px;">
+				<div class="mx-auto"  style="max-width: 250px;">
+					{if !empty($row->image)}
+						<img src="{$baseUrl}/{$row->image}" class="card-img-top " alt="Photo {$row->username}">
+					{else}
+						<img src="{$baseUrl}/images/ddd.jpg" class="card-img-top" alt="Photo {$row->username}">
+					{/if}
+				</div> 
+				<div class="card-body">
+					<p class="border-top pt-2 mb-2">
+						<span class="text-muted">Name: </span>{$row->username}
+					</p>
+					<p class="border-top pt-2 mb-2">
+						<span class="text-muted">Phone: </span>{$row->phone}
+					</p>
+					<p class="border-top pt-2 mb-2">
+						<span class="text-muted">Phone verified: </span>{$row->phone_verified}
+					</p>
+					<p class="border-top pt-2 mb-2">
+						<span class="text-muted">Email: </span>{$row->email} 
+					</p>
+					<p class="border-top pt-2 mb-2">
+						<span class="text-muted">Email verified: </span>{$row->email_verified} 
+					</p>
+					<p class="border-top pt-2 mb-2">
+						<span class="text-muted">Roles: </span>
+						<span n:inner-foreach="$users_roles[$row->id] as $role">
+							{$role}{if !$iterator->last}, {/if}
+						</span>
+					</p>
+					<p class="border-top pt-2 mb-2">
+						<span class="text-muted">Created_at: </span>{$row->created_at} 
+					</p>
+					<p class="border-top pt-2 mb-2">
+						<span class="text-muted">Updated_at: </span>{$row->updated_at} 
+					</p>
+					<p class="border-top pt-2 mb-2">
+						<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
+						<button type="button" class="btn btn-outline-primary d-block m-2" data-bs-toggle="modal" data-bs-target="#{$row->username}{$row->id}">
+							Delete
+						</button>
+					</p>
+												<!-- Modal -->
+							<div class="modal fade" id="{$row->username}{$row->id}" tabindex="-1" aria-labelledby="{$row->username}" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="{$row->username}">Warning!</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<p>Do you really want to delete the user "{$row->username}" with roles 
+										<span n:inner-foreach="$users_roles[$row->id] as $role">
+											{$role}{if !$iterator->last}, {/if}
+										</span>
+									?</p>
+								</div>
+								<div class="modal-footer btn-toolbar justify-content-between">
+									<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:delete $row['id']}">Delete</button>
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								</div>
+								</div>
+							</div>
+							</div>
 				</div>
 			</div>
 		{/foreach}
 	</div>
-		
-	<form method="post" id="postUsersForm"></form>
 
 	<div class="d-none d-xl-table table-responsive">	
 		<table class="table table-striped table-bordered table-sm caption-top">
-            <caption>List of users</caption>
+            <caption>List of users (total count: {$count})</caption>
             <thead>
                 <tr>
                      <th scope="col">N</th>
@@ -47,31 +106,35 @@
             </thead>
             <tbody class="text_left">
 				{php $key = 0}
-				{foreach $users_data as $id => $row}
-					{if !empty($row['image'])}
-						{php $img=$row['image']}
+				{foreach $users_data as $row}
+					{if !empty($row->image)}
+						{php $img=$row->image}
 					{else}
 						{php $img='images/ddd_thumb.png'}
 					{/if}
 					<tr>
 						<th scope="row">{php $key++}{$key}</th>	
-                        <td><img src="{$baseUrl}/{$img}" alt="Photo {$row['username']}" style="width:64px;"/></td>
-                        <td>{$row['username']}</td>
+                        <td><img src="{$baseUrl}/{$img}" alt="Photo {$row->username}" style="width:64px;"/></td>
+                        <td>{$row->username}</td>
 						<td>
 							<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
-							<button type="button" class="btn btn-outline-primary d-block m-2" data-bs-toggle="modal" data-bs-target="#{$row['username']}{$row['id']}">
+							<button type="button" class="btn btn-outline-primary d-block m-2" data-bs-toggle="modal" data-bs-target="#{$row->username}{$row->id}">
 								Delete
 							</button>
 							<!-- Modal -->
-							<div class="modal fade" id="{$row['username']}{$row['id']}" tabindex="-1" aria-labelledby="{$row['username']}" aria-hidden="true">
+							<div class="modal fade" id="{$row->username}{$row->id}" tabindex="-1" aria-labelledby="{$row->username}" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content">
 								<div class="modal-header">
-									<h5 class="modal-title" id="{$row['username']}">Warning!</h5>
+									<h5 class="modal-title" id="{$row->username}">Warning!</h5>
 									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
-									<p>Do you really want to delete the user "{$row['username']}" with role "{$row['role_id']}"?</p>
+									<p>Do you really want to delete the user "{$row->username}" with roles 
+										<span n:inner-foreach="$users_roles[$row->id] as $role">
+											{$role}{if !$iterator->last}, {/if}
+										</span>
+									?</p>
 								</div>
 								<div class="modal-footer btn-toolbar justify-content-between">
 									<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:delete $row['id']}">Delete</button>
@@ -80,13 +143,16 @@
 								</div>
 							</div>
 							</div>
-		
 						</td>
 						<td>{$row['phone']}</td>
 						<td>{$row['phone_verified']}</td>
 						<td>{$row['email']}</td>
 						<td>{$row['email_verified']}</td>
-						<td>{$row->ref("roles",'role_id')->role_name}</td>
+						<td>
+							<span n:inner-foreach="$users_roles[$row->id] as $role">
+								{$role}{if !$iterator->last}, {/if}
+							</span>
+						</td>
 						<td>{$row['created_at']}</td>
 						<td>{$row['updated_at']}</td>
 					</tr>

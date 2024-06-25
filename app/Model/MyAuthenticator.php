@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\UI\Accessory\GetRoless;
 use Nette;
 use Nette\Database\Explorer;
 use Nette\Security\AuthenticationException;
@@ -16,6 +17,8 @@ use Nette\Security\SimpleIdentity;
  */
 final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Security\IdentityHandler
 {
+    use GetRoless;
+
     // Dependency injection of database explorer and password utilities
     public function __construct(
         private Explorer $sqlite,
@@ -50,7 +53,7 @@ final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Secur
         $arr = $user->toArray();
         unset($arr[$this->u_T_C::ColumnPasswordHash]);
 
-        $roles = $this->getRoless($user[$this->u_T_C::ColumnId]);
+        $roles = $this->getRoless($this->sqlite, $user[$this->u_T_C::ColumnId]);
 
         return new SimpleIdentity($user[$this->u_T_C::ColumnId], $roles, $arr);
         // return new Nette\Security\SimpleIdentity($row[$this->u_T_C::ColumnId], $row[$this->u_T_C::ColumnRole], $arr);
@@ -71,30 +74,11 @@ final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Secur
         if (!empty($row)) {
             $arr = $row->toArray();
             unset($arr[$this->u_T_C::ColumnPasswordHash]);
-            $roles = $this->getRoless($row[$this->u_T_C::ColumnId]);
+            $roles = $this->getRoless($this->sqlite, $row[$this->u_T_C::ColumnId]);
         }
 
         return $row
             ? new SimpleIdentity($row[$this->u_T_C::ColumnId], $roles, $arr)
             : null;
-    }
-
-    protected function getRoless($user_id)
-    {
-        $roles_ids_sql = $this->sqlite->table('role_user')
-            ->select('role_id')
-            ->where('user_id', $user_id);
-        foreach ($roles_ids_sql as $role_id) {
-            $roles_ids[] = $role_id['role_id'];
-        }
-        $roles_sql = $this->sqlite->table('role')
-            ->select('role_name')
-            ->where('id', $roles_ids);
-
-        foreach ($roles_sql as $role) {
-            $roles[] = $role['role_name'];
-        }
-
-        return $roles;
     }
 }
