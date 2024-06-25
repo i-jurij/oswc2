@@ -31,6 +31,7 @@ final class UserFacade extends UsersTableColumns
         $this->table = $this->sqlite->table(self::TableName);
     }
 
+    #[Requires(methods: 'POST', sameOrigin: true)]
     public function getAllUsersData(): Selection
     {
         $users_data = $this->table->select($this->getColumns());
@@ -38,6 +39,7 @@ final class UserFacade extends UsersTableColumns
         return $users_data;
     }
 
+    #[Requires(methods: 'POST', sameOrigin: true)]
     public function getUserData($id)
     {
         $user_data = $this->table->select($this->getColumns())->get($id);
@@ -45,15 +47,18 @@ final class UserFacade extends UsersTableColumns
         return $user_data;
     }
 
+    #[Requires(methods: 'POST', sameOrigin: true)]
     public function deleteUserData($id): void
     {
         try {
-            $user_data = $this->table->where('id', $id)->delete();
+            $this->table->where('id', $id)->delete();
+            $this->sqlite->table('role_user')->where('user_id', $id)->delete();
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
+    #[Requires(methods: 'POST', sameOrigin: true)]
     public function countUsers()
     {
         return $count = count($this->table);
@@ -103,15 +108,16 @@ final class UserFacade extends UsersTableColumns
                 // self::ColumnCreatedAt => $created_at,
                 // self::ColumnUpdatedAt => $updated_at,
         ];
+        // remove the empty element
         $insert_array = array_filter($insert_array);
         try {
             $new_user = $this->sqlite->table(self::TableName)->insert($insert_array);
 
-            if (\is_array($data->role)) {
-                foreach ($data->role as $key => $value) {
+            if (\is_array($data->roles)) {
+                foreach ($data->roles as $id) {
                     $this->sqlite->table('role_user')->insert([
                         'user_id' => $new_user->id,
-                        'role_id' => $value,
+                        'role_id' => $id,
                     ]);
                 }
             }

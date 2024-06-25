@@ -3,9 +3,10 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-    <div class="">
+    <div>
+        <h2 class="text-center">Adding a user</h2>
         {*include ../../Accessory/basic_form.latte, form: userAddForm*}
-        <form n:name=userAddForm class="form" style="max-width: 22rem;">
+        <form n:name=userAddForm class="form mt-4 mx-auto" style="max-width: 22rem;">
         	<ul class="error text-warning fst-italic" n:ifcontent>
                 <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
             </ul>
@@ -38,17 +39,21 @@
                 <input n:name=email class="form-control" placeholder="name@example.com">
                 <label n:name=email class="form-label">Email:</label>
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError email}</p>
-            </div>
-
+            </div> 
+            
             <div class="mb-1 p-3 border rounded">
-                <label n:name=role>Role:</label>
-                <select n:name=role>
-                    {foreach $form[role]->items as $key => $label}
-                        <option value="role:$key">{$label}</option>
+                <label n:name=roles class="pb-2">Roles:</label>
+                    {foreach $form[roles]->items as $role_id => $role_name}
+                        <p class="ps-3">
+                            <label>
+                                <input type="checkbox" name="roles[]" value="{$role_id}">
+                                {$role_name}
+                            </label>
+                        </p>
                     {/foreach}
-                </select>
-                <p class="error text-warning fst-italic" n:ifcontent>{inputError role}</p>
-            </div>            
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError roles}</p>
+            </div>  
+
             {*
             <div class="form-floating mb-1">
                 <input n:name=role class="form-control">

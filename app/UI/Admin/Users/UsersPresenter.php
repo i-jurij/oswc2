@@ -88,14 +88,13 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
         $form->addEmail('email', '');
 
-        $roles = $this->userfacade->sqlite->table('roles');
+        $roles = $this->userfacade->sqlite->table('role');
         foreach ($roles as $role) {
             $roles_array[$role['id']] = $role['role_name'];
         }
-        $form->addSelect('role', 'Role:', $roles_array)
-            ->setPrompt('Choose the role')
-            ->setRequired('You must choose the role');
-        // ->setDefaultValue('user')
+
+        $form->addCheckboxList('roles', 'Roles:', $roles_array);
+
         /*
         $form->addText('role', 'Role:')
         ->setHtmlAttribute('placeholder', 'Role:')
