@@ -6,13 +6,13 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-{if in_array('admin', $user->getRoles())}
+{if in_array('admin', $user->getRoles()) || in_array('moder', $user->getRoles())}
 	<div class="container-fluid">
-		<div class="text-center" aria-label="User add buttons">
+		<div n:if="in_array('admin', $user->getRoles())" aria-label="User add buttons">
 			<a n:href=":Admin:Users:add" class="btn btn-outline-primary">Add user</a>
 		</div>
 
-		<p class="my-3 mx-auto p-2 text-center text-danger border border-danger">
+		<p n:if="in_array('admin', $user->getRoles())" class="my-3 mx-auto p-2 text-center text-danger border border-danger">
 			Do not delete your account with admin rights!
 		</p>
 		
@@ -58,13 +58,14 @@
 						<p class="border-top pt-2 mb-2">
 							<span class="text-muted">Updated_at: </span>{$row->updated_at} 
 						</p>
-						<p class="border-top pt-2 mb-2">
+
+						<p n:if="in_array('admin', $user->getRoles())" class="border-top pt-2 mb-2">
 							<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
 							<button type="button" class="btn btn-outline-primary d-block m-2" data-bs-toggle="modal" data-bs-target="#sm{$row->username}{$row->id}">
 								Delete
 							</button>
 						</p>
-													<!-- Modal -->
+							<!-- Modal -->
 								<div class="modal fade" id="sm{$row->username}{$row->id}" tabindex="-1" aria-labelledby="{$row->username}" aria-hidden="true">
 								<div class="modal-dialog">
 									<div class="modal-content">
@@ -98,7 +99,7 @@
 						<th scope="col">N</th>
 						<th scope="col">Photo</th>
 						<th scope="col">Name</th>
-						<th scope="col">Actions</th>
+						<th n:if="in_array('admin', $user->getRoles())" scope="col">Actions</th>
 						<th scope="col">Phone</th>
 						<th scope="col">Phone verify</th>
 						<th scope="col">Email</th>
@@ -120,7 +121,7 @@
 							<th scope="row">{php $key++}{$key}</th>	
 							<td><img src="{$baseUrl}/{$img}" alt="Photo {$row->username}" style="width:64px;"/></td>
 							<td>{$row->username}</td>
-							<td>
+							<td n:if="in_array('admin', $user->getRoles())">
 								<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
 								<button type="button" class="btn btn-outline-primary d-block m-2" data-bs-toggle="modal" data-bs-target="#{$row->username}{$row->id}">
 									Delete

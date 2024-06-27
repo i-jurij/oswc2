@@ -4,16 +4,26 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
+
 <div class="container">
-    <form action=":Admin:Users:update">
+    <form   name="userUpdateForm" 
+            id="userUpdateForm"
+            method="post"
+            class="form mt-4 mx-auto" 
+            style="max-width: 22rem;">
         <h2>User "{$user_data['username']}" data editing</h2>
         {ifset $user_data}
             {foreach $user_data as $key => $value}
                 {if $key != 'auth_token'}
                     {$key}: {$value}<br />
+                    <label>{$key}: {$value}</label>
+                    <input type="text" value="{$value}" />
                 {/if}
             {/foreach}
         {/ifset}	
-        <button type="submit" type="button" class="btn btn-primary">Edit profile</button>
+        <button type="submit" form="userUpdateForm"
+                class="btn btn-primary"
+                formaction="{link :Admin:Users:update}">
+                Update users data</button>
     </form>
 </div>

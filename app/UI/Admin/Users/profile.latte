@@ -34,7 +34,7 @@
                 </li>
                 <li class="list-group-item">
                     <span class="text-muted">Roles: </span>
-                    <span n:foreach="$user->getIdentity()->getRoles() as $item" >
+                    <span n:foreach="$user_data['roles'] as $item" >
                         {$item}{if !$iterator->last}, {/if}
                     </span>
                 </li>

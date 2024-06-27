@@ -20,6 +20,8 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     // Incorporates methods to check user login status
     use RequireLoggedUser;
 
+    public string $backlink;
+
     public function __construct(protected UserFacade $userfacade,
         private FormFactory $formFactory)
     {
@@ -41,19 +43,27 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $this->template->users_roles = $roles;
     }
 
-    public function actionProfile(): void
+    public function renderProfile(): void
     {
-        $this->template->user_data = $this->getUser()->getIdentity()->getData();
+        $identity = $this->getUser()->getIdentity();
+        $this->template->user_data = $identity->getData();
+        $this->template->user_data['roles'] = $identity->getRoles();
     }
 
-    public function actionEdit(int $id): void
+    public function renderEdit(int $id): void
     {
         $this->template->user_data = $this->userfacade->getUserData($id);
     }
 
-    public function actionUpdate($id): void
+    public function actionUpdate($data): void
     {
         // update profile throw UserFacade? and show profile again with updated data;
+        try {
+            $this->flashMessage('You have successfully user update.', 'text-success');
+        } catch (\Exception $e) {
+            $this->flashMessage("Such a name, email or number is already in the database.\nError: ".$e->getMessage(), 'text-danger');
+        }
+        $this->redirect(':Admin:Users:');
     }
 
     public function actionDelete(int $id): void
@@ -74,7 +84,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $form->setHtmlAttribute('id', 'useradd')
             ->setHtmlAttribute('class', 'form');
 
-        $form->addPassword('passwordVerify', '')
+        $form->addPassword('passwordVerify', 'PasswordVerify')
             ->setHtmlAttribute('placeholder', 'Confirm password:')
             ->setRequired('Введите пароль ещё раз, чтобы проверить опечатки')
             ->addRule($form::Equal, 'Несоответствие пароля', $form['password'])
@@ -83,10 +93,12 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
             ->setOmitted();
 
         $form->addText('phone', 'Phone:')
-            ->setHtmlType('tel');
+            ->setHtmlType('tel')
+            ->setHtmlAttribute('placeholder', 'Phone:');
         // ->setEmptyValue('+7');
 
-        $form->addEmail('email', '');
+        $form->addEmail('email', 'Email:')
+            ->setHtmlAttribute('placeholder', 'Email:');
 
         $roles = $this->userfacade->sqlite->table('role');
         foreach ($roles as $role) {

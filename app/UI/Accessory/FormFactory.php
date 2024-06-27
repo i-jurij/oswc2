@@ -48,14 +48,14 @@ final class FormFactory
 
         // $form->addGroup('--- 👥 ---');
         $form->addGroup('');
-        $form->addText('username', '')
+        $form->addText('username', 'Username:')
             ->setHtmlAttribute('placeholder', 'Name:')
             ->setRequired('Пожалуйста, введите ваше имя.')
             ->addRule($form::MinLength, 'Имя длиной не менее %d символов', 3)
             ->addRule($form::Pattern, 'Имя только из букв, цифр, дефисов и подчеркиваний', '^[a-zA-Zа-яА-ЯёЁ0-9\-_]{3,25}$')
             ->setMaxLength(25);
 
-        $form->addPassword('password', '')
+        $form->addPassword('password', 'Password:')
             ->setHtmlAttribute('placeholder', 'Password:')
             ->setRequired('Пожалуйста, введите ваш пароль.')
             ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userFacade::PasswordMinLength)

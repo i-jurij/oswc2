@@ -6,7 +6,7 @@
     <div>
         <h2 class="text-center">Adding a user</h2>
         {*include ../../Accessory/basic_form.latte, form: userAddForm*}
-        <form n:name=userAddForm class="form mt-4 mx-auto" style="max-width: 22rem;">
+        <form n:if="in_array('admin', $user->getRoles())" n:name=userAddForm class="form mt-4 mx-auto" style="max-width: 22rem;">
         	<ul class="error text-warning fst-italic" n:ifcontent>
                 <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
             </ul>
