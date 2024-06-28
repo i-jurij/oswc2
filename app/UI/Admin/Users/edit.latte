@@ -6,20 +6,87 @@
 {block content}
 
 <div class="container">
+{ifset $user_data}
+    <h2 class="text-center">User "{$user_data['username']}" data editing</h2>
+    <h3 class="text-secondary text-center">Fill in only the required fields.</h3>
     <form   name="userUpdateForm" 
             id="userUpdateForm"
             method="post"
             class="form mt-4 mx-auto" 
-            style="max-width: 22rem;">
-        <h2>User "{$user_data['username']}" data editing</h2>
-        {ifset $user_data}
-            {foreach $user_data as $key => $value}
-                {if $key != 'auth_token'}
-                    {$key}: {$value}<br />
-                    <label>{$key}: {$value}</label>
-                    <input type="text" value="{$value}" />
-                {/if}
-            {/foreach}
+            style="max-width: 25rem;">
+        
+            <div class="mb-1">
+                <label name="username" class="form-label">Username: 
+                    <span class="text-muted">"{$user_data->username}"</span>
+                </label>
+                {var $password_pattern = "^[a-zA-Zа-яА-ЯёЁ0-9-_]{3,25}$"}
+                <input  name="username" size=20 class="form-control" 
+                        minlength="3" 
+                        maxlength="25" 
+                        pattern={$password_pattern}
+                        value="">
+            </div>
+
+            <div class="mb-1">
+                <label name="password" class="form-label">Password:</label>
+                <input  type="password" name=password id="password" class="form-control" 
+                        minlength="4" 
+                        maxlength="120">
+            </div>
+
+            <div class="mb-1">
+                <label name="passwordVerify" class="form-label">PasswordVerify:</label>
+                <input  type="password" name="passwordVerify" id="confirm_password" 
+                        class="form-control" 
+                        oninput="validatePassword()" 
+                        minlength="4" 
+                        maxlength="120">
+                <p class="my-2" id="passwordConfirmMessage"></p>
+            </div>
+
+            <div class="mb-1">
+                <label name="phone" class="form-label">Phone: 
+                    <span class="text-muted">{$user_data->phone}</span>
+                </label>
+                {var $phone_pattern="(\+?7|8)?\s?[\(]{0,1}?\d{3}[\)]{0,1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?"}
+                <input  type="tel" name="phone" id="number" 
+                        class="form-control"
+                        title="Формат: +7 999 999 99 99"
+                        placeholder="+7 ___ ___ __ __"
+                        pattern={$phone_pattern}
+                        value=""
+                >
+            </div>
+
+            <div class="mb-1">
+                <label name="email" class="form-label">Email: 
+                    <span class="text-muted">{$user_data->email}</span>
+                </label>
+                <input  name="email" class="form-control" 
+                        placeholder="name@example.com"
+                        value="">
+            </div> 
+            
+            <div class="mb-1 p-3 border rounded">
+                <label name="roles" class="pb-2">
+                    Roles:
+                    {foreach $user_roles as $name} 
+                        <span class="text-muted">"{$name}"{if !$iterator->last}, {/if}</span>
+                    {/foreach}
+                </label>
+                    {foreach $roles as $role_id => $role_name}
+                        <p class="ps-3">
+                            <label>
+                                <input type="checkbox" 
+                                    name="roles[]" 
+                                    value="{$role_id}"
+                                    n:attr="value: $role_id"
+                                >
+                                {$role_name}
+                            </label>
+                        </p>
+                    {/foreach}
+            </div>  
         {/ifset}	
         <button type="submit" form="userUpdateForm"
                 class="btn btn-primary"
@@ -27,3 +94,15 @@
                 Update users data</button>
     </form>
 </div>
+<script>
+function validatePassword() {
+  if(document.getElementById('password').value === 
+     document.getElementById('confirm_password').value) {
+    document.getElementById('passwordConfirmMessage').innerText = '✅ The passwords are identical!';
+    document.getElementById('confirm_password').setCustomValidity('');
+  } else {
+    document.getElementById('passwordConfirmMessage').innerText = '❌ Passwords are different!';
+    document.getElementById('confirm_password').setCustomValidity('Passwords must match.');
+  }
+}
+</script>

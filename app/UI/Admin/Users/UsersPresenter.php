@@ -53,6 +53,11 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     public function renderEdit(int $id): void
     {
         $this->template->user_data = $this->userfacade->getUserData($id);
+        $this->template->user_roles = $this->roleWithUserId($this->userfacade->sqlite, $id);
+        $roles = $this->userfacade->sqlite->table('role');
+        foreach ($roles as $role) {
+            $this->template->roles[$role['id']] = $role['role_name'];
+        }
     }
 
     public function actionUpdate($data): void
@@ -94,7 +99,8 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
         $form->addText('phone', 'Phone:')
             ->setHtmlType('tel')
-            ->setHtmlAttribute('placeholder', 'Phone:');
+            ->setHtmlAttribute('placeholder', 'Phone:')
+            ->addRule($form::Pattern, '+7 000 111 22 33', '(\+?7|8)?\s?[\(]{0,1}?\d{3}[\)]{0,1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?');
         // ->setEmptyValue('+7');
 
         $form->addEmail('email', 'Email:')
