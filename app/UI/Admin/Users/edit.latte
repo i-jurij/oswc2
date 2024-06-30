@@ -4,96 +4,99 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-
 <div class="container">
-{ifset $user_data}
-    <h2 class="text-center">User "{$user_data['username']}" data editing</h2>
+    <h2 class="text-center">User data editing</h2>
     <h3 class="text-secondary text-center">Fill in only the required fields.</h3>
-    <form   name="userUpdateForm" 
-            id="userUpdateForm"
-            method="post"
+     <form  n:if="in_array('admin', $user->getRoles())" 
+            n:name=userUpdateForm 
             class="form mt-4 mx-auto" 
-            style="max-width: 25rem;">
+            style="max-width: 25rem;"
+            id="userUpdateForm"
+            method="post">
+        	<ul class="error text-warning fst-italic" n:ifcontent>
+                <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
+            </ul>
+
+            <input  type="hidden" n:name=id>
         
             <div class="mb-1">
-                <label name="username" class="form-label">Username: 
-                    <span class="text-muted">"{$user_data->username}"</span>
-                </label>
+                <label n:name="username" class="form-label">Username: </label>
                 {var $password_pattern = "^[a-zA-Zа-яА-ЯёЁ0-9-_]{3,25}$"}
-                <input  name="username" size=20 class="form-control" 
+                <input  n:name="username" size=20 class="form-control" 
                         minlength="3" 
                         maxlength="25" 
                         pattern={$password_pattern}
-                        value="">
+                >
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError username}</p>
             </div>
 
             <div class="mb-1">
-                <label name="password" class="form-label">Password:</label>
-                <input  type="password" name=password id="password" class="form-control" 
+                <label n:name="password" class="form-label">Password:</label>
+                <input  type="password" n:name=password id="password" class="form-control" 
                         minlength="4" 
                         maxlength="120">
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError password}</p>
             </div>
 
             <div class="mb-1">
-                <label name="passwordVerify" class="form-label">PasswordVerify:</label>
-                <input  type="password" name="passwordVerify" id="confirm_password" 
+                <label n:name="passwordVerify" class="form-label">PasswordVerify:</label>
+                <input  type="password" n:name="passwordVerify" id="confirm_password" 
                         class="form-control" 
                         oninput="validatePassword()" 
                         minlength="4" 
                         maxlength="120">
                 <p class="my-2" id="passwordConfirmMessage"></p>
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError passwordVerify}</p>
             </div>
 
             <div class="mb-1">
-                <label name="phone" class="form-label">Phone: 
-                    <span class="text-muted">{$user_data->phone}</span>
-                </label>
+                <label n:name="phone" class="form-label">Phone: </label>
                 {var $phone_pattern="(\+?7|8)?\s?[\(]{0,1}?\d{3}[\)]{0,1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?"}
-                <input  type="tel" name="phone" id="number" 
+                <input  type="tel" n:name="phone" id="number" 
                         class="form-control"
                         title="Формат: +7 999 999 99 99"
                         placeholder="+7 ___ ___ __ __"
                         pattern={$phone_pattern}
                         value=""
                 >
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError phone}</p>
             </div>
 
             <div class="mb-1">
-                <label name="email" class="form-label">Email: 
-                    <span class="text-muted">{$user_data->email}</span>
-                </label>
-                <input  name="email" class="form-control" 
+                <label n:name="email" class="form-label">Email: </label>
+                <input  n:name="email" class="form-control" 
                         placeholder="name@example.com"
                         value="">
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError email}</p>
             </div> 
             
             <div class="mb-1 p-3 border rounded">
-                <label name="roles" class="pb-2">
+                <label n:name="roles" class="pb-2">
                     Roles:
-                    {foreach $user_roles as $name} 
-                        <span class="text-muted">"{$name}"{if !$iterator->last}, {/if}</span>
-                    {/foreach}
                 </label>
-                    {foreach $roles as $role_id => $role_name}
+                    {foreach $form[roles]->items as $role_id => $role_name}
                         <p class="ps-3">
-                            <label>
+                            <label n:name="roles" >
                                 <input type="checkbox" 
                                     name="roles[]" 
                                     value="{$role_id}"
-                                    n:attr="value: $role_id"
+                                    n:attr="value: $role_id, checked: in_array($role_name, $user_roles)"
                                 >
                                 {$role_name}
                             </label>
                         </p>
                     {/foreach}
+                <p class="error text-warning fst-italic" n:ifcontent>{inputError roles}</p>
             </div>  
-        {/ifset}	
-        <button type="submit" form="userUpdateForm"
-                class="btn btn-primary"
-                formaction="{link :Admin:Users:update}">
-                Update users data</button>
+    
+
+        <div class="my-2 py-2">
+            <input n:name=send class="btn btn-primary">
+        </div>
+
     </form>
 </div>
+
 <script>
 function validatePassword() {
   if(document.getElementById('password').value === 

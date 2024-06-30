@@ -21,6 +21,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     use RequireLoggedUser;
 
     public string $backlink;
+    protected $user_data;
 
     public function __construct(protected UserFacade $userfacade,
         private FormFactory $formFactory)
@@ -50,21 +51,82 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $this->template->user_data['roles'] = $identity->getRoles();
     }
 
-    public function renderEdit(int $id): void
+    public function createComponentUserUpdateForm()
     {
-        $this->template->user_data = $this->userfacade->getUserData($id);
-        $this->template->user_roles = $this->roleWithUserId($this->userfacade->sqlite, $id);
+        $form = new Form();
+        $form->addProtection();
+        $renderer = $form->getRenderer();
+        $renderer->wrappers['group']['container'] = 'div class="my1 mx-auto pb2 px2"';
+        $renderer->wrappers['controls']['container'] = 'div';
+        $renderer->wrappers['pair']['container'] = 'div';
+        $renderer->wrappers['label']['container'] = null;
+        $renderer->wrappers['control']['container'] = null;
+
+        $form->setHtmlAttribute('id', 'userUpdateForm')
+            ->setHtmlAttribute('class', 'form')
+            ->setAction($this->link(':Admin:Users:update'));
+
+        $form->addGroup('');
+
+        $form->addHidden('id');
+
+        $form->addText('username', 'Username:')
+            ->setHtmlAttribute('placeholder', 'Name:')
+            ->addRule($form::MinLength, 'Имя длиной не менее %d символов', 3)
+            ->addRule($form::Pattern, 'Имя только из букв, цифр, дефисов и подчеркиваний', '^[a-zA-Zа-яА-ЯёЁ0-9\-_]{3,25}$')
+            ->setMaxLength(25);
+
+        $form->addPassword('password', 'Password:')
+            ->setHtmlAttribute('placeholder', 'Password:')
+            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userfacade::PasswordMinLength)
+            ->setMaxLength(120);
+
+        $form->addPassword('passwordVerify', 'PasswordVerify')
+            ->setHtmlAttribute('placeholder', 'Confirm password:')
+            ->addRule($form::Equal, 'Несоответствие пароля', $form['password'])
+            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userfacade::PasswordMinLength)
+            ->setMaxLength(120)
+            ->setOmitted();
+
+        $form->addText('phone', 'Phone:')
+            ->setHtmlType('tel')
+            ->setHtmlAttribute('placeholder', 'Phone:')
+            ->addRule($form::Pattern, '+7 000 111 22 33', '(\+?7|8)?\s?[\(]{0,1}?\d{3}[\)]{0,1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?');
+        // ->setEmptyValue('+7');
+
+        $form->addEmail('email', 'Email:')
+            ->setHtmlAttribute('placeholder', 'Email:');
+
         $roles = $this->userfacade->sqlite->table('role');
         foreach ($roles as $role) {
-            $this->template->roles[$role['id']] = $role['role_name'];
+            $roles_array[$role['id']] = $role['role_name'];
         }
+
+        $form->addCheckboxList('roles', 'Roles:', $roles_array);
+
+        $form->addGroup('');
+        $form->addSubmit('send', 'Update user');
+
+        $form->onSuccess[] = [$this, 'update'];
+
+        return $form;
     }
 
-    public function actionUpdate($data): void
+    public function renderEdit(int $id): void
+    {
+        $user_data = $this->userfacade->getUserData($id);
+        $this->template->user_roles = $this->roleWithUserId($this->userfacade->sqlite, $id);
+
+        $form = $this->getComponent('userUpdateForm');
+        $form->setDefaults($user_data); // устанавливаем значения по умолчанию
+    }
+
+    public function update(Form $form, $data): void
     {
         // update profile throw UserFacade? and show profile again with updated data;
         try {
-            $this->flashMessage('You have successfully user update.', 'text-success');
+            $dt = json_encode($data);
+            $this->flashMessage($dt, 'text-success');
         } catch (\Exception $e) {
             $this->flashMessage("Such a name, email or number is already in the database.\nError: ".$e->getMessage(), 'text-danger');
         }
@@ -101,7 +163,6 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
             ->setHtmlType('tel')
             ->setHtmlAttribute('placeholder', 'Phone:')
             ->addRule($form::Pattern, '+7 000 111 22 33', '(\+?7|8)?\s?[\(]{0,1}?\d{3}[\)]{0,1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?');
-        // ->setEmptyValue('+7');
 
         $form->addEmail('email', 'Email:')
             ->setHtmlAttribute('placeholder', 'Email:');
@@ -113,14 +174,6 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
         $form->addCheckboxList('roles', 'Roles:', $roles_array);
 
-        /*
-        $form->addText('role', 'Role:')
-        ->setHtmlAttribute('placeholder', 'Role:')
-        ->addRule($form::MinLength, '>= %d characters', 3)
-        ->addRule($form::Pattern, 'Role only letters', '^[a-zA-Zа-яА-ЯёЁ]{3,25}$')
-        ->setMaxLength(25);
-        */
-
         $form->addGroup('');
         $form->addSubmit('send', 'Add user');
 
@@ -131,8 +184,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
     public function add(Form $form, $data): void
     {
-        // $data->name contains name
-        // $data->password contains password
+        // $data->name contains name, $data->password contains password
         try {
             $this->userfacade->add($data);
             $this->flashMessage('You have successfully user add.', 'text-success');
@@ -143,15 +195,3 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $this->redirect(':Admin:Users:');
     }
 }
-/*
-class UsersTemplate extends Nette\Bridges\ApplicationLatte\Template
-{
-    public Nette\Security\User $user;
-    public string $basePath;
-    public string $baseUrl;
-    public array $flashes;
-    public object $presenter;
-    public object $control;
-    public array $pages_data;
-}
-*/
