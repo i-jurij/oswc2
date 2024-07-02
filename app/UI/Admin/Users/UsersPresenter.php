@@ -114,21 +114,28 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
     public function renderEdit(int $id): void
     {
-        $user_data = $this->userfacade->getUserData($id);
+        $this->template->user_data = $this->userfacade->getUserData($id);
         $this->template->user_roles = $this->roleWithUserId($this->userfacade->sqlite, $id);
-
-        $form = $this->getComponent('userUpdateForm');
-        $form->setDefaults($user_data); // устанавливаем значения по умолчанию
     }
 
     public function update(Form $form, $data): void
     {
         // update profile throw UserFacade? and show profile again with updated data;
         try {
-            $dt = json_encode($data);
-            $this->flashMessage($dt, 'text-success');
+            if (!empty($data)) {
+                $this->userfacade->update($data);
+                // $this->flashMessage('User "'.$this->userfacade->getUserData($this->update_user_id)->username.'" updated', 'text-success');
+                $this->flashMessage('User updated', 'text-success');
+            } else {
+                $this->flashMessage('Nothing was updated', 'text-success');
+            }
         } catch (\Exception $e) {
-            $this->flashMessage("Such a name, email or number is already in the database.\nError: ".$e->getMessage(), 'text-danger');
+            $this->flashMessage('Caught Exception!'.PHP_EOL
+                .'Error message: '.$e->getMessage().PHP_EOL
+                .'File: '.$e->getFile().PHP_EOL
+                .'Line: '.$e->getLine().PHP_EOL
+                .'Error code: '.$e->getCode().PHP_EOL
+                .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
         }
         $this->redirect(':Admin:Users:');
     }

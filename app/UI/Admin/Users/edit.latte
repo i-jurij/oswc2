@@ -7,7 +7,7 @@
 <div class="container">
     <h2 class="text-center">User data editing</h2>
     <h3 class="text-secondary text-center">Fill in only the required fields.</h3>
-     <form  n:if="in_array('admin', $user->getRoles())" 
+     <form  n:if="(in_array('admin', $user->getRoles()) && !empty($user_data))" 
             n:name=userUpdateForm 
             class="form mt-4 mx-auto" 
             style="max-width: 25rem;"
@@ -17,20 +17,23 @@
                 <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
             </ul>
 
-            <input  type="hidden" n:name=id>
+            <input type="hidden" n:name=id value="{$user_data->id}">
         
-            <div class="mb-1">
-                <label n:name="username" class="form-label">Username: </label>
-                {var $password_pattern = "^[a-zA-Zа-яА-ЯёЁ0-9-_]{3,25}$"}
+            <div class="mb-4">
+                <label n:name="username" class="form-label">
+                    Username: 
+                    <span class="text-muted">"{$user_data->username}"</span>
+                </label>
+                {var $name_pattern = "^[a-zA-Zа-яА-ЯёЁ0-9-_]{3,25}$"}
                 <input  n:name="username" size=20 class="form-control" 
                         minlength="3" 
                         maxlength="25" 
-                        pattern={$password_pattern}
+                        pattern={$name_pattern}
                 >
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError username}</p>
             </div>
 
-            <div class="mb-1">
+            <div class="mb-4">
                 <label n:name="password" class="form-label">Password:</label>
                 <input  type="password" n:name=password id="password" class="form-control" 
                         minlength="4" 
@@ -38,7 +41,7 @@
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError password}</p>
             </div>
 
-            <div class="mb-1">
+            <div class="mb-4">
                 <label n:name="passwordVerify" class="form-label">PasswordVerify:</label>
                 <input  type="password" n:name="passwordVerify" id="confirm_password" 
                         class="form-control" 
@@ -49,38 +52,44 @@
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError passwordVerify}</p>
             </div>
 
-            <div class="mb-1">
-                <label n:name="phone" class="form-label">Phone: </label>
+            <div class="mb-4">
+                <label n:name="phone" class="form-label">Phone:  
+                    <span class="text-muted">"{$user_data->phone}"</span>
+                </label>
                 {var $phone_pattern="(\+?7|8)?\s?[\(]{0,1}?\d{3}[\)]{0,1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?\d{1}\s?[\-]{0,1}?"}
                 <input  type="tel" n:name="phone" id="number" 
                         class="form-control"
                         title="Формат: +7 999 999 99 99"
                         placeholder="+7 ___ ___ __ __"
                         pattern={$phone_pattern}
-                        value=""
                 >
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError phone}</p>
             </div>
 
-            <div class="mb-1">
-                <label n:name="email" class="form-label">Email: </label>
+            <div class="mb-4">
+                <label n:name="email" class="form-label">Email:  
+                    <span class="text-muted">"{$user_data->email}"</span>
+                </label>
                 <input  n:name="email" class="form-control" 
                         placeholder="name@example.com"
-                        value="">
+                >
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError email}</p>
             </div> 
             
             <div class="mb-1 p-3 border rounded">
                 <label n:name="roles" class="pb-2">
                     Roles:
+                    {foreach $user_roles as $role_id => $role_name}
+                        <span class="text-muted">
+                        "{$role_name}"{if !$iterator->last}, {/if}</span>
+                    {/foreach}
                 </label>
                     {foreach $form[roles]->items as $role_id => $role_name}
                         <p class="ps-3">
-                            <label n:name="roles" >
+                            <label n:name="roles" class="text-muted" >
                                 <input type="checkbox" 
-                                    name="roles[]" 
-                                    value="{$role_id}"
-                                    n:attr="value: $role_id, checked: in_array($role_name, $user_roles)"
+                                    name="roles[]"
+                                    n:attr="value: $role_id"
                                 >
                                 {$role_name}
                             </label>

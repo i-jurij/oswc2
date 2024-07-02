@@ -7,6 +7,7 @@ namespace App\Model;
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
 use Nette\Database\Explorer;
+use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\Selection;
 use Nette\Database\UniqueConstraintViolationException;
 use Nette\Security\Passwords;
@@ -40,7 +41,7 @@ final class UserFacade extends UsersTableColumns
     }
 
     #[Requires(methods: 'POST', sameOrigin: true)]
-    public function getUserData($id)
+    public function getUserData($id): ActiveRow
     {
         $user_data = $this->table->select($this->getColumns())->get($id);
 
@@ -91,14 +92,13 @@ final class UserFacade extends UsersTableColumns
         }
     }
 
-    #[Requires(methods: 'POST', sameOrigin: true)]
-    public function add($data): void
+    protected function prepareAddFormData($data)
     {
         if (!empty($data->email)) {
             Validators::assert($data->email, 'email');
         }
         // $email = !empty($data->email) ? $data->email : $data->username.'@'.$data->username.'.com';
-        $insert_array = [
+        $data_array = [
                 self::ColumnName => $data->username,
                 self::ColumnPasswordHash => $this->passwords->hash($data->password),
                 self::ColumnImage => $data->image ?? null,
@@ -108,10 +108,17 @@ final class UserFacade extends UsersTableColumns
                 // self::ColumnCreatedAt => $created_at,
                 // self::ColumnUpdatedAt => $updated_at,
         ];
+
         // remove the empty element
-        $insert_array = array_filter($insert_array);
+        return array_filter($data_array);
+    }
+
+    #[Requires(methods: 'POST', sameOrigin: true)]
+    public function add($data): void
+    {
         try {
-            $new_user = $this->sqlite->table(self::TableName)->insert($insert_array);
+            $new_user = $this->sqlite->table(self::TableName)
+                ->insert($this->prepareAddFormData($data));
 
             if (\is_array($data->roles)) {
                 foreach ($data->roles as $id) {
@@ -123,6 +130,45 @@ final class UserFacade extends UsersTableColumns
             }
             // email or sms to new user with auth_token for verification
             // $this->email->to()->text('form with links to verification cli or accessory);
+        } catch (Exception $e) {
+            throw new Exception();
+        }
+    }
+
+    #[Requires(methods: 'POST', sameOrigin: true)]
+    public function update($data)
+    {
+        if (!empty($data->email)) {
+            Validators::assert($data->email, 'email');
+        }
+        // $email = !empty($data->email) ? $data->email : $data->username.'@'.$data->username.'.com';
+
+        try {
+            foreach ($data as $key => $value) {
+                if (!empty($value) && $key !== 'id' && $key !== 'roles') {
+                    $update_data[$key] = $value;
+                }
+            }
+
+            if (!empty($update_data)) {
+                $user = $this->sqlite->table(self::TableName)
+                ->where('id', $data->id)
+                ->update($update_data);
+            }
+
+            if (!empty($data->roles) && \is_array($data->roles)) {
+                $roles = [];
+                $this->sqlite->table('role_user')
+                    ->where('user_id', $data->id)
+                    ->delete();
+                foreach ($data->roles as $role_id) {
+                    $roles[] = [
+                        'user_id' => $data->id,
+                        'role_id' => $role_id,
+                    ];
+                }
+                $this->sqlite->table('role_user')->insert($roles);
+            }
         } catch (Exception $e) {
             throw new Exception();
         }
