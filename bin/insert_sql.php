@@ -5,10 +5,11 @@ $role = 'INSERT INTO "role" ("role_name") VALUES
 		("user"),
 		("moder"),
 		("admin")';
-$permission = 'INSERT INTO "permission" ("perm_mod", "perm_desc") VALUES
-		("USER", "Get"),
-		("USER", "Save"),
-		("USER", "Delete")';
+$permission = 'INSERT INTO "permission" ("resource", "action") VALUES
+		("user", "getUserData"),
+		("user", "add"),
+		("user", "update"),
+		("user", "deleteUserData")';
 $roles_permissions = 'INSERT INTO "role_permission" ("role_id", "permission_id") VALUES
 		((SELECT "id" from "role" WHERE "role_name"="admin" LIMIT 1), 1),
 		((SELECT "id" from "role" WHERE "role_name"="admin" LIMIT 1), 2),

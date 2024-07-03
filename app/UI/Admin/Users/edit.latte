@@ -7,7 +7,7 @@
 <div class="container">
     <h2 class="text-center">User data editing</h2>
     <h3 class="text-secondary text-center">Fill in only the required fields.</h3>
-     <form  n:if="(in_array('admin', $user->getRoles()) && !empty($user_data))" 
+     <form  n:if="($user->isInRole('admin')) && !empty($user_data))" 
             n:name=userUpdateForm 
             class="form mt-4 mx-auto" 
             style="max-width: 25rem;"

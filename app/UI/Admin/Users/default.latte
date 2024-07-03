@@ -9,7 +9,7 @@
 {if in_array('admin', $user->getRoles()) || in_array('moder', $user->getRoles())}
 	<div class="container-fluid">
 		<h2 class="text-center">Users editing</h2>
-		<p n:if="in_array('admin', $user->getRoles())" class="my-3 mx-auto p-2 text-center text-danger border border-danger">
+		<p n:if="$user->isInRole('admin')" class="my-3 mx-auto p-2 text-center text-danger border border-danger">
 			Do not delete your account with admin rights!
 		</p>
 		
