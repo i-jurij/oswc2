@@ -10,7 +10,17 @@
             </a>
           </li>
           {if ($user->isInRole('admin') || $user->isInRole('moder'))}
-            <li n:class="$presenter->isLinkCurrent(':Admin:Users:*') ? 'border-bottom border-info'"><a n:href=":Admin:Users:" class="nav-link px-2 link-body-emphasis">Users</a></li>
+          <div class="dropdown">
+            <button  n:class="$presenter->isLinkCurrent(':Admin:Users:*') ? 'border-bottom border-info', 'nav-link px-2 link-body-emphasis dropdown-toggle'" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              Users
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:add">Add</a></li>
+              <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:default">Edit, delete</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:RolesPermissions:">Roles, permissions</a></li>
+            </ul>
+          </div>
             <li n:class="$presenter->isLinkCurrent(':Admin:Logs:*') ? 'border-bottom border-info'"><a n:href=":Admin:Logs:" class="nav-link px-2 link-body-emphasis">Logs</a></li>
           {/if}  
           {if $user->isInRole('admin')}
