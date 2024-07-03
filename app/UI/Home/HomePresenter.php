@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Home;
 
-use App\Model\PagesListFacade;
+use App\Model\PageFacade;
 use Michelf\MarkdownExtra;
 use Nette;
 use Nette\Utils\Finder;
@@ -15,7 +15,7 @@ use Nette\Utils\Html;
  */
 final class HomePresenter extends Nette\Application\UI\Presenter
 {
-    public function __construct(private PagesListFacade $db_pages)
+    public function __construct(private PageFacade $db_pages)
     {
     }
 

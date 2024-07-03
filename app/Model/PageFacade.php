@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Nette\Database\Connection;
 
-final class PagesListFacade
+final class PageFacade
 {
     protected Connection $db_pages;
     private $check_table;
