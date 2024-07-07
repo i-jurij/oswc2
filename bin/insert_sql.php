@@ -6,10 +6,10 @@ $role = 'INSERT INTO "role" ("role_name") VALUES
 		("moder"),
 		("admin")';
 $permission = 'INSERT INTO "permission" ("resource", "action") VALUES
-		("user", "getUserData"),
-		("user", "add"),
-		("user", "update"),
-		("user", "deleteUserData")';
+		("User", "getUserData"),
+		("User", "add"),
+		("User", "update"),
+		("User", "deleteUserData")';
 $roles_permissions = 'INSERT INTO "role_permission" ("role_id", "permission_id") VALUES
 		((SELECT "id" from "role" WHERE "role_name"="admin" LIMIT 1), 1),
 		((SELECT "id" from "role" WHERE "role_name"="admin" LIMIT 1), 2),

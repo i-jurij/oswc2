@@ -1,0 +1,78 @@
+{*layout '../@layout.latte'*}
+
+{var $title = "Permissions removing"}
+{var $description = "Removing permissions"}
+{var $keywords = "Removing permissions"}
+{var $robots = "NOINDEX,NOFOLLOW"}
+
+{block content}
+<div class="container">
+    <h2 class="text-center">Removing permissions</h2>
+    <form   n:if="($user->isInRole('admin'))" 
+            n:name=formPermissionsDelete 
+            class="form mt-4 mx-auto" 
+            style="max-width: 25rem;"
+            method="post">
+        	<ul class="error text-warning fst-italic" n:ifcontent>
+                <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
+            </ul>
+
+            <div>
+                <p class="error text-warning fst-italic"></p>
+
+                {foreach $existed_permissions as $resource => $actions_array}
+                    <div class="border m-2 p-2">
+                        <p>
+                            <span class="text-muted" >Resource </span>
+                            "{$resource}"
+                            <span class="text-muted" >actions: </span>
+                        </p>
+                        {foreach $actions_array as $data}
+                            <label class="text-muted border m-2 p-2" >
+                                <input type="checkbox" 
+                                    name="permission[]"
+                                    id="{$data['id']}{$data['action']}"
+                                    value="{$data['id']}"
+                                >
+                                {$data['action']}
+                        </label>
+                        {/foreach}
+                    </div>
+                {/foreach}
+            </div>
+
+            <div class="my-2 py-2">
+                <input n:name=deletePermissions class="btn btn-primary">
+            </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function permissionsDeleting() { 
+       const TDEL = document.querySelectorAll('input[name="resource"]');
+       if (TDEL) {
+        for (const TDE of TDEL) {
+            TDE.addEventListener('click', function(e) {
+                const CHE = document.querySelectorAll('.checkboxes');
+                for (const CH of CHE) {
+                    CH.classList.add('d-none');
+                }
+
+                if (TDE.checked) {
+                    const EL = document.querySelector('#'+TDE.id+'actions');
+                    const CHS = document.querySelectorAll('input[type="checkbox"]');
+                    if (CHS) {
+                        CHS.forEach((element) => element.checked = false);
+                    }
+                    if (EL) {
+                        EL.classList.remove('d-none');
+                        EL.classList.add('d-block');
+                    }
+                }
+               
+           });
+        }
+
+       }
+});
+</script>

@@ -31,4 +31,12 @@ final class PageFacade
 
         return !empty($db_data) ? $db_data : [];
     }
+
+    public function add()
+    {
+    }
+
+    public function delete()
+    {
+    }
 }

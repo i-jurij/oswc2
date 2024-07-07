@@ -9,81 +9,58 @@
 <div class="container">
     <h2 class="text-center">Permissions adding</h2>
 
-    <form   n:if="($user->isInRole('admin'))" 
-            n:name=formPermissionsAdd 
-            class="form mt-4 mx-auto" 
-            style="max-width: 25rem;"
-            method="post">
-        	<ul class="error text-warning fst-italic" n:ifcontent>
-                <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
-            </ul>
-            {*
-            <div class="mb-4">
-                <label n:name="resource" class="form-label">
-                    Resource: 
-                </label>
-                <input  n:name="resource" class="form-control">
-                <p class="error text-warning fst-italic" n:ifcontent>{inputError resource}</p>
+    <form n:if="($user->isInRole('admin'))" n:name=formPermissionsAdd class="form mt-4 mx-auto" style="max-width: 25rem;" >
+        <ul class="error text-warning fst-italic" n:ifcontent>
+            <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
+        </ul>
+
+
+
+
+        <div class="mb-1 p-3 border rounded">
+            <p class="pb-2">
+                Resource:
+            </p>
+            
+            <div>
+                {foreach $actions as $resource => $actions_array}
+                    <label class="text-muted border m-2 p-2">
+                        <input type="radio" name="resource" id="{$resource}" value="{$resource}" > 
+                        {$resource}
+                    </label>
+                {/foreach}
             </div>
+        </div> 
 
-            <div class="mb-4">
-                <label n:name="action" class="form-label">
-                    Action: 
-                </label>
-                <input n:name="action" class="form-control">
-                <p class="error text-warning fst-italic" n:ifcontent>{inputError action}</p>
-            </div>
-            *}
-
-            <div class="mb-1 p-3 border rounded">
-                <label n:name="resource" class="pb-2">
-                    Resource:
-                </label>
-                    {foreach $form[resource]->items as $item}
-                        <p class="ps-3">
-                            <label n:name="resource" class="text-muted" >
-                                <input type="radio" 
-                                    name="resource"
-                                    id="{$item}"
-                                >
-                                {$item}
+        <div class="mb-1 p-3 border rounded">
+            <p class="pb-2">
+                Actions:
+            </p>
+            <div>
+                {foreach $actions as $resource => $actions_array}
+                    <div class="ps-3 d-none checkboxes" id="{$resource}actions">
+                    {foreach $actions_array as $k => $act}
+                        {if !in_array($act, ['__construct', 'token', 'getColumns', 'injectRequireLoggedUser', 'shortAdd'])}
+                            <label class="text-muted m-2 p-2 border" >
+                                <input type="checkbox" name="action[]" value="{$act}" >
+                                {$act}
                             </label>
-                        </p>
-                    {/foreach}
-                <p class="error text-warning fst-italic" n:ifcontent>{inputError resource}</p>
-            </div> 
-
-            <div class="mb-1 p-3 border rounded">
-                <label n:name="action" class="pb-2">
-                    Actions:
-                </label>
-                    {foreach $form[action]->items as $resource => $actions}
-                    <div class="ps-3 d-none checkboxes" id="{$resource}actions">{*$resource*}
-                    {foreach $actions as $action}
-                        {if !in_array($action, ['__construct', 'token', 'getColumns', 'injectRequireLoggedUser', 'shortAdd'])}
-                            <p class="ps-3">
-                            <label n:name="action" class="text-muted" >
-                                <input type="checkbox" 
-                                    name="action[]"
-                                >
-                                {$action}
-                            </label>
-                            </p>
                         {/if}
                     {/foreach}
                     </div>
-                    {/foreach}
-                <p class="error text-warning fst-italic" n:ifcontent>{inputError action}</p>
-            </div> 
-
-            <div class="my-2 py-2">
-                <input n:name=send class="btn btn-primary">
+                {/foreach}
             </div>
+            <p class="error text-warning fst-italic" id="action_error_p"></p>
+        </div> 
+
+        <div class="my-2 py-2">
+            <input n:name=addPermissions class="btn btn-primary">
+        </div>
     </form>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() { 
+document.addEventListener("DOMContentLoaded", function permissionsAdding() { 
        const TDEL = document.querySelectorAll('input[name="resource"]');
        if (TDEL) {
         for (const TDE of TDEL) {
@@ -94,13 +71,32 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
 
                 if (TDE.checked) {
-                    document.querySelector('#'+TDE.id+'actions').classList.remove('d-none');
-                    document.querySelector('#'+TDE.id+'actions').classList.add('d-block');
+                    const EL = document.querySelector('#'+TDE.id+'actions');
+                    const CHS = document.querySelectorAll('input[type="checkbox"]');
+                    if (CHS) {
+                        CHS.forEach((element) => element.checked = false);
+                    }
+                    if (EL) {
+                        EL.classList.remove('d-none');
+                        EL.classList.add('d-block');
+                    }
                 }
                
            });
         }
 
        }
+
+    const subm = document.querySelector('input[type="submit"]');
+    subm.addEventListener('click', function(event) {
+        const checkboxGroup = document.querySelectorAll('input[name="action[]"]');
+        const p_err = document.querySelector('#action_error_p');
+        let isChecked = Array.from(checkboxGroup).some(checkbox => checkbox.checked);
+        checkboxGroup[0].setCustomValidity(isChecked ? "" : p_err.innerHTML = "Required!");
+
+        if (!formPermissionsAdd.checkValidity()) {
+            event.preventDefault();
+        }
+    });
 });
 </script>

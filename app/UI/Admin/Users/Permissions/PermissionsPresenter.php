@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace App\UI\Admin\Users\Permissions;
 
-use App\UI\Accessory\FormFactory;
+use App\Model\PermissionFacade;
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
 use Nette\Application\UI\Form;
-use Nette\Utils\Finder;
-use Nette\Utils\Strings;
 
 /**
- * @property UsersTemplate $template
+ * @property PermissionsTemplate $template
  */
 final class PermissionsPresenter extends Nette\Application\UI\Presenter
 {
@@ -22,52 +20,113 @@ final class PermissionsPresenter extends Nette\Application\UI\Presenter
     public string $backlink;
     protected $user_data;
 
-    public function __construct(private FormFactory $formFactory)
+    public function __construct(
+        private PermissionFacade $pf)
     {
+    }
+
+    private function get(int $id)
+    {
+    }
+
+    public function actionAdd()
+    {
+        $actions = $this->pf->actionListFromModelDir();
+        $existed_permissions = $this->pf->list();
+
+        foreach ($actions as $resource => $values) {
+            foreach ($values as $key => $action) {
+                if (isset($existed_permissions[$resource]) && \in_array($action, $existed_permissions[$resource])) {
+                    unset($actions[$resource][$key]);
+                }
+            }
+        }
+
+        return $this->template->actions = $actions;
     }
 
     public function createComponentFormPermissionsAdd(): Form
     {
-        $form = $this->formFactory->create();
+        $form = new Form();
+        $form->addProtection();
         $form->setHtmlAttribute('id', 'formPermissionsAdd')
            ->setHtmlAttribute('class', 'form');
-        /*
-        $form->addText('resource', 'Resources name:')
-            ->setHtmlAttribute('placeholder', 'Resources name:')
-            ->setRequired()
-            ->addRule($form::Pattern, 'Resources name = models name', '^[a-zA-Z0-9]$');
 
-        $form->addText('action', 'Action name:')
-            ->setHtmlAttribute('placeholder', 'Action name:')
-            ->setRequired()
-            ->addRule($form::Pattern, 'Action name = name of models method', '^[a-zA-Z0-9]$');
-        */
-        foreach (Finder::findFiles('*Facade.php')->in(APPDIR.DIRECTORY_SEPARATOR.'Model') as $name => $file) {
-            $model = \pathinfo($name, PATHINFO_FILENAME);
-            $resource = Strings::before($model, 'Facade', 1);
-            if (\class_exists('App\Model\\'.$model)) {
-                foreach (\get_class_methods('App\Model\\'.$model) as $action) {
-                    $actions[$resource][] = $action;
-                }
-            }
-            $resources[] = $resource;
-        }
-
-        $form->addRadioList('resource', 'Resource:', $resources);
-        $form->addCheckboxList('action', 'Actions:', $actions);
-
-        $form->addSubmit('send', 'Add permissions');
+        $form->addSubmit('addPermissions', 'Add permissions');
 
         $form->onSuccess[] = [$this, 'add'];
 
         return $form;
     }
 
-    public function add(): void
+    public function add(Form $form): void
     {
+        $data['resource'] = $form->getHttpData($form::DataText, 'resource');
+        $data['action'] = $form->getHttpData($form::DataText, 'action[]');
+
+        if (!empty($data['resource']) && !empty($data['action'])) {
+            try {
+                $this->pf->add($data);
+
+                $this->flashMessage('Permission added', 'text-success');
+            } catch (\Throwable $e) {
+                $this->flashMessage('Caught Exception!'.PHP_EOL
+                    .'Error message: '.$e->getMessage().PHP_EOL
+                    .'File: '.$e->getFile().PHP_EOL
+                    .'Line: '.$e->getLine().PHP_EOL
+                    .'Error code: '.$e->getCode().PHP_EOL
+                    .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
+            }
+        } else {
+            $this->flashMessage('An empty form was received');
+            $this->redirect(':Admin:Users:Permissions:add');
+        }
+
+        $this->redirect(':Admin:');
     }
 
-    public function delete(): void
+    public function actionDelete()
     {
+        $existed_permissions = [];
+        foreach ($this->pf->table as $row) {
+            $existed_permissions[$row->resource][] = [
+                'id' => $row->id,
+                'action' => $row->action,
+            ];
+        }
+
+        return $this->template->existed_permissions = $existed_permissions;
+    }
+
+    public function createComponentFormPermissionsDelete(): Form
+    {
+        $form = new Form();
+        $form->addProtection();
+        $form->setHtmlAttribute('id', 'formPermissionsDelete')
+           ->setHtmlAttribute('class', 'form');
+
+        $form->addSubmit('deletePermissions', 'Delete permissions');
+
+        $form->onSuccess[] = [$this, 'delete'];
+
+        return $form;
+    }
+
+    public function delete(Form $form): void
+    {
+        $data = $form->getHttpData($form::DataText, 'permission[]');
+        try {
+            $this->pf->delete($data);
+            $this->flashMessage('Permissions was deleted', 'text-success');
+        } catch (\Throwable $e) {
+            $this->flashMessage('Caught Exception!'.PHP_EOL
+                    .'Error message: '.$e->getMessage().PHP_EOL
+                    .'File: '.$e->getFile().PHP_EOL
+                    .'Line: '.$e->getLine().PHP_EOL
+                    .'Error code: '.$e->getCode().PHP_EOL
+                    .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
+        }
+
+        $this->redirect(':Admin:');
     }
 }
