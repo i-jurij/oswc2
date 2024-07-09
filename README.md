@@ -51,11 +51,11 @@ It safely for data in existing tables.
 SQL query for tables created is in file "create_sql.php".   
 
 Then run:  
-```php ./bin/start.php useradd <username> <password> <email> <role>```  
-for user add (at least one user with admin role needed).  
+```php ./bin/start.php useradd <username> <password>```  
+for user with admin grants creating.  
 Password minimal length = 7 (it can be change in app/Model/UserFacade.php).  
 
-In the future, users can be added from the admin panel.  
+Other users can be added from the admin panel.  
 
 ***If you change columns of table "users" in file "create_sql.php" change it in app/Model/UsersTableColumns too***
 
@@ -66,7 +66,26 @@ Config `pages_sqlite` is require for page menu on main page and admin pages.
 ### Routing
 "app/Core/RouterFactory.php", [documentation](https://doc.nette.org/en/application/routing)  
 Application use three main routes: "Home", "Sign" and "Admin".   
-??? And "Home::Pages::OtherPresenters::method", "Admin::Pages::OtherPresenters::method".   
+Other routes as in Nette Framework: "Home::Pages::OtherPresenters::method", "Admin::Pages::OtherPresenters::method".   
 
 ### Models
-`PagesListFacade` - get data from table pages (for menu at main page).   
+`PagesFacade` - get data from table pages (for menu at main page).  
+`MyAuthenticator` - get user data (name, roles and other)   
+`PermissionFacade` - add, edit, delete permissions   
+`UserFacade` - add, edit, delete users   
+
+### Accessory  
+`RequireLoggedUser` - trait for page that need autentication (in user not logged - redirect to sign in)  
+
+## Basic pages
+
+### Admin
+
+#### Users
+Add, edit, delete users and their roles.  
+
+#### Roles
+Add, edit, delete roles and permissions for roles.   
+
+#### Permissions
+Add, edit, delete Permissions. Permissions can be get from Models or Presenters classes (or both: see `PermissionFacade`) as their methods.   

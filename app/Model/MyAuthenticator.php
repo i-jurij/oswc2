@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\UI\Accessory\GetRoless;
 use Nette;
 use Nette\Database\Explorer;
 use Nette\Security\AuthenticationException;
@@ -17,13 +16,12 @@ use Nette\Security\SimpleIdentity;
  */
 final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Security\IdentityHandler
 {
-    use GetRoless;
-
     // Dependency injection of database explorer and password utilities
     public function __construct(
         private Explorer $sqlite,
         private Passwords $passwords,
-        private UsersTableColumns $u_T_C
+        private UsersTableColumns $u_T_C,
+        private UserFacade $userfacade,
     ) {
     }
 
@@ -53,7 +51,7 @@ final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Secur
         $arr = $user->toArray();
         unset($arr[$this->u_T_C::ColumnPasswordHash]);
 
-        $roles = $this->getRoless($this->sqlite, $user[$this->u_T_C::ColumnId]);
+        $roles = $this->userfacade->getRoless($user[$this->u_T_C::ColumnId]);
 
         return new SimpleIdentity($user[$this->u_T_C::ColumnId], $roles, $arr);
         // return new Nette\Security\SimpleIdentity($row[$this->u_T_C::ColumnId], $row[$this->u_T_C::ColumnRole], $arr);
@@ -74,7 +72,7 @@ final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Secur
         if (!empty($row)) {
             $arr = $row->toArray();
             unset($arr[$this->u_T_C::ColumnPasswordHash]);
-            $roles = $this->getRoless($this->sqlite, $row[$this->u_T_C::ColumnId]);
+            $roles = $this->userfacade->getRoless($row[$this->u_T_C::ColumnId]);
         }
 
         return $row

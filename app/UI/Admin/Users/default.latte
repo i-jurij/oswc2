@@ -56,12 +56,12 @@
 							<span class="text-muted">Updated_at: </span>{$row->updated_at} 
 						</p>
 
-						<p n:if="in_array('admin', $user->getRoles())" class="border-top pt-2 mb-2">
-							<button class="btn btn-outline-primary d-block m-2" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
-							<button type="button" class="btn btn-outline-primary d-block m-2" data-bs-toggle="modal" data-bs-target="#sm{$row->username}{$row->id}">
+						<div n:if="in_array('admin', $user->getRoles())" class="border-top pt-2">
+							<button class="btn btn-outline-primary" form="postUsersForm" formaction="{link :Admin:Users:edit $row['id']}">Edit</button>
+							<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#sm{$row->username}{$row->id}">
 								Delete
 							</button>
-						</p>
+						</div>
 							<!-- Modal -->
 								<div class="modal fade" id="sm{$row->username}{$row->id}" tabindex="-1" aria-labelledby="{$row->username}" aria-hidden="true">
 								<div class="modal-dialog">

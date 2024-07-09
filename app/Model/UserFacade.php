@@ -114,7 +114,7 @@ final class UserFacade extends UsersTableColumns
     }
 
     #[Requires(methods: 'POST', sameOrigin: true)]
-    public function add($data): void
+    public function add($data): void // object
     {
         try {
             $new_user = $this->sqlite->table(self::TableName)
@@ -133,6 +133,8 @@ final class UserFacade extends UsersTableColumns
         } catch (Exception $e) {
             throw new Exception();
         }
+
+        // return $new_user;
     }
 
     #[Requires(methods: 'POST', sameOrigin: true)]
@@ -146,7 +148,11 @@ final class UserFacade extends UsersTableColumns
         try {
             foreach ($data as $key => $value) {
                 if (!empty($value) && $key !== 'id' && $key !== 'roles') {
-                    $update_data[$key] = $value;
+                    if ($key === 'password') {
+                        $update_data[$key] = $this->passwords->hash($value);
+                    } else {
+                        $update_data[$key] = $value;
+                    }
                 }
             }
 
@@ -177,6 +183,42 @@ final class UserFacade extends UsersTableColumns
     public function token()
     {
         return Nette\Utils\Random::generate(15);
+    }
+
+    protected function prepare($user_id)
+    {
+        $roles_ids = [];
+
+        $roles_ids_sql = $this->sqlite->table('role_user')
+            ->select('role_id')
+            ->where('user_id', $user_id);
+        foreach ($roles_ids_sql as $role_id) {
+            $roles_ids[] = $role_id['role_id'];
+        }
+        $roles_sql = $this->sqlite->table('role')
+            ->where('id', $roles_ids);
+
+        return $roles_sql;
+    }
+
+    public function getRoless($user_id)
+    {
+        $roles = [];
+        foreach ($this->prepare($user_id) as $role) {
+            $roles[] = $role->role_name;
+        }
+
+        return $roles;
+    }
+
+    public function roleWithUserId($user_id)
+    {
+        $roles = [];
+        foreach ($this->prepare($user_id) as $role) {
+            $roles[$role->id] = $role->role_name;
+        }
+
+        return $roles;
     }
 }
 

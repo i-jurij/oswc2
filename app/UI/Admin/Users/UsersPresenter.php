@@ -6,7 +6,6 @@ namespace App\UI\Admin\Users;
 
 use App\Model\UserFacade;
 use App\UI\Accessory\FormFactory;
-use App\UI\Accessory\GetRoless;
 use App\UI\Accessory\RequireLoggedUser;
 use Nette;
 use Nette\Application\UI\Form;
@@ -16,11 +15,9 @@ use Nette\Application\UI\Form;
  */
 final class UsersPresenter extends Nette\Application\UI\Presenter
 {
-    use GetRoless;
     // Incorporates methods to check user login status
     use RequireLoggedUser;
 
-    public string $backlink;
     protected $user_data;
 
     public function __construct(protected UserFacade $userfacade,
@@ -39,7 +36,8 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $this->template->lastPage = $lastPage;
 
         foreach ($users_data as $user) {
-            $roles[$user->id] = $this->roleWithUserId($this->userfacade->sqlite, $user->id);
+            // $roles[$user->id] = $this->roleWithUserId($this->userfacade->sqlite, $user->id);
+            $roles[$user->id] = $this->userfacade->roleWithUserId($user->id);
         }
         $this->template->users_roles = $roles;
     }
@@ -115,17 +113,21 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     public function renderEdit(int $id): void
     {
         $this->template->user_data = $this->userfacade->getUserData($id);
-        $this->template->user_roles = $this->roleWithUserId($this->userfacade->sqlite, $id);
+        // $this->template->user_roles = $this->roleWithUserId($this->userfacade->sqlite, $id);
+        $this->template->user_roles = $this->userfacade->roleWithUserId($id);
     }
 
     public function update(Form $form, $data): void
     {
         // update profile throw UserFacade? and show profile again with updated data;
         try {
-            if (!empty($data)) {
-                $this->userfacade->update($data);
+            $id = $data->id;
+            unset($data->id);
+            $update = array_filter((array) $data);
+            if (!empty($update)) {
+                $this->userfacade->where('id', $id)->update($update);
                 // $this->flashMessage('User "'.$this->userfacade->getUserData($this->update_user_id)->username.'" updated', 'text-success');
-                $this->flashMessage('User updated', 'text-success');
+                $this->flashMessage(\json_encode($data).'User updated', 'text-success');
             } else {
                 $this->flashMessage('Nothing was updated', 'text-success');
             }
@@ -137,7 +139,8 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
                 .'Error code: '.$e->getCode().PHP_EOL
                 .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
         }
-        $this->redirect(':Admin:Users:');
+
+        $this->redirect(':Admin:');
     }
 
     public function actionDelete(int $id): void
@@ -193,12 +196,14 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     {
         // $data->name contains name, $data->password contains password
         try {
-            $this->userfacade->add($data);
+            $new_user = $this->userfacade->add($data);
             $this->flashMessage('You have successfully user add.', 'text-success');
         } catch (\Exception $e) {
             $this->flashMessage("Such a name, email or number is already in the database.\nError: ".$e->getMessage(), 'text-danger');
         }
 
-        $this->redirect(':Admin:Users:');
+        $this->redirect(':Admin:');
+        // $this->redirect(':Admin:Users:');
+        // $this->redirect(':Admin:Users:edit', $new_user->id);
     }
 }

@@ -6,16 +6,13 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-<div class="container">
+<div class="container" n:if="is_array($actions)">
     <h2 class="text-center">Permissions adding</h2>
 
     <form n:if="($user->isInRole('admin'))" n:name=formPermissionsAdd class="form mt-4 mx-auto" style="max-width: 25rem;" >
         <ul class="error text-warning fst-italic" n:ifcontent>
             <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
         </ul>
-
-
-
 
         <div class="mb-1 p-3 border rounded">
             <p class="pb-2">

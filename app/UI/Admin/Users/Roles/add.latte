@@ -12,7 +12,6 @@
     <form   n:if="($user->isInRole('admin'))" 
             n:name=formRoleAdd 
             class="form mt-4 mx-auto" 
-            style="max-width: 25rem;"
             method="post">
         	<ul class="error text-warning fst-italic" n:ifcontent>
                 <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
@@ -22,29 +21,34 @@
                 <label n:name="rolename" class="form-label">
                     Rolename: 
                 </label>
-                <input  n:name="rolename" class="form-control">
+                <input n:name="rolename" class="form-control">
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError rolename}</p>
             </div>
 
             <div class="mb-1 p-3 border rounded">
-                <label n:name="permissions" class="pb-2">
-                    Permissions:
-                </label>
-                    {foreach $form[permissions]->items as $item}
-                        <p class="ps-3">
-                            <label n:name="permissions" class="text-muted" >
-                                <input type="checkbox" 
-                                    name="permissions[]"
-                                >
-                                {$item->resource}: {$item->action}
-                            </label>
+                <p>Permissions:</p>
+                <div>
+                    {foreach $form[permissions]->items as $key => $row}
+                        {var $re = $row['resource']}
+                        <p n:if="((isset($res) && $re != $res) || $iterator->first)" class="mt-4">
+                            <span class="text-muted">
+                                Resource "{$row['resource']}": 
+                            </span>
                         </p>
+                        <label n:name="permissions:$key" class="text-muted border p-2 me-2 mb-2" >
+                            <input type="checkbox" 
+                                n:name="permissions:$key"
+                                value="{$row['id']}"
+                            >
+                            {$row['resource']}: {$row['action']}
+                        </label>
+                        {var $res = $row['resource']}
                     {/foreach}
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError permissions}</p>
             </div>  
 
             <div class="my-2 py-2">
-                <input n:name=send class="btn btn-primary">
+                <input n:name=addRole class="btn btn-primary">
             </div>
     </form>
 </div>

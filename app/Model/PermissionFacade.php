@@ -38,6 +38,34 @@ final class PermissionFacade
         return $actions;
     }
 
+    public function presenterList()
+    {
+        if (\class_exists('Nette\Application\UI\Presenter')) {
+            foreach (\get_class_methods('Nette\Application\UI\Presenter') as $action) {
+                $presenter[] = $action;
+            }
+        }
+
+        foreach (Finder::findFiles('*Presenter.php')->from(APPDIR.DIRECTORY_SEPARATOR.'UI') as $name => $file) {
+            $path_parts = pathinfo($name);
+            $name = $path_parts['filename'];
+            $path = Strings::after($path_parts['dirname'], 'UI/', 1);
+
+            $namespace = implode('\\', explode(DIRECTORY_SEPARATOR, $path)).'\\';
+            $resource = Strings::before($name, 'Presenter', 1);
+            $class = 'App\UI\\'.$namespace.$name;
+            if (\class_exists($class)) {
+                foreach (\get_class_methods($class) as $action) {
+                    if (!in_array($action, $presenter) && $action !== 'injectRequireLoggedUser') {
+                        $actions[$resource][] = $action;
+                    }
+                }
+            }
+        }
+
+        return $actions;
+    }
+
     public function list()
     {
         $existed_permissions = [];

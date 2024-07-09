@@ -32,12 +32,14 @@ final class PermissionsPresenter extends Nette\Application\UI\Presenter
     public function actionAdd()
     {
         $actions = $this->pf->actionListFromModelDir();
+        // $actions = $this->pf->presenterList() ?? null;
         $existed_permissions = $this->pf->list();
-
-        foreach ($actions as $resource => $values) {
-            foreach ($values as $key => $action) {
-                if (isset($existed_permissions[$resource]) && \in_array($action, $existed_permissions[$resource])) {
-                    unset($actions[$resource][$key]);
+        if (is_array($actions) && !empty($actions)) {
+            foreach ($actions as $resource => $values) {
+                foreach ($values as $key => $action) {
+                    if (isset($existed_permissions[$resource]) && \in_array($action, $existed_permissions[$resource])) {
+                        unset($actions[$resource][$key]);
+                    }
                 }
             }
         }
