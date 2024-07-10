@@ -52,6 +52,7 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
         return $form;
     }
 
+    #[Requires(methods: 'POST')]
     public function add(Form $form, array $data): void
     {
         if (!empty($data['rolename'])) {
@@ -73,18 +74,64 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
         $this->redirect(':Admin:');
     }
 
-    public function renderDelete(): void
+    public function createComponentFormRoleDelete(): Form
     {
+        $form = $this->formFactory->create();
+        $form->setHtmlAttribute('id', 'formRoleDelete')
+           ->setHtmlAttribute('class', 'form');
+
+        $roles = $this->rf->role->fetchAll();
+        $form->addCheckboxList('role', 'Roles:', $roles);
+
+        $form->addSubmit('deleteRole', 'Delete');
+
+        $form->onSuccess[] = [$this, 'delete'];
+
+        return $form;
     }
 
-    public function delete(): void
+    #[Requires(methods: 'POST')]
+    public function delete(Form $form, array $data): void
     {
+        if (!empty($data['role'])) {
+            try {
+                // $role = $this->rf->delete($data);
+                $message = '';
+                $type = 'text-info';
+
+                switch ($this->rf->delete($data)) {
+                    case 0:
+                        $message = 'Roles NOT deleted';
+                        break;
+                    case 1:
+                        $message = 'Role(s) was deleted. Permissions NOT deleted (or role(s) have not been permissions';
+                        break;
+                    case 2:
+                        $message = 'Role(s) was deleted. Permissions was deleted. Users roles NOT deleted (or users have not been assigned these roles)';
+                        break;
+                    case 3:
+                        $message = 'Role(s) was deleted';
+                        $type = 'text-success';
+                        break;
+                }
+
+                $this->flashMessage($message, $type);
+            } catch (\Throwable $e) {
+                $this->flashMessage($e->getMessage().PHP_EOL
+                    .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
+            }
+        } else {
+            $this->flashMessage('An empty form was received');
+            $this->redirect(':Admin:Users:Roles:delete');
+        }
+        $this->redirect(':Admin:');
     }
 
     public function renderPermissions(): void
     {
     }
 
+    #[Requires(methods: 'POST')]
     public function update(): void
     {
     }
