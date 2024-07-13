@@ -5,17 +5,7 @@
 {var $keywords = "Keywords of Admin page"}
 {var $robots = "NOINDEX,NOFOLLOW"}
 
-{block content}
-	<pre>
-	{php print_r($user->getIdentity()->getRoles())}
-	</pre>
-	<div n:inner-foreach="$user->getIdentity()->getData() as $key => $item">
-		<p>
-			<span>{$key}: </span>
-			<span>{$item}</span>
-		</p>
-	</div>
-	
+{block content}	
 	{ifset $pages_data}
 		{foreach $pages_data as $page_data}
 			{$page_data['alias']}<br />

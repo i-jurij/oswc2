@@ -16,7 +16,7 @@ final class RoleFacade
     use RequireLoggedUser;
     public Selection $table;
     public Selection $role;
-    private Selection $role_permission;
+    public Selection $role_permission;
     private Selection $role_user;
 
     public function __construct(public Explorer $sqlite)
@@ -58,6 +58,16 @@ final class RoleFacade
             }
         } else {
             return 0; // 'Roles NOT deleted';
+        }
+    }
+
+    public function permissionsAdd(array $data): void
+    {
+        if (!empty($data['permissions'][0]) && !empty($data['role'])) {
+            foreach ($data['permissions'] as $key => $permission_id) {
+                $role_permission_insert[] = ['role_id' => $data['role'], 'permission_id' => $permission_id];
+            }
+            $this->role_permission->insert($role_permission_insert) or throw new \Exception('Permissions for role NOT inserted');
         }
     }
 }

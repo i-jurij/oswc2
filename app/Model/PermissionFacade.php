@@ -23,14 +23,14 @@ final class PermissionFacade
         $this->table = $this->sqlite->table('permission');
     }
 
-    public function actionListFromModelDir()
+    public function actionListFromModelDir(): array
     {
         foreach (Finder::findFiles('*Facade.php')->in(APPDIR.DIRECTORY_SEPARATOR.'Model') as $name => $file) {
             $model = \pathinfo($name, PATHINFO_FILENAME);
             $resource = Strings::before($model, 'Facade', 1);
             if (\class_exists('App\Model\\'.$model)) {
-                foreach (\get_class_methods('App\Model\\'.$model) as $action) {
-                    $actions[$resource][] = $action;
+                foreach (\get_class_methods('App\Model\\'.$model) as $key => $action) {
+                    $actions[$resource][$key] = $action;
                 }
             }
         }
@@ -38,7 +38,7 @@ final class PermissionFacade
         return $actions;
     }
 
-    public function presenterList()
+    public function presenterList(): array
     {
         if (\class_exists('Nette\Application\UI\Presenter')) {
             foreach (\get_class_methods('Nette\Application\UI\Presenter') as $action) {

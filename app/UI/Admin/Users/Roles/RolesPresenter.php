@@ -95,7 +95,6 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
     {
         if (!empty($data['role'])) {
             try {
-                // $role = $this->rf->delete($data);
                 $message = '';
                 $type = 'text-info';
 
@@ -127,12 +126,55 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
         $this->redirect(':Admin:');
     }
 
-    public function renderPermissions(): void
+    public function actionPermissionsAdd()
     {
+        foreach ($this->rf->role_permission as $row) {
+            $this->template->roles_isset_permissions['role_'.$row->role_id][] = $row->permission_id;
+            // ['role_id' => $row->role_id, 'permission_id' => $row->permission_id];
+        }
+        // $this->template->roles_isset_permissions = \json_encode($this->template->roles_isset_permissions);
+    }
+
+    public function createComponentFormPermissionsAdd(): Form
+    {
+        $form = $this->formFactory->create();
+        $form->setHtmlAttribute('id', 'formPermissionsAdd')
+           ->setHtmlAttribute('class', 'form');
+
+        $roles = $this->rf->role->fetchAll();
+        $form->addRadioList('role', 'Roles:', $roles);
+
+        // $permissions = $this->pf->table->fetchAll();
+        // \array_multisort(\array_column($permissions, 'resource'), SORT_DESC, $permissions);
+        foreach ($this->pf->table as $value) {
+            $permissions[$value['resource']][] = ['id' => $value['id'], 'action' => $value['action']];
+        }
+
+        $form->addCheckboxList('permissions', 'Permissions:', $permissions);
+
+        $form->addSubmit('addPermissions', 'Add Permissions');
+
+        $form->onSuccess[] = [$this, 'permissionsAdd'];
+
+        return $form;
     }
 
     #[Requires(methods: 'POST')]
-    public function update(): void
+    public function permissionsAdd(Form $form): void
     {
+        $data['role'] = $form->getHttpData($form::DataText, 'role');
+        $data['permissions'] = $form->getHttpData($form::DataText, 'permissions[]');
+
+        $this->flashMessage(\json_encode($data));
+        if (!empty($data['role']) && !empty($data['permissions'][0])) {
+            try {
+                $role = $this->rf->permissionsAdd($data);
+                $this->flashMessage('Permissions for role was inserted', 'text-success');
+            } catch (\Throwable $e) {
+                $this->flashMessage($e->getMessage().PHP_EOL
+                    .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
+            }
+        }
+        $this->redirect(':Admin:');
     }
 }
