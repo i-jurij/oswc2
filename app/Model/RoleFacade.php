@@ -70,4 +70,26 @@ final class RoleFacade
             $this->role_permission->insert($role_permission_insert) or throw new \Exception('Permissions for role NOT inserted');
         }
     }
+
+    public function permissionsDelete(array $data): void
+    {
+        if (!empty($data[0])) {
+            foreach ($data as $value) {
+                list($role_id, $permission_id) = explode('_', $value);
+                $roles[] = $role_id;
+                $permissions[] = $permission_id;
+                // $delete[$role_id][] = $permission_id;
+            }
+
+            try {
+                foreach ($this->role->where('id', $roles) as $role) {
+                    $role->related('role_permission.role_id')
+                        ->where('permission_id', $permissions)
+                        ->delete();
+                }
+            } catch (\Throwable $th) {
+                throw $th;
+            }
+        }
+    }
 }

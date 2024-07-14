@@ -163,7 +163,6 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
         $data['role'] = $form->getHttpData($form::DataText, 'role');
         $data['permissions'] = $form->getHttpData($form::DataText, 'permissions[]');
 
-        $this->flashMessage(\json_encode($data));
         if (!empty($data['role']) && !empty($data['permissions'][0])) {
             try {
                 $role = $this->rf->permissionsAdd($data);
@@ -220,5 +219,17 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
         $data = $form->getHttpData($form::DataText, 'role_permissions[]');
 
         $this->flashMessage(\json_encode($data));
+        if (!empty($data[0])) {
+            try {
+                $this->rf->permissionsDelete($data);
+                $this->flashMessage('Permissions for roles was deleted', 'text-success');
+            } catch (\Throwable $e) {
+                $this->flashMessage($e->getMessage().PHP_EOL
+                    .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
+            }
+        } else {
+            $this->flashMessage('Empty form was received');
+        }
+        $this->redirect(':Admin:');
     }
 }
