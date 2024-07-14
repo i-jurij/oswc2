@@ -130,9 +130,7 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
     {
         foreach ($this->rf->role_permission as $row) {
             $this->template->roles_isset_permissions['role_'.$row->role_id][] = $row->permission_id;
-            // ['role_id' => $row->role_id, 'permission_id' => $row->permission_id];
         }
-        // $this->template->roles_isset_permissions = \json_encode($this->template->roles_isset_permissions);
     }
 
     public function createComponentFormPermissionsAdd(): Form
@@ -176,5 +174,51 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
             }
         }
         $this->redirect(':Admin:');
+    }
+
+    public function actionPermissionsDelete()
+    {
+        foreach ($this->rf->role as $role) {
+            $permissions = [];
+            foreach ($role->related('role_permission.role_id') as $role_permission) {
+                $permission_id = $role_permission->ref('permission', 'permission_id')->id;
+                $resource = $role_permission->ref('permission', 'permission_id')->resource;
+                $action = $role_permission->ref('permission', 'permission_id')->action;
+
+                $permissions[$resource][] = [
+                    'permission_id' => $permission_id,
+                    'action' => $action,
+                ];
+            }
+            if (!empty($permissions)) {
+                $roles[] = [
+                    'role_id' => $role->id,
+                    'role_name' => $role->role_name,
+                    'permissions' => $permissions,
+                ];
+            }
+        }
+        $this->template->roles = $roles;
+    }
+
+    public function createComponentFormPermissionsDelete(): Form
+    {
+        $form = $this->formFactory->create();
+        $form->setHtmlAttribute('id', 'formPermissionsDelete')
+           ->setHtmlAttribute('class', 'form');
+
+        $form->addSubmit('deletePermissions', 'Delete Permissions');
+
+        $form->onSuccess[] = [$this, 'permissionsDelete'];
+
+        return $form;
+    }
+
+    #[Requires(methods: 'POST')]
+    public function permissionsDelete(Form $form): void
+    {
+        $data = $form->getHttpData($form::DataText, 'role_permissions[]');
+
+        $this->flashMessage(\json_encode($data));
     }
 }
