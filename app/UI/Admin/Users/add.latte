@@ -6,25 +6,30 @@
     <div>
         <h2 class="text-center">Adding a user</h2>
         {*include ../../Accessory/basic_form.latte, form: userAddForm*}
-        <form n:if="$user->isInRole('admin')" n:name=userAddForm class="form mt-4 mx-auto" style="max-width: 22rem;">
+        <form 
+            n:if="$user->isInRole('admin')" 
+            n:name=userAddForm 
+            class="form mt-4 mx-auto" 
+            style="max-width: 22rem;"
+            autocomplete="off">
         	<ul class="error text-warning fst-italic" n:ifcontent>
                 <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
             </ul>
 
             <div class="form-floating mb-1">
-                <input n:name=username size=20 autofocus class="form-control">
+                <input n:name=username size=20 autofocus class="form-control" autocomplete="off">
                 <label n:name=username class="form-label">Username:</label>
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError username}</p>
             </div>
 
             <div class="form-floating mb-1">
-                <input n:name=password class="form-control">
+                <input n:name=password class="form-control" autocomplete="off">
                 <label n:name=password class="form-label">Password:</label>
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError password}</p>
             </div>
 
             <div class="form-floating mb-1">
-                <input n:name=passwordVerify class="form-control">
+                <input n:name=passwordVerify class="form-control" autocomplete="off">
                 <label n:name=passwordVerify class="form-label">PasswordVerify:</label>
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError passwordVerify}</p>
             </div>

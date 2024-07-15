@@ -20,7 +20,8 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
     protected $user_data;
 
-    public function __construct(protected UserFacade $userfacade,
+    public function __construct(
+        protected UserFacade $userfacade,
         private FormFactory $formFactory)
     {
     }
@@ -125,9 +126,8 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
             unset($data->id);
             $update = array_filter((array) $data);
             if (!empty($update)) {
-                $this->userfacade->where('id', $id)->update($update);
-                // $this->flashMessage('User "'.$this->userfacade->getUserData($this->update_user_id)->username.'" updated', 'text-success');
-                $this->flashMessage(\json_encode($data).'User updated', 'text-success');
+                $this->userfacade->update($id, $update);
+                $this->flashMessage(\json_encode($update).'User updated', 'text-success');
             } else {
                 $this->flashMessage('Nothing was updated', 'text-success');
             }

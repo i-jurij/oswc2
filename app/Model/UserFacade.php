@@ -138,13 +138,11 @@ final class UserFacade extends UsersTableColumns
     }
 
     #[Requires(methods: 'POST', sameOrigin: true)]
-    public function update($data)
+    public function update($id, $data): void
     {
-        if (!empty($data->email)) {
-            Validators::assert($data->email, 'email');
+        if (!empty($data['email'])) {
+            Validators::assert($data['email'], 'email');
         }
-        // $email = !empty($data->email) ? $data->email : $data->username.'@'.$data->username.'.com';
-
         try {
             foreach ($data as $key => $value) {
                 if (!empty($value) && $key !== 'id' && $key !== 'roles') {
@@ -156,20 +154,20 @@ final class UserFacade extends UsersTableColumns
                 }
             }
 
+            $user = $this->sqlite->table(self::TableName);
+
             if (!empty($update_data)) {
-                $user = $this->sqlite->table(self::TableName)
-                ->where('id', $data->id)
-                ->update($update_data);
+                $user->where('id', $id)->update($update_data);
             }
 
-            if (!empty($data->roles) && \is_array($data->roles)) {
+            if (!empty($data['roles']) && is_array($data['roles'])) {
+                if ($user->get($id)->related('role_user.user_id')->delete() > 0) {
+                    unset($user);
+                }
                 $roles = [];
-                $this->sqlite->table('role_user')
-                    ->where('user_id', $data->id)
-                    ->delete();
-                foreach ($data->roles as $role_id) {
+                foreach ($data['roles'] as $role_id) {
                     $roles[] = [
-                        'user_id' => $data->id,
+                        'user_id' => $id,
                         'role_id' => $role_id,
                     ];
                 }
