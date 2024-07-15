@@ -10,7 +10,7 @@
         Fill in only the required fields.<br />
         Click for edit
     </p>
-     <form  n:if="($user->isInRole('admin') && !empty($user_data))" 
+     <form  n:if="(!empty($user_data) && ( $user->isInRole('admin') || ($user->isLoggedIn() && $user->getIdentity()->getId() === $user_data->id) ) )" 
             n:name=userUpdateForm 
             class="form mt-4 mx-auto" 
             style="max-width: 25rem;"
@@ -141,7 +141,7 @@
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError email}</p>
             </div> 
             
-            <div class="mb-4">
+            <div n:if="$user->isInRole('admin')" class="mb-4">
                 <span 
                     class="border rounded p-2"
                     data-bs-toggle="collapse" 

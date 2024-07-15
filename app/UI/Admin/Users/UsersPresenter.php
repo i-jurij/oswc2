@@ -126,8 +126,12 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
             unset($data->id);
             $update = array_filter((array) $data);
             if (!empty($update)) {
-                $this->userfacade->update($id, $update);
-                $this->flashMessage(\json_encode($update).'User updated', 'text-success');
+                if ($this->getUser()->isInRole('admin') || $this->getUser()->getIdentity()->getId() == $id) {
+                    $this->userfacade->update($id, $update);
+                    $this->flashMessage(\json_encode($update).'User updated', 'text-success');
+                } else {
+                    $this->flashMessage($this->getUser()->getIdentity()->getId().'/'.$id.'/'.\json_encode($update).'You not permissions for user data updating');
+                }
             } else {
                 $this->flashMessage('Nothing was updated', 'text-success');
             }

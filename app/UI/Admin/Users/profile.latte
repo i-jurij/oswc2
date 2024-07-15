@@ -32,7 +32,7 @@
                 <li class="list-group-item">
                     <span class="text-muted">Email verified: </span>{$user_data['email_verified']} 
                 </li>
-                <li class="list-group-item">
+                <li  n:if="$user->isInRole('admin')" class="list-group-item">
                     <span class="text-muted">Roles: </span>
                     <span n:foreach="$user_data['roles'] as $item" >
                         {$item}{if !$iterator->last}, {/if}
