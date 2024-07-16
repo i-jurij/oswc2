@@ -18,9 +18,7 @@
               <ul class="dropdown-menu" aria-labelledby="usersMenu">
                 <li n:if="$user->isAllowed('User','add')"><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:add">Add</a></li>
                 <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:default">
-                  {if $user->isAllowed('User','update')}Edit, delete
-                  {else} List
-                  {/if}</a>
+                  List{if $user->isAllowed('User','update')}, edit, delete{/if}</a>
                 </li>
               </ul>
             </div>
