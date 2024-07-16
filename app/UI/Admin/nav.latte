@@ -9,14 +9,19 @@
               <span>Main</span>
             </a>
           </li>
-          {if ($user->isInRole('admin') || $user->isInRole('moder'))}
+          {*if ($user->isInRole('admin') || $user->isInRole('moder'))*}
+          {if ($user->isAllowed('User','getAllUsersData'))}
             <div class="dropdown">
               <button  n:class="$presenter->isLinkCurrent(':Admin:Users:*') ? 'border-bottom border-info', 'nav-link px-2 link-body-emphasis dropdown-toggle'" type="button" id="usersMenu" data-bs-toggle="dropdown" aria-expanded="false">
                 Users
               </button>
               <ul class="dropdown-menu" aria-labelledby="usersMenu">
-                <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:add">Add</a></li>
-                <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:default">Edit, delete</a></li>
+                <li n:if="$user->isAllowed('User','add')"><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:add">Add</a></li>
+                <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:default">
+                  {if $user->isAllowed('User','update')}Edit, delete
+                  {else} List
+                  {/if}</a>
+                </li>
               </ul>
             </div>
           {/if}  
@@ -29,6 +34,7 @@
                 <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:Roles:add">Add</a></li>
                 <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:Roles:delete">Delete</a></li>
                 <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:Roles:permissions">Permissions</a></li>
                 <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:Roles:permissionsAdd">Permissions add</a></li>
                 <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:Roles:permissionsDelete">Permissions delete</a></li>
               </ul>

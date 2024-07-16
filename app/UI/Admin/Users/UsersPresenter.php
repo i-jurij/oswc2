@@ -28,6 +28,9 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
     public function renderDefault(int $page = 1): void
     {
+        if (!$this->getUser()->isAllowed('User', 'getAllUsersData')) {
+            $this->error('Forbidden', 403);
+        }
         $users_data = $this->userfacade->getAllUsersData();
         $this->template->count = count($users_data);
 
@@ -113,6 +116,9 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
     public function renderEdit(int $id): void
     {
+        if (!$this->getUser()->isAllowed('User', 'update')) {
+            $this->error('Forbidden', 403);
+        }
         $this->template->user_data = $this->userfacade->getUserData($id);
         // $this->template->user_roles = $this->roleWithUserId($this->userfacade->sqlite, $id);
         $this->template->user_roles = $this->userfacade->roleWithUserId($id);
@@ -120,6 +126,9 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
     public function update(Form $form, $data): void
     {
+        if (!$this->getUser()->isAllowed('User', 'update')) {
+            $this->error('Forbidden', 403);
+        }
         // update profile throw UserFacade? and show profile again with updated data;
         try {
             $id = $data->id;
@@ -149,6 +158,9 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
     public function actionDelete(int $id): void
     {
+        if (!$this->getUser()->isAllowed('User', ' deleteUserData')) {
+            $this->error('Forbidden', 403);
+        }
         try {
             $this->userfacade->deleteUserData($id);
             $this->flashMessage('User deleted.');
@@ -198,6 +210,9 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
 
     public function add(Form $form, $data): void
     {
+        if (!$this->getUser()->isAllowed('User', ' add')) {
+            $this->error('Forbidden', 403);
+        }
         // $data->name contains name, $data->password contains password
         try {
             $new_user = $this->userfacade->add($data);

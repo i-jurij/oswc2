@@ -47,4 +47,5 @@ class AdminTemplate extends Nette\Bridges\ApplicationLatte\Template
     public object $presenter;
     public object $control;
     public array $pages_data;
+    public array $sql;
 }

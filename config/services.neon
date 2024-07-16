@@ -1,6 +1,7 @@
 services:
 	- App\Core\RouterFactory::createRouter
 	- App\Core\MyAuthenticator(@database.sqlite.explorer)
+	- App\Core\MyAuthorizator(@database.sqlite.connection)
 	- App\Model\PageFacade(@database.sqlite.connection)
 	- App\Model\UserFacade(@database.sqlite.explorer)
 

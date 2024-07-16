@@ -29,6 +29,14 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
     ) {
     }
 
+    protected function startup()
+    {
+        parent::startup();
+        if (!$this->getUser()->isAllowed('Permission')) {
+            $this->error('Forbidden', 403);
+        }
+    }
+
     public function createComponentFormRoleAdd(): Form
     {
         $form = $this->formFactory->create();
