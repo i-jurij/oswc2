@@ -2,7 +2,8 @@
 
 $role = 'INSERT INTO "role" ("role_name") VALUES
 		("client"),
-		("user"),
+		("guest"),
+		("registered"),
 		("moder"),
 		("admin")';
 $permission = 'INSERT INTO "permission" ("resource", "action") VALUES

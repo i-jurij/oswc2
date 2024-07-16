@@ -5,12 +5,13 @@ declare(strict_types=1);
 function start()
 {
     echo '
-            1. Create table "user", "role", "permission" etc, run:
-            "php start.php migrate"
+1. Create table "user", "role", "permission" etc, run:
+"php start.php migrate"
 
-            2. Create user (with role "admin"), run:
-            "php start.php useradd <username> <password>"
-            ';
+2. Create user (with role "admin"), run:
+"php start.php useradd <username> <password>"
+
+';
     exit(1);
 }
 

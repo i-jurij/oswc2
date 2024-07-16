@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Core;
 
+use App\Model\UserFacade;
+use App\Model\UsersTableColumns;
 use Nette;
 use Nette\Database\Explorer;
 use Nette\Security\AuthenticationException;
@@ -11,9 +13,6 @@ use Nette\Security\IIdentity;
 use Nette\Security\Passwords;
 use Nette\Security\SimpleIdentity;
 
-/**
- * Manages user-related operations such as authentication and adding new users.
- */
 final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Security\IdentityHandler
 {
     // Dependency injection of database explorer and password utilities
