@@ -8,6 +8,9 @@
 {block content}
 <div class="container">
     <h2 class="text-center">Removing permissions</h2>
+    <p class="lead text-center">
+        ALL selected permissions will be deleted.
+    </p>
     <form   n:if="($user->isInRole('admin'))" 
             n:name=formPermissionsDelete 
             class="form mt-4 mx-auto" 
@@ -21,22 +24,32 @@
                 <p class="error text-warning fst-italic"></p>
 
                 {foreach $existed_permissions as $resource => $actions_array}
-                    <div class="border m-2 p-2">
-                        <p>
+                    <div class="mt-4">
+                        <span 
+                            class="text-muted border p-2" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#resource{$resource}actions" 
+                            role="button"
+                            aria-expanded="false" 
+                            aria-controls="resource{$resource}actions"
+                        >
                             <span class="text-muted" >Resource </span>
                             "{$resource}"
                             <span class="text-muted" >actions: </span>
-                        </p>
-                        {foreach $actions_array as $data}
-                            <label class="text-muted border m-2 p-2" >
-                                <input type="checkbox" 
-                                    name="permission[]"
-                                    id="{$data['id']}{$data['action']}"
-                                    value="{$data['id']}"
-                                >
-                                {$data['action']}
-                        </label>
-                        {/foreach}
+                        </span>
+                        <div class="collapse border mt-2 p-2" id="resource{$resource}actions">
+                            {foreach $actions_array as $data}
+                                <label class="text-muted border m-2 p-2" >
+                                    <input type="checkbox" 
+                                        name="permission[]"
+                                        id="{$data['id']}{$data['action']}"
+                                        value="{$data['id']}"
+                                    >
+                                    {$data['action']}
+                                </label>
+                            {/foreach}
+                        </div>
+
                     </div>
                 {/foreach}
             </div>
@@ -46,33 +59,3 @@
             </div>
     </form>
 </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function permissionsDeleting() { 
-       const TDEL = document.querySelectorAll('input[name="resource"]');
-       if (TDEL) {
-        for (const TDE of TDEL) {
-            TDE.addEventListener('click', function(e) {
-                const CHE = document.querySelectorAll('.checkboxes');
-                for (const CH of CHE) {
-                    CH.classList.add('d-none');
-                }
-
-                if (TDE.checked) {
-                    const EL = document.querySelector('#'+TDE.id+'actions');
-                    const CHS = document.querySelectorAll('input[type="checkbox"]');
-                    if (CHS) {
-                        CHS.forEach((element) => element.checked = false);
-                    }
-                    if (EL) {
-                        EL.classList.remove('d-none');
-                        EL.classList.add('d-block');
-                    }
-                }
-               
-           });
-        }
-
-       }
-});
-</script>

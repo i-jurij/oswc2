@@ -51,6 +51,7 @@ final class PermissionsPresenter extends Nette\Application\UI\Presenter
                 }
             }
         }
+        unset($actions['Permission'], $actions['Role']);
 
         return $this->template->actions = $actions;
     }
