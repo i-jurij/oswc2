@@ -16,6 +16,7 @@
                 Users
               </button>
               <ul class="dropdown-menu" aria-labelledby="usersMenu">
+                <li n:if="$user->isAllowed('User','getAllUsersData')"><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:search">Search</a></li>
                 <li n:if="$user->isAllowed('User','add')"><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:add">Add</a></li>
                 <li><a class="dropdown-item nav-link px-2 link-body-emphasis" n:href=":Admin:Users:default">
                   List{if $user->isAllowed('User','update')}, edit, delete{/if}</a>

@@ -21,7 +21,7 @@
             
             <div>
                 {foreach $actions as $resource => $actions_array}
-                    <label class="text-muted border m-2 p-2">
+                    <label n:if="!empty($actions_array)" class="text-muted border m-2 p-2">
                         <input type="radio" name="resource" id="{$resource}" value="{$resource}" > 
                         {$resource}
                     </label>
@@ -37,12 +37,10 @@
                 {foreach $actions as $resource => $actions_array}
                     <div class="ps-3 d-none checkboxes" id="{$resource}actions">
                     {foreach $actions_array as $k => $act}
-                        {if !in_array($act, ['__construct', 'token', 'getColumns', 'injectRequireLoggedUser', 'shortAdd'])}
-                            <label class="text-muted m-2 p-2 border" >
-                                <input type="checkbox" name="action[]" value="{$act}" >
-                                {$act}
-                            </label>
-                        {/if}
+                        <label class="text-muted m-2 p-2 border" >
+                            <input type="checkbox" name="action[]" value="{$act}" >
+                            {$act}
+                        </label>
                     {/foreach}
                     </div>
                 {/foreach}

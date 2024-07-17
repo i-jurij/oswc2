@@ -30,7 +30,9 @@ final class PermissionFacade
             $resource = Strings::before($model, 'Facade', 1);
             if (\class_exists('App\Model\\'.$model)) {
                 foreach (\get_class_methods('App\Model\\'.$model) as $key => $action) {
-                    $actions[$resource][$key] = $action;
+                    if (!in_array($action, ['__construct', 'token', 'getColumns', 'injectRequireLoggedUser', 'shortAdd'])) {
+                        $actions[$resource][$key] = $action;
+                    }
                 }
             }
         }
