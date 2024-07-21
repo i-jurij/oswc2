@@ -218,6 +218,64 @@ final class UserFacade extends UsersTableColumns
 
         return $roles;
     }
+
+    protected function prepareSearch($data)
+    {
+        $data_array = [
+                self::ColumnName => $data->username ?? null,
+                self::ColumnPhone => $data->phone ?? null,
+                self::ColumnEmail => $data->email ?? null,
+                'roles' => $data->roles ?? null,
+        ];
+
+        // remove the empty element
+        return array_filter($data_array);
+    }
+
+    public function search($data)
+    {
+        $users_data = null;
+        $pre_data = $this->prepareSearch($data);
+        if (!empty($pre_data)) {
+            $query = $this->table;
+
+            if (!empty($pre_data[self::ColumnName])) {
+                $username = $pre_data[self::ColumnName];
+                $query = $query->where('username LIKE ?', "%$username%");
+            }
+            if (!empty($pre_data[self::ColumnPhone])) {
+                $phone = $pre_data[self::ColumnPhone];
+                $query = $query->where(self::ColumnPhone, $phone);
+            }
+            if (!empty($pre_data[self::ColumnEmail])) {
+                $email = $pre_data[self::ColumnEmail];
+                $query = $query->where('email LIKE ?', "%$email%");
+            }
+
+            foreach ($query as $user) {
+                $users_data[$user->id] = [
+                        'username' => $user->username,
+                        'phone' => $user->phone,
+                        'phone_verified' => $user->phone_verified,
+                        'email' => $user->email,
+                        'email_verified' => $user->email_verified,
+                        'created_at' => $user->created_at,
+                        'updated_at' => $user->updated_at,
+                ];
+
+                foreach ($user->related('role_user.user_id') as $row) {
+                    $users_data[$user->id]['roles'][] = $row->ref('role', 'role_id');
+                    if (!empty($pre_data['roles'])) {
+                        if (!\in_array($row->role_id, $pre_data['roles'])) {
+                            unset($users_data[$user->id]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $users_data;
+    }
 }
 
 /**

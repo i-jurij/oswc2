@@ -19,6 +19,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     use RequireLoggedUser;
 
     protected $user_data;
+    public $postsearch;
 
     public function __construct(
         protected UserFacade $userfacade,
@@ -65,8 +66,8 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $renderer->wrappers['control']['container'] = null;
 
         $form->setHtmlAttribute('id', 'userUpdateForm')
-            ->setHtmlAttribute('class', 'form')
-            ->setAction($this->link(':Admin:Users:update'));
+            ->setHtmlAttribute('class', 'form');
+        // ->setAction($this->link(':Admin:Users:update'));
 
         $form->addGroup('');
 
@@ -124,6 +125,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $this->template->user_roles = $this->userfacade->roleWithUserId($id);
     }
 
+    #[Requires(methods: 'POST')]
     public function update(Form $form, $data): void
     {
         if (!$this->getUser()->isAllowed('User', 'update')) {
@@ -137,7 +139,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
             if (!empty($update)) {
                 if ($this->getUser()->isInRole('admin') || $this->getUser()->getIdentity()->getId() == $id) {
                     $this->userfacade->update($id, $update);
-                    $this->flashMessage(\json_encode($update).'User updated', 'text-success');
+                    $this->flashMessage(\json_encode($update).' User updated', 'text-success');
                 } else {
                     $this->flashMessage($this->getUser()->getIdentity()->getId().'/'.$id.'/'.\json_encode($update).'You not permissions for user data updating');
                 }
@@ -170,7 +172,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         $this->redirect(':Admin:Users:');
     }
 
-    public function createComponentUserAddForm()
+    public function createComponentUserAddForm(): Form
     {
         $form = $this->formFactory->createLoginForm();
 
@@ -208,12 +210,12 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         return $form;
     }
 
+    #[Requires(methods: 'POST')]
     public function add(Form $form, $data): void
     {
         if (!$this->getUser()->isAllowed('User', ' add')) {
             $this->error('Forbidden', 403);
         }
-        // $data->name contains name, $data->password contains password
         try {
             $new_user = $this->userfacade->add($data);
             $this->flashMessage('You have successfully user add.', 'text-success');
@@ -222,7 +224,57 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
         }
 
         $this->redirect(':Admin:');
-        // $this->redirect(':Admin:Users:');
-        // $this->redirect(':Admin:Users:edit', $new_user->id);
+    }
+
+    public function createComponentUserSearchForm(): Form
+    {
+        $form = new Form();
+        $form->addProtection();
+        $form->setHtmlAttribute('id', 'userSearchForm')
+            ->setHtmlAttribute('class', 'form');
+        $form->addText('username', 'Username:')
+            ->setHtmlAttribute('placeholder', 'Name:')
+            ->addRule($form::MinLength, 'Имя длиной не менее %d символов', 3)
+            ->addRule($form::Pattern, 'Имя только из букв, цифр, дефисов и подчеркиваний', '^[a-zA-Zа-яА-ЯёЁ0-9\-_]{3,25}$')
+            ->setMaxLength(25);
+        $form->addText('phone', 'Phone:')
+            ->setHtmlAttribute('placeholder', 'Phone:')
+            ->addRule($form::Pattern, 'Only +, digits, underscore, spaces and hyphens', '^[+0-9\-_]{3,30}$')
+            ->setMaxLength(30);
+        $form->addText('email', 'Email:')
+            ->setHtmlAttribute('placeholder', 'Email:')
+            ->setMaxLength(125);
+        $roles = $this->userfacade->sqlite->table('role');
+        foreach ($roles as $role) {
+            $roles_array[$role['id']] = $role['role_name'];
+        }
+        $form->addCheckboxList('roles', 'Roles:', $roles_array);
+        $form->addSubmit('searchUser', 'Search');
+        $form->onSuccess[] = [$this, 'renderSearch'];
+
+        return $form;
+    }
+
+    // public function renderSearch(Form $form = null): void
+    public function renderSearch(Form $form = null): void
+    {
+        /*
+        if (!$this->getUser()->isAllowed('User', ' search')) {
+            $this->error('Forbidden', 403);
+        }
+*/
+        $httpRequest = $this->getHttpRequest();
+
+        if ($httpRequest->isMethod('POST') && !empty($form)) {
+            try {
+                $users_data = $this->userfacade->search($form->getValues());
+                $this->template->show = $users_data; // get data from db
+                // $this->flashMessage(json_encode($users_data), 'text-success');
+            } catch (\Exception $e) {
+                $this->flashMessage("Not find.\nError: ".$e->getMessage(), 'text-danger');
+            }
+
+            // $this->redirect('this');
+        }
     }
 }

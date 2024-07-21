@@ -57,7 +57,9 @@ Password minimal length = 7 (it can be change in app/Model/UserFacade.php).
 
 Other users can be added from the admin panel.  
 
-***If you change columns of table "users" in file "create_sql.php" change it in app/Model/UsersTableColumns too***
+***If you change columns of table "users" in file "create_sql.php" change it in "app/Model/UsersTableColumns.php" too***
+
+***Users factory can be run from "bin/factorys/user"***
 
 ### Config   
 Configs files are located in "app/config". Read this [documentation](https://doc.nette.org/en/configuring).   

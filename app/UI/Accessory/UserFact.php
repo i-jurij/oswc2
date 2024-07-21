@@ -31,7 +31,7 @@ class UserFact
         $this->array['phone'] = Random::generate(10, '0-9');
         $this->array['email'] = $this->array['username'].'@'.$this->array['username'].'.com';
         $role_id = array_rand($this->roles_ids);
-        $this->array['role'] = [$role_id];
+        $this->array['roles'] = [$role_id];
 
         return (object) $this->array;
     }
