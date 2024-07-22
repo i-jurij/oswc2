@@ -21,10 +21,10 @@
             <li n:foreach="$form->getOwnErrors() as $error">{$error}</li>
         </ul>
         <div class="border-top pt-2 row">
-            <div class="mb-4 col-md-auto">
+            <div class="mb-4 col-sm-auto">
                 <label 
                     n:name="username" 
-                    class="form-label border rounded p-2"
+                    class="form-label border rounded p-2 w-100"
                     data-bs-toggle="collapse" 
                     data-bs-target="#username_input_user_search" 
                     role="button"
@@ -43,10 +43,10 @@
                 <p class="error text-warning fst-italic" n:ifcontent>{inputError username}</p>
             </div>
 
-            <div class="mb-4 col-md-auto">
+            <div class="mb-4 col-sm-auto">
                     <label 
                         n:name="phone" 
-                        class="form-label border rounded p-2"
+                        class="form-label border rounded p-2 w-100"
                         data-bs-toggle="collapse" 
                         data-bs-target="#number" 
                         role="button"
@@ -66,10 +66,10 @@
                     <p class="error text-warning fst-italic" n:ifcontent>{inputError phone}</p>
                 </div>
 
-                <div class="mb-4 col-md-auto">
+                <div class="mb-4 col-sm-auto">
                     <label 
                         n:name="email" 
-                        class="form-label border rounded p-2"
+                        class="form-label border rounded p-2 w-100"
                         data-bs-toggle="collapse" 
                         data-bs-target="#email_user_edit" 
                         role="button"
@@ -90,9 +90,9 @@
                     <p class="error text-warning fst-italic" n:ifcontent>{inputError email}</p>
                 </div> 
                 
-                <div class="mb-4 col-md-auto">
+                <div class="mb-4 col-sm-auto">
                     <label 
-                        class="form-label border rounded p-2"
+                        class="form-label border rounded p-2 w-100"
                         data-bs-toggle="collapse" 
                         data-bs-target="#roles_user_search" 
                         role="button"

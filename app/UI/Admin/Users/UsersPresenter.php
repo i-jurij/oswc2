@@ -258,11 +258,10 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     // public function renderSearch(Form $form = null): void
     public function renderSearch(Form $form = null): void
     {
-        /*
-        if (!$this->getUser()->isAllowed('User', ' search')) {
+        if (!$this->getUser()->isAllowed('User', 'search')) {
             $this->error('Forbidden', 403);
         }
-*/
+
         $httpRequest = $this->getHttpRequest();
 
         if ($httpRequest->isMethod('POST') && !empty($form)) {
