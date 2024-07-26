@@ -33,11 +33,7 @@ final class PermissionsPresenter extends Nette\Application\UI\Presenter
         }
     }
 
-    private function get(int $id)
-    {
-    }
-
-    public function actionAdd()
+    public function actionAddAuto()
     {
         $actions = $this->pf->actionListFromModelDir();
         // $actions = $this->pf->presenterList() ?? null;
@@ -56,14 +52,41 @@ final class PermissionsPresenter extends Nette\Application\UI\Presenter
         return $this->template->actions = $actions;
     }
 
-    public function createComponentFormPermissionsAdd(): Form
+    public function createComponentFormPermissionsAddAuto(): Form
     {
         $form = new Form();
         $form->addProtection();
-        $form->setHtmlAttribute('id', 'formPermissionsAdd')
+        $form->setHtmlAttribute('id', 'formPermissionsAddAuto')
            ->setHtmlAttribute('class', 'form');
 
-        $form->addSubmit('addPermissions', 'Add permissions');
+        $form->addSubmit('addPermissionsAuto', 'Add permissions');
+
+        $form->onSuccess[] = [$this, 'add'];
+
+        return $form;
+    }
+
+    public function createComponentFormPermissionsAddManual(): Form
+    {
+        $form = new Form();
+        $form->addProtection();
+        $form->setHtmlAttribute('id', 'formPermissionsAddManual')
+           ->setHtmlAttribute('class', 'form');
+
+        $form->addText('resource', 'Resource:')
+            ->setHtmlAttribute('placeholder', 'Resource with a capital letter:')
+            ->addRule($form::MinLength, 'Length > %d', 2)
+            ->addRule($form::Pattern, 'Only 2 < letters < 25', '^[A-Z][a-z]{2,25}$')
+            ->setMaxLength(25)
+            ->setRequired();
+        $form->addText('actionn', 'Action:')
+            ->setHtmlAttribute('placeholder', 'Action in lowercase:')
+            ->addRule($form::MinLength, 'Length > %d', 2)
+            ->addRule($form::Pattern, 'Only 2 < lowercase letters < 25', '^[a-z]{2,25}$')
+            ->setMaxLength(25)
+            ->setRequired();
+
+        $form->addSubmit('addPermissionsManual', 'Add permissions');
 
         $form->onSuccess[] = [$this, 'add'];
 
@@ -73,13 +96,20 @@ final class PermissionsPresenter extends Nette\Application\UI\Presenter
     public function add(Form $form): void
     {
         $data['resource'] = $form->getHttpData($form::DataText, 'resource');
-        $data['action'] = $form->getHttpData($form::DataText, 'action[]');
+        // $data['action'] = $form->getHttpData($form::DataText, 'action[]');
+        $action_array = $form->getHttpData($form::DataText, 'action[]') ?? null;
+        $action = $form->getHttpData($form::DataText, 'actionn') ?? null;
+        if (!empty($action_array)) {
+            $data['action'] = $action_array;
+        } elseif (!empty($action)) {
+            $data['action'] = $action;
+        }
 
         if (!empty($data['resource']) && !empty($data['action'])) {
             try {
                 $this->pf->add($data);
 
-                $this->flashMessage('Permission added', 'text-success');
+                $this->flashMessage(json_encode($data).'Permission added', 'text-success');
             } catch (\Throwable $e) {
                 $this->flashMessage('Caught Exception!'.PHP_EOL
                     .'Error message: '.$e->getMessage().PHP_EOL
@@ -89,7 +119,7 @@ final class PermissionsPresenter extends Nette\Application\UI\Presenter
                     .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
             }
         } else {
-            $this->flashMessage('An empty form was received');
+            $this->flashMessage(json_encode($data).'An empty form was received');
             $this->redirect(':Admin:Users:Permissions:add');
         }
 

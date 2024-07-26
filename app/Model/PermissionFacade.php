@@ -82,11 +82,18 @@ final class PermissionFacade
     {
         try {
             $insert = [];
-            foreach ($data['action'] as $value) {
-                $insert[] = [
-                    'resource' => $data['resource'],
-                    'action' => $value,
-                ];
+            if (\is_array($data['action'])) {
+                foreach ($data['action'] as $value) {
+                    $insert[] = [
+                        'resource' => $data['resource'],
+                        'action' => $value,
+                    ];
+                }
+            } elseif (is_string($data['action'])) {
+                $insert = [
+                        'resource' => $data['resource'],
+                        'action' => $data['action'],
+                    ];
             }
 
             $this->table->insert($insert);
