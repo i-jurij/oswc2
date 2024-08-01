@@ -49,9 +49,9 @@
             {*<li n:class="$presenter->isLinkCurrent(':Admin:clearCache:*') ? 'border-bottom border-info'"><a n:href=":Admin:clearCache" class="nav-link px-2 link-body-emphasis">Cache</a></li>*}
             <li><a n:href=":Admin:clearCache" class="nav-link px-2 link-body-emphasis">Clear Cache</a></li>
           {/if}
-          
-          <li n:class="$presenter->isLinkCurrent(':Admin:Logs:*') ? 'border-bottom border-info'"><a n:href=":Admin:Logs:" class="nav-link px-2 link-body-emphasis">Logs</a></li>
-          
+          {if $user->isAllowed('Logs', 'list')}
+            <li n:class="$presenter->isLinkCurrent(':Admin:Logs:*') ? 'border-bottom border-info'"><a n:href=":Admin:Logs:" class="nav-link px-2 link-body-emphasis">Logs</a></li>
+          {/if}
         </ul>
 
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end mb-3 mb-md-0">

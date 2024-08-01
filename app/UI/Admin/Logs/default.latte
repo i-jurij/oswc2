@@ -1,18 +1,43 @@
 {*layout '../@layout.latte'*}
 
-{var $title = "Users editing"}
-{var $description = "Users editing"}
-{var $keywords = "Users editing"}
+{var $title = "Logs"}
+{var $description = "Logs"}
+{var $keywords = "Logs"}
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}
-	{ifset $pages_data}
-		{foreach $pages_data as $page_data}
-			{$page_data['alias']}<br />
-			{$page_data['title']}<br />
-			{$page_data['decription']}<br />
-		{/foreach}
-	{else}
-		You is not autorized
-	{/ifset}	
+{if $user->isAllowed('Logs', 'list')}
+	{ifset $logs}
+		<table class="table">
+			<thead>
+				<tr>
+				<th scope="col">#</th>
+				<th scope="col">Path</th>
+				<th scope="col">Last modification</th>
+				<th scope="col">Size</th>
+				<th scope="col">Message</th>
+				<th scope="col">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{var $i = 0}
+				{foreach $logs as $log}
+					<tr>
+					{php $i++}
+					<th scope="row">{$i}</th>
+					<td><a n:href="Logs:show $log['name']" >{$log['name']}</a></td>
+					<td>{date('d.m.Y H:i:s', $log['modification_time'])}</td>
+					<td n:class="!empty($log['message']) ? text-danger">{$log['size']}</td>
+					<td n:class="!empty($log['message']) ? text-warning">{$log['message']}</td>
+					<td n:class="!empty($log['message']) ? text-info">
+						<a n:href=":Admin:Logs:clear $log['name']" role="button" class="btn btn-outline-primary">
+							Clear
+						</a>
+					</td>
+					</tr>
+				{/foreach}				
+			</tbody>
+		</table>
+	{/ifset}
+{/if}	
 {/block}
