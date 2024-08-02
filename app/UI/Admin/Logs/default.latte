@@ -35,7 +35,22 @@
 						</a>
 					</td>
 					</tr>
-				{/foreach}				
+				{/foreach}	
+				{foreach $tracys as $tracy}
+					<tr>
+					{php $i++}
+					<th scope="row">{$i}</th>
+					<td><a n:href="Logs:show $tracy['name']" >{$tracy['name']}</a></td>
+					<td>{date('d.m.Y H:i:s', $tracy['modification_time'])}</td>
+					<td n:class="!empty($tracy['message']) ? text-danger">{$tracy['size']}</td>
+					<td n:class="!empty($tracy['message']) ? text-warning">{$tracy['message']}</td>
+					<td n:class="!empty($tracy['message']) ? text-info">
+						<a n:href=":Admin:Logs:delete $tracy['name']" role="button" class="btn btn-outline-primary">
+							Delete
+						</a>
+					</td>
+					</tr>
+				{/foreach}			
 			</tbody>
 		</table>
 	{/ifset}

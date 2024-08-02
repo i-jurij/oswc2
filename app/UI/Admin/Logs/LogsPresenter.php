@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\UI\Admin\Logs;
 
 use Nette;
+use Nette\Utils\FileSystem;
 use Nette\Utils\Finder;
 
 /**
@@ -21,44 +22,63 @@ final class LogsPresenter extends Nette\Application\UI\Presenter
     public function renderDefault()
     {
         if ($this->getUser()->isAllowed('Logs', 'list')) {
-            foreach (Finder::findFiles(['*.log'])->in($this->log_directory) as $log) {
+            foreach (Finder::findFiles(['*.log', '*.html'])->in($this->log_directory) as $log) {
                 $size = $log->getSize();
                 $message = '';
                 if ($size > 1048576 * 10) {
                     $message = 'File is bigger then 10Mb. You can clear it before open (last ten entries will be left)';
                 }
-                $this->template->logs[] = [
-                    'name' => $log->getFilename(),
-                    'realpath' => $log->getRealPath(),
-                    'modification_time' => $log->getMTime(),
-                    'size' => $this->formatBytes($size, 2),
-                    'message' => $message,
-                ];
+
+                if ($log->getExtension() == 'log') {
+                    $this->template->logs[] = [
+                        'name' => $log->getFilename(),
+                        'realpath' => $log->getRealPath(),
+                        'modification_time' => $log->getMTime(),
+                        'size' => $this->formatBytes($size, 2),
+                        'message' => $message,
+                    ];
+                }
+
+                if ($log->getExtension() == 'html') {
+                    $this->template->tracys[] = [
+                        'name' => $log->getFilename(),
+                        'realpath' => $log->getRealPath(),
+                        'modification_time' => $log->getMTime(),
+                        'size' => $this->formatBytes($size, 2),
+                        'message' => $message,
+                    ];
+                }
             }
+            $time = array_column($this->template->tracys, 'modification_time');
+            array_multisort($time, SORT_DESC, $this->template->tracys);
         } else {
-            $this->flashMessage('You don\'t have permission for this');
+            $this->flashMessage('You don\'t have permission for this', 'text-warning');
             $this->redirect(':Admin:');
         }
     }
 
-    public function renderShow($name, int $page = 1)
+    public function actionShow($name, int $page = 1)
     {
         if ($this->getUser()->isAllowed('Logs', 'show')) {
             $this->template->name = $name;
 
             if (\is_readable($this->log_directory.DIRECTORY_SEPARATOR.$name)) {
-                $lines = array_reverse(file($this->log_directory.DIRECTORY_SEPARATOR.$name), true);
+                if (pathinfo($this->log_directory.DIRECTORY_SEPARATOR.$name, PATHINFO_EXTENSION) == 'log') {
+                    $lines = array_reverse(file($this->log_directory.DIRECTORY_SEPARATOR.$name), true);
 
-                $paginator = new Nette\Utils\Paginator();
-                $paginator->setItemCount(count($lines));
-                $paginator->setItemsPerPage(10);
-                $paginator->setPage($page);
+                    $paginator = new Nette\Utils\Paginator();
+                    $paginator->setItemCount(count($lines));
+                    $paginator->setItemsPerPage(10);
+                    $paginator->setPage($page);
 
-                $this->template->lines = array_slice($lines, $paginator->getOffset(), $paginator->getLength(), true);
+                    $this->template->lines = array_slice($lines, $paginator->getOffset(), $paginator->getLength(), true);
 
-                $this->template->paginator = $paginator;
+                    $this->template->paginator = $paginator;
+                } elseif (pathinfo($this->log_directory.DIRECTORY_SEPARATOR.$name, PATHINFO_EXTENSION) == 'html') {
+                    $this->template->setFile($this->log_directory.DIRECTORY_SEPARATOR.$name);
+                }
             } else {
-                $this->flashMessage('You don\'t have permission for this');
+                $this->flashMessage('You don\'t have permission for this', 'text-warning');
                 $this->redirect(':Admin:Logs:');
             }
         } else {
@@ -67,15 +87,27 @@ final class LogsPresenter extends Nette\Application\UI\Presenter
         }
     }
 
-    public function renderClear($name)
+    public function actionClear($name)
     {
         if ($this->clearFile($this->log_directory.DIRECTORY_SEPARATOR.$name, 30)) {
-            $this->flashMessage('Success! Log "'.$name.'" cleared');
+            $this->flashMessage('Success! Log "'.$name.'" cleared', 'text-success');
             $this->redirectPermanent(':Admin:Logs:');
         } else {
-            $this->flashMessage('Error! Log "'.$name.'" was NOT cleared.');
+            $this->flashMessage('Error! Log "'.$name.'" was NOT cleared.', 'text-danger');
             $this->redirectPermanent(':Admin:Logs:');
         }
+    }
+
+    public function actionDelete($name)
+    {
+        try {
+            FileSystem::delete($this->log_directory.DIRECTORY_SEPARATOR.$name);
+            $this->flashMessage('Success! Tracy log "'.$name.'" deleted', 'text-success');
+        } catch (\Throwable $th) {
+            $this->flashMessage($th->getMessage().PHP_EOL
+                 .'Trace: '.$th->getTraceAsString().PHP_EOL, 'text-danger');
+        }
+        $this->redirectPermanent(':Admin:Logs:');
     }
 }
 /*
