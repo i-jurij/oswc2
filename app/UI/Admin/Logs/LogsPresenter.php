@@ -19,7 +19,7 @@ final class LogsPresenter extends Nette\Application\UI\Presenter
 
     private string $log_directory = APPDIR.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'log';
 
-    public function renderDefault()
+    public function renderDefault(int $page = 1)
     {
         if ($this->getUser()->isAllowed('Logs', 'list')) {
             foreach (Finder::findFiles(['*.log', '*.html'])->in($this->log_directory) as $log) {
@@ -40,7 +40,7 @@ final class LogsPresenter extends Nette\Application\UI\Presenter
                 }
 
                 if ($log->getExtension() == 'html') {
-                    $this->template->tracys[] = [
+                    $tracys[] = [
                         'name' => $log->getFilename(),
                         'realpath' => $log->getRealPath(),
                         'modification_time' => $log->getMTime(),
@@ -49,8 +49,19 @@ final class LogsPresenter extends Nette\Application\UI\Presenter
                     ];
                 }
             }
-            $time = array_column($this->template->tracys, 'modification_time');
-            array_multisort($time, SORT_DESC, $this->template->tracys);
+            if (!empty($tracys)) {
+                $time = array_column($tracys, 'modification_time');
+                array_multisort($time, SORT_DESC, $tracys);
+
+                $paginator = new Nette\Utils\Paginator();
+                $paginator->setItemCount(count($tracys));
+                $paginator->setItemsPerPage(10);
+                $paginator->setPage($page);
+
+                $this->template->tracys = array_slice($tracys, $paginator->getOffset(), $paginator->getLength(), true);
+
+                $this->template->paginator = $paginator;
+            }
         } else {
             $this->flashMessage('You don\'t have permission for this', 'text-warning');
             $this->redirect(':Admin:');
@@ -103,6 +114,21 @@ final class LogsPresenter extends Nette\Application\UI\Presenter
         try {
             FileSystem::delete($this->log_directory.DIRECTORY_SEPARATOR.$name);
             $this->flashMessage('Success! Tracy log "'.$name.'" deleted', 'text-success');
+        } catch (\Throwable $th) {
+            $this->flashMessage($th->getMessage().PHP_EOL
+                 .'Trace: '.$th->getTraceAsString().PHP_EOL, 'text-danger');
+        }
+        $this->redirectPermanent(':Admin:Logs:');
+    }
+
+    public function actionDeleteAll()
+    {
+        try {
+            foreach (Finder::findFiles(['*.html'])->in($this->log_directory) as $tracy) {
+                FileSystem::delete($tracy->getRealPath());
+            }
+
+            $this->flashMessage('Success! All tracy logs deleted', 'text-success');
         } catch (\Throwable $th) {
             $this->flashMessage($th->getMessage().PHP_EOL
                  .'Trace: '.$th->getTraceAsString().PHP_EOL, 'text-danger');
