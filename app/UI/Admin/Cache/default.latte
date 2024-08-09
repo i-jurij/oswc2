@@ -1,0 +1,47 @@
+{*layout '../@layout.latte'*}
+
+{var $title = "Admin Simple CMS"}
+{var $description = "Admin Simple CMS"}
+{var $keywords = "Keywords of Admin page"}
+{var $robots = "NOINDEX,NOFOLLOW"}
+
+{block content}	
+<p n:ifset="$data['size']">
+    Total size is {$data['size']}
+    &nbsp
+    <a class="btn btn-primary" n:href=":Admin:Cache:clearAll">Clear all</a>
+</p>
+
+<form 
+    n:ifset="$data['files']" 
+    method="post" 
+    id="clearCacheForm" 
+    name="clearCacheForm"
+    action="{link :Admin:Cache:clear}">
+<div class="table-responsive" style="height: 65vh;">
+{foreach $data['files'] as $file}
+	<table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Check</th>
+                <th scope="col">Name</th>
+                <th scope="col">Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            {iterateWhile}
+            <tr id="row-{$iterator->counter}">
+                <th scope="row">{$iterator->counter}</th>
+                <td><input type="checkbox" name="clear_cache[]" value="{$file['file']}"></td>
+                <td>{$file['file']}</td>
+                <td>{$file['size']}</td>
+            </tr>
+            {/iterateWhile true}
+        </tbody>
+	</table>
+{/foreach}
+</div>
+<br>
+<button type="submit" class="btn btn-primary" form="clearCacheForm">Clear</button>
+</form>
