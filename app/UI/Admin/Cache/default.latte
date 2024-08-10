@@ -6,18 +6,25 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}	
-<p n:ifset="$data['size']">
-    Total size is {$data['size']}
-    &nbsp
-    <a class="btn btn-primary" n:href=":Admin:Cache:clearAll">Clear all</a>
-</p>
-
 <form 
     n:ifset="$data['files']" 
     method="post" 
     id="clearCacheForm" 
     name="clearCacheForm"
-    action="{link :Admin:Cache:clear}">
+    action="">
+
+    <p n:ifset="$data['size']">
+        Total size is <span class="fw-bold">{$data['size']}</span> in <span class="fw-bold">{count($data['files'])}</span> files.
+        &nbsp
+        <button 
+            type="submit" 
+            class="btn btn-primary" 
+            form="clearCacheForm"
+            formaction="{link :Admin:Cache:clearAll}"
+        >
+            Clear All
+        </button>
+    </p>
 <div class="table-responsive" style="height: 65vh;">
 {foreach $data['files'] as $file}
 	<table class="table table-striped">
@@ -43,5 +50,14 @@
 {/foreach}
 </div>
 <br>
-<button type="submit" class="btn btn-primary" form="clearCacheForm">Clear</button>
+<input type="hidden" name="csrf" value="{$csrf}">
+<button 
+    type="submit" 
+    class="btn btn-primary" 
+    form="clearCacheForm"
+    formaction="{link :Admin:Cache:clear}"
+>
+    Clear
+</button>
+<button class="btn btn-secondary" type="reset">Reset</button>
 </form>

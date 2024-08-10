@@ -21,9 +21,15 @@ final class CachePresenter extends Nette\Application\UI\Presenter
     use CacheCleaner;
     use ErrorFlashMessage;
 
+    #[Requires(methods: 'GET')]
     public function renderDefault(): void
     {
+        $csrf = random_int(PHP_INT_MIN, PHP_INT_MAX);
+
+        $this->getHttpResponse()->setCookie('csrf', "$csrf", '30');
+
         $this->template->data = $this->getFileList(CACHE_DIR);
+        $this->template->csrf = $csrf;
     }
 
     #[Requires(methods: 'POST')]
@@ -33,10 +39,13 @@ final class CachePresenter extends Nette\Application\UI\Presenter
             $this->error('Forbidden', 403);
         }
         try {
-            $httpRequest = $this->getHttpRequest();
-            $data = $httpRequest->getPost('clear_cache');
+            $data = $this->getHttpRequest()->getPost('clear_cache');
+            $csrf = $this->getHttpRequest()->getPost('csrf');
+            $cookie_csrf = $this->getHttpRequest()->getCookie('csrf');
+            $this->getHttpResponse()->deleteCookie('csrf');
             $i = 0;
-            if (!empty($data)) {
+
+            if (!empty($data) && $csrf == $cookie_csrf) {
                 foreach ($data as $file) {
                     FileSystem::delete($file);
                     ++$i;
@@ -48,18 +57,28 @@ final class CachePresenter extends Nette\Application\UI\Presenter
             $this->flashMessage($this->erMes($e), 'text-danger');
         }
 
-        $this->redirect(':Admin:Cache:');
+        $this->redirect(':Admin:Cache:default');
     }
 
+    #[Requires(methods: 'POST')]
     public function actionClearAll(): void
     {
-        try {
-            $count = $this->cleanCache(CACHE_DIR) ?? 0;
-            $this->flashMessage("All cached files was removed. Remove {$count} files.");
-        } catch (\Throwable $th) {
-            $this->flashMessage($this->erMes($th), 'text-danger');
+        if (!$this->getUser()->isAllowed('Cache', 'clear')) {
+            $this->error('Forbidden', 403);
+        }
+        $csrf = $this->getHttpRequest()->getPost('csrf');
+        $cookie_csrf = $this->getHttpRequest()->getCookie('csrf');
+        $this->getHttpResponse()->deleteCookie('csrf');
+
+        if ($csrf == $cookie_csrf) {
+            try {
+                $count = $this->cleanCache(CACHE_DIR) ?? 0;
+                // $this->flashMessage("All cached files was removed. Remove {$count} files.");
+            } catch (\Throwable $th) {
+                $this->flashMessage($this->erMes($th), 'text-danger');
+            }
         }
 
-        $this->redirect(':Admin:Cache:');
+        $this->redirect(':Admin:Cache:default');
     }
 }
