@@ -40,18 +40,21 @@
 	</style>
 	{include flash from 'flash.latte'}
 	<div class="container-fluid">
-    	<div class="row">
-			{block nav}
-				{include nav from 'nav.latte'}
-			{/block}
-			<div class="col-2 col-sm-3 col-lg-3 col-xl-2 px-sm-2 px-0">
+		{block nav}
+			{include nav from 'nav.latte'}
+		{/block}
+		<div class="d-flex">
+			<div class="collapse show" id="sidebarrr">
 				{block sidebar}
 					{include sidebar from 'sidebar.latte'}
 				{/block}
 			</div>
-
-			<div class="col-10 col-sm-9 col-lg-9 col-xl-10 py-3">
+			<div class="flex-grow-1">
+				{*block admin_menu}
+					{include admin_menu from 'admin_menu.latte'}
+				{/block*}
 				{block content}{/block}
+				
 			</div>
 		</div>
 	</div>

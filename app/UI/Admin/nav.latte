@@ -1,8 +1,37 @@
 {block nav}
-    <header class="p-3 mb-3 border-bottom">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
-        <ul class="nav col-12 col-md-auto order-last order-md-first me-md-auto mb-2 justify-content-center mb-sm-0">
+    <header class="border-bottom p-2 mb-3">
+    <div>
+      <div class="d-flex flex-column flex-md-row align-items-center justify-content-md-between">
+   
+        <div class="px-3 order-md-last ms-auto">
+          {*<form class="me-3" role="search">
+            <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+          </form>
+          *}
+          <div class="dropdown">            
+              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-person"></i>
+                  {$user->getIdentity()->username}
+              </a>
+              <ul class="dropdown-menu text-small">
+                  <li><a class="dropdown-item" n:href=":Admin:Users:Profile">Profile</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" n:href=":Sign:out">Sign out</a></li>
+              </ul>
+          </div>
+        </div>
+
+        <ul class="nav justify-content-center me-auto">
+          <li>
+                  <a 
+                        class="nav-link px-2 link-body-emphasis"
+                        data-bs-toggle="collapse" 
+                        href="#sidebarrr" 
+                        aria-expanded="false" 
+                        aria-controls="sidebarrr">
+                        <i class="bi bi-list"></i>
+                  </a>
+          </li>
           <li>
             <a n:href=":Admin:" class="nav-link px-2 link-body-emphasis">
               <i class="bi bi-house"></i>
@@ -52,24 +81,6 @@
             <li n:class="$presenter->isLinkCurrent(':Admin:Logs:*') ? 'border-bottom border-info'"><a n:href=":Admin:Logs:" class="nav-link px-2 link-body-emphasis">Logs</a></li>
           {/if}
         </ul>
-
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end mb-3 mb-md-0">
-          {*<form class="me-3" role="search">
-            <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-          </form>
-          *}
-          <div class="dropdown text-end">            
-              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-person"></i>
-                  {$user->getIdentity()->username}
-              </a>
-              <ul class="dropdown-menu text-small">
-                  <li><a class="dropdown-item" n:href=":Admin:Users:Profile">Profile</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" n:href=":Sign:out">Sign out</a></li>
-              </ul>
-          </div>
-        </div>
 
       </div>
     </div>
