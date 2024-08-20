@@ -43,8 +43,31 @@
 		{block nav}
 			{include nav from 'nav.latte'}
 		{/block}
+		<div class="d-flex align-items-center my-3">
+			<a 
+				class="btn btn-secondary dropdown-toggle me-4"
+				data-bs-toggle="collapse" 
+				href="#sidebarrr"
+				aria-controls="sidebarrr"
+				role="button"
+			>
+				<i class="bi bi-three-dots-vertical"></i></i>
+			</a>
+			<div class="flex-grow-1">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a n:href=":Admin:">Admin</a></li>
+						{*if (!empty($pageLinks) && is_array($pageLinks)) }
+							<li n:foreach="$pageLinks as $page" class="breadcrumb-item active" aria-current="{$page}">{$page}</li>
+						{elseif (!empty($pageLinks) && is_string($pageLinks))} 
+							<li class="breadcrumb-item active" aria-current="{$pageLinks}">{$pageLinks}</li>
+						{/if*}
+					</ol>
+				</nav>
+			</div>
+		</div>
 		<div class="d-flex">
-			<div class="collapse show" id="sidebarrr">
+			<div class="">
 				{block sidebar}
 					{include sidebar from 'sidebar.latte'}
 				{/block}

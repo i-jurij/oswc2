@@ -1,0 +1,19 @@
+{*layout '../@layout.latte'*}
+
+{var $title = "CMS main"}
+{var $description = "Admin Simple CMS main"}
+{var $keywords = "Admin, SimpleCMS, CMS main"}
+{var $robots = "NOINDEX,NOFOLLOW"}
+
+{block content}	
+{import 'menu.latte'}
+
+<div class="container">
+{if $user->isAllowed('Cms', 'menu')}
+    <h2 class="text-center">CMS</h2>
+    <br />
+    {include menu, $pageList}
+{/if}
+</div>
+
+{*php print_r($pageList)*}

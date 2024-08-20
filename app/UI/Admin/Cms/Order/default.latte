@@ -1,0 +1,11 @@
+{*layout '../@layout.latte'*}
+
+{var $title = "Order"}
+{var $description = "Order"}
+{var $keywords = "Admin, SimpleCMS, Order"}
+{var $robots = "NOINDEX,NOFOLLOW"}
+
+{block content}	
+Order<br>
+{import '../menu.latte'}
+{include menu, $menuList}

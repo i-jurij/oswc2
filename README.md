@@ -79,10 +79,30 @@ Other routes as in Nette Framework: "Home::Pages::OtherPresenters::method", "Adm
 ### Accessory  
 `RequireLoggedUser` - trait for page that need autentication (in user not logged - redirect to sign in)  
 
-## Basic pages
+### Admin page and menu creating
+#### Nav menu
+For admins basic pages: "Users", "Roles", "Permissions", "Logs", "Cache".  
+It is created manually.   
 
-### Admin
+#### Sidebar menu
+Menu section CMS is created automatically from filesystem.   
+The file structure is as follows eg: 
+``` 
+CMS dir  
+	First dir
+	FirstPresenter.php (namespace "App\UI\Cms\First" and class "FirstPresenter")  
+			Second dir   
+			SecondPresenter.php (namespace "App\UI\Cms\Second" and class "SecondPresenter")  
+					Third dir  
+					ThirdPresenter.php (namespace "App\UI\Cms\Third" and class "ThirdPresenter")  
+```
+Menu point will be viewed only if Presenters class existed.				
+That is, only controllers classes are used and if you not need the menu point - create method into presenter. And if you need menu links - create dirs and into it create presenters class for action.  
+Permissions for user is ["Cms", "menu"].   
 
+## Admins Basic pages
+
+### Admins nav menu
 #### Users
 Add, edit, delete users and their roles.  
 
@@ -91,3 +111,13 @@ Add, edit, delete roles and permissions for roles.
 
 #### Permissions
 Add, edit, delete Permissions. Permissions can be get from Models or Presenters classes (or both: see `PermissionFacade`) as their methods.   
+
+#### Cache
+Clear cache or delete different file(s)   
+
+#### Logs
+List, show, clear logs   
+
+## Admins additional pages and sidebar menu
+#### CMS
+Create, update, delete pages (SEO, content, user permissions etc)
