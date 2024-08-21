@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\UI\Accessory\RequireLoggedUser;
+use App\UI\Accessory\PhoneNumber;
 use Nette;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
@@ -18,7 +18,7 @@ use Nette\Utils\Validators;
  */
 final class UserFacade extends UsersTableColumns
 {
-    use RequireLoggedUser;
+    use \App\UI\Accessory\RequireLoggedUser;
 
     // Minimum password length requirement for users
     public const PasswordMinLength = 7;
@@ -99,14 +99,14 @@ final class UserFacade extends UsersTableColumns
         }
         // $email = !empty($data->email) ? $data->email : $data->username.'@'.$data->username.'.com';
         $data_array = [
-                self::ColumnName => $data->username,
-                self::ColumnPasswordHash => $this->passwords->hash($data->password),
-                self::ColumnImage => $data->image ?? null,
-                self::ColumnPhone => $data->phone ?? null,
-                self::ColumnEmail => $data->email ?? null,
-                self::ColumnAuthToken => $this->token(),
-                // self::ColumnCreatedAt => $created_at,
-                // self::ColumnUpdatedAt => $updated_at,
+            self::ColumnName => $data->username,
+            self::ColumnPasswordHash => $this->passwords->hash($data->password),
+            self::ColumnImage => $data->image ?? null,
+            self::ColumnPhone => PhoneNumber::toDb($data->phone) ?? null,
+            self::ColumnEmail => $data->email ?? null,
+            self::ColumnAuthToken => $this->token(),
+            // self::ColumnCreatedAt => $created_at,
+            // self::ColumnUpdatedAt => $updated_at,
         ];
 
         // remove the empty element
@@ -222,10 +222,10 @@ final class UserFacade extends UsersTableColumns
     protected function prepareSearch($data)
     {
         $data_array = [
-                self::ColumnName => $data->username ?? null,
-                self::ColumnPhone => $data->phone ?? null,
-                self::ColumnEmail => $data->email ?? null,
-                'roles' => $data->roles ?? null,
+            self::ColumnName => $data->username ?? null,
+            self::ColumnPhone => PhoneNumber::toDb($data->phone) ?? null,
+            self::ColumnEmail => $data->email ?? null,
+            'roles' => $data->roles ?? null,
         ];
 
         // remove the empty element
@@ -245,7 +245,7 @@ final class UserFacade extends UsersTableColumns
             }
             if (!empty($pre_data[self::ColumnPhone])) {
                 $phone = $pre_data[self::ColumnPhone];
-                $query = $query->where(self::ColumnPhone, $phone);
+                $query = $query->where('phone LIKE ?', "%$phone%");
             }
             if (!empty($pre_data[self::ColumnEmail])) {
                 $email = $pre_data[self::ColumnEmail];
@@ -254,13 +254,13 @@ final class UserFacade extends UsersTableColumns
 
             foreach ($query as $user) {
                 $users_data[$user->id] = [
-                        'username' => $user->username,
-                        'phone' => $user->phone,
-                        'phone_verified' => $user->phone_verified,
-                        'email' => $user->email,
-                        'email_verified' => $user->email_verified,
-                        'created_at' => $user->created_at,
-                        'updated_at' => $user->updated_at,
+                    'username' => $user->username,
+                    'phone' => $user->phone,
+                    'phone_verified' => $user->phone_verified,
+                    'email' => $user->email,
+                    'email_verified' => $user->email_verified,
+                    'created_at' => $user->created_at,
+                    'updated_at' => $user->updated_at,
                 ];
 
                 foreach ($user->related('role_user.user_id') as $row) {

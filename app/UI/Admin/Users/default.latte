@@ -32,7 +32,7 @@
 							<span class="text-muted">Name: </span>{$row->username}
 						</p>
 						<p class="border-top pt-2 mb-2">
-							<span class="text-muted">Phone: </span>{$row->phone}
+							<span class="text-muted">Phone: </span>{\App\UI\Accessory\PhoneNumber::fromDb($row->phone)}
 						</p>
 						<p class="border-top pt-2 mb-2">
 							<span class="text-muted">Phone verified: </span>{$row->phone_verified}
@@ -146,7 +146,7 @@
 								</div>
 								</div>
 							</td>
-							<td>{$row['phone']}</td>
+							<td>{\App\UI\Accessory\PhoneNumber::fromDb($row->phone)}</td>
 							<td>{$row['phone_verified']}</td>
 							<td>{$row['email']}</td>
 							<td>{$row['email_verified']}</td>
