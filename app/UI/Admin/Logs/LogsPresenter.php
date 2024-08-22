@@ -11,7 +11,7 @@ use Nette\Utils\Finder;
 /**
  * @property LogsTemplate $template
  */
-final class LogsPresenter extends Nette\Application\UI\Presenter
+final class LogsPresenter extends \App\UI\BasePresenter
 {
     use \App\UI\Accessory\RequireLoggedUser;
     use \App\UI\Accessory\HumanSize;
@@ -137,7 +137,7 @@ final class LogsPresenter extends Nette\Application\UI\Presenter
     }
 }
 /*
-class UsersTemplate extends Nette\Bridges\ApplicationLatte\Template
+class LogsTemplate extends \App\Ui\BaseTemplate
 {
     public Nette\Security\User $user;
     public string $basePath;

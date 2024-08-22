@@ -162,7 +162,9 @@ sss
                             <p class="border-top pt-2 mb-2">
                                 <span class="text-muted">Roles: </span>
                                 <span n:inner-foreach="$row['roles'] as $role">
+                                    {ifset $role->role_name}
                                     {$role->role_name}{if !$iterator->last}, {/if}
+                                    {/ifset}
                                 </span>
                             </p>
                             <p class="border-top pt-2 mb-2">
@@ -202,7 +204,9 @@ sss
                                         <div class="modal-body">
                                             <p>Do you really want to delete the user "{$row['username']}" with roles 
                                                 <span n:inner-foreach="$row['roles'] as $role">
+                                                    {ifset $role->role_name}
                                                     {$role->role_name}{if !$iterator->last}, {/if}
+                                                    {/ifset}
                                                 </span>
                                             ?</p>
                                         </div>

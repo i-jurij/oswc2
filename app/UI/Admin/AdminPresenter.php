@@ -6,13 +6,12 @@ namespace App\UI\Admin;
 
 use App\UI\Accessory\CacheCleaner;
 use App\UI\Accessory\RequireLoggedUser;
-use Nette;
 use Nette\Security\User;
 
 /**
  * @property AdminTemplate $template
  */
-final class AdminPresenter extends Nette\Application\UI\Presenter
+final class AdminPresenter extends \App\UI\BasePresenter
 {
     // Incorporates methods to check user login status
     use RequireLoggedUser;
@@ -30,7 +29,7 @@ final class AdminPresenter extends Nette\Application\UI\Presenter
     }
 }
 
-class AdminTemplate extends Nette\Bridges\ApplicationLatte\Template
+class AdminTemplate extends \App\UI\BaseTemplate
 {
     public User $user;
     public string $basePath;

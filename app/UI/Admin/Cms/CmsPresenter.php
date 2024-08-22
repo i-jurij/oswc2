@@ -6,10 +6,9 @@ namespace App\UI\Admin\Cms;
 
 use App\UI\Accessory\AdminCmsMenu;
 use App\UI\Accessory\RequireLoggedUser;
-use Nette;
 use Nette\Security\User;
 
-final class CmsPresenter extends Nette\Application\UI\Presenter
+final class CmsPresenter extends \App\UI\BasePresenter
 {
     // Incorporates methods to check user login status
     use RequireLoggedUser;

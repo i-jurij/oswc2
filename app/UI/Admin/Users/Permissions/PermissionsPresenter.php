@@ -6,13 +6,12 @@ namespace App\UI\Admin\Users\Permissions;
 
 use App\Model\PermissionFacade;
 use App\UI\Accessory\RequireLoggedUser;
-use Nette;
 use Nette\Application\UI\Form;
 
 /**
  * @property PermissionsTemplate $template
  */
-final class PermissionsPresenter extends Nette\Application\UI\Presenter
+final class PermissionsPresenter extends \App\UI\BasePresenter
 {
     // Incorporates methods to check user login status
     use RequireLoggedUser;

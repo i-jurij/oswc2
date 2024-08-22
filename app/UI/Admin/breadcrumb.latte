@@ -1,0 +1,11 @@
+{block breadcrumbMenu}
+	<div class="flex-grow-1">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb" n:inner-foreach="$breadcrumb as $item">
+				<li class="breadcrumb-item">
+					<a n:tag-if="!$iterator->last" n:href="$item['full']">{$item['short']}</a>
+				</li>
+			</ol>
+		</nav>
+	</div>
+{/block}

@@ -7,13 +7,12 @@ namespace App\UI\Admin\Users;
 use App\Model\UserFacade;
 use App\UI\Accessory\FormFactory;
 use App\UI\Accessory\RequireLoggedUser;
-use Nette;
 use Nette\Application\UI\Form;
 
 /**
  * @property UsersTemplate $template
  */
-final class UsersPresenter extends Nette\Application\UI\Presenter
+final class UsersPresenter extends \App\UI\BasePresenter
 {
     // Incorporates methods to check user login status
     use RequireLoggedUser;
@@ -256,7 +255,7 @@ final class UsersPresenter extends Nette\Application\UI\Presenter
     }
 
     // public function renderSearch(Form $form = null): void
-    public function renderSearch(Form $form = null): void
+    public function renderSearch(?Form $form = null): void
     {
         if (!$this->getUser()->isAllowed('User', 'search')) {
             $this->error('Forbidden', 403);

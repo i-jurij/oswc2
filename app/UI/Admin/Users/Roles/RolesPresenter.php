@@ -8,13 +8,12 @@ use App\Model\PermissionFacade;
 use App\Model\RoleFacade;
 use App\UI\Accessory\FormFactory;
 use App\UI\Accessory\RequireLoggedUser;
-use Nette;
 use Nette\Application\UI\Form;
 
 /**
  * @property UsersTemplate $template
  */
-final class RolesPresenter extends Nette\Application\UI\Presenter
+final class RolesPresenter extends \App\UI\BasePresenter
 {
     // Incorporates methods to check user login status
     use RequireLoggedUser;
@@ -32,7 +31,7 @@ final class RolesPresenter extends Nette\Application\UI\Presenter
     protected function startup()
     {
         parent::startup();
-        if (!$this->getUser()->isAllowed('Permission')) {
+        if (!$this->getUser()->isAllowed('Role', 'add') || !$this->getUser()->isAllowed('Role', 'delete')) {
             $this->error('Forbidden', 403);
         }
     }
