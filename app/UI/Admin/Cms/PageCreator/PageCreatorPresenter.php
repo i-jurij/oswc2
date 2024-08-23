@@ -7,10 +7,12 @@ namespace App\UI\Admin\Cms\PageCreator;
 final class PageCreatorPresenter extends \App\UI\BasePresenter
 {
     use \App\UI\Accessory\RequireLoggedUser;
-    use \App\UI\Accessory\ScanDirectoryRecursively;
+    use \App\UI\Accessory\LinkFromFileSystem;
 
     public function renderDefault()
     {
-        $this->template->menuList = $this->scanDirectoryRecursively(__DIR__);
+        if ($this->getUser()->isAllowed('PageCreator', 'update')) {
+            $this->template->menuList = $this->linkFromFileSystem(__DIR__);
+        }
     }
 }

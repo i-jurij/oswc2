@@ -22,12 +22,13 @@
         </div>
 
         <ul class="nav justify-content-center">
-          <li>
+          {*<li>
             <a n:href=":Admin:" class="nav-link px-2 link-body-emphasis">
               <i class="bi bi-house"></i>
               <span>Main</span>
             </a>
           </li>
+          *}
           {*if ($user->isInRole('admin') || $user->isInRole('moder'))*}
           {if ($user->isAllowed('User','getAllUsersData'))}
             <div class="dropdown">

@@ -6,9 +6,9 @@ namespace App\UI\Accessory;
 
 use Nette\Utils\Finder;
 
-trait ScanDirectoryRecursively
+trait LinkFromFileSystem
 {
-    private function scanDirectoryRecursively($directory)
+    private function linkFromFileSystem(string $directory): array
     {
         $directory_tree = [];
 
@@ -23,7 +23,7 @@ trait ScanDirectoryRecursively
             $check_class = class_exists($class, true);
             $link = ':Admin:Cms'.\implode(':', explode(DIRECTORY_SEPARATOR, $smc_path)).':';
             if ($check_class) {
-                $ar = $this->scanDirectoryRecursively($path);
+                $ar = $this->linkFromFileSystem($path);
                 if (\iterator_count($ar) > 0) {
                     $directory_tree[$link] = $ar;
                 } else {

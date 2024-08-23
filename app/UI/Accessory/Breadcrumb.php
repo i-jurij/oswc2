@@ -48,11 +48,13 @@ trait Breadcrumb
                 'full' => $full,
             ];
         }
-        $count_controls = count($controls);
-        $controls[$count_controls] = [
-            'short' => $method,
-            'full' => $controls[$count_controls - 1]['full'].$method,
-        ];
+        if (!empty($method)) {
+            $count_controls = count($controls);
+            $controls[$count_controls] = [
+                'short' => $method,
+                'full' => $controls[$count_controls - 1]['full'].$method,
+            ];
+        }
 
         return $controls;
     }

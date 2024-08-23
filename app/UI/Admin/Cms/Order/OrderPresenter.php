@@ -10,10 +10,10 @@ final class OrderPresenter extends \App\UI\BasePresenter
 {
     // Incorporates methods to check user login status
     use \App\UI\Accessory\RequireLoggedUser;
-    use \App\UI\Accessory\ScanDirectoryRecursively;
+    use \App\UI\Accessory\LinkFromFileSystem;
 
     public function renderDefault()
     {
-        $this->template->menuList = $this->scanDirectoryRecursively(__DIR__);
+        $this->template->menuList = $this->linkFromFileSystem(__DIR__);
     }
 }
