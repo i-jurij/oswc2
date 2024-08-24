@@ -17,6 +17,8 @@ final class UsersPresenter extends \App\UI\BasePresenter
     // Incorporates methods to check user login status
     use RequireLoggedUser;
 
+    use \App\UI\Accessory\LinkFromFileSystem;
+
     protected $user_data;
     public $postsearch;
 
@@ -26,7 +28,12 @@ final class UsersPresenter extends \App\UI\BasePresenter
     {
     }
 
-    public function renderDefault(int $page = 1): void
+    public function renderDefault()
+    {
+        $this->template->menuList = $this->linkFromFileSystem(__DIR__);
+    }
+
+    public function renderList(int $page = 1): void
     {
         if (!$this->getUser()->isAllowed('User', 'getAllUsersData')) {
             $this->error('Forbidden', 403);
