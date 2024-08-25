@@ -6,13 +6,9 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}	
-	{ifset $data}
-		{foreach $data as $page_data}
-			{$page_data['alias']}<br />
-			{$page_data['title']}<br />
-			{$page_data['decription']}<br />
-		{/foreach}
+	{ifset $menuList}
+		{include menu from $shared_templates.'menu.latte', $menuList}
 	{else}
-		admin page is empty
+		Admin main page
 	{/ifset}
 {/block}

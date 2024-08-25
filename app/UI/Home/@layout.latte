@@ -29,7 +29,10 @@
 			<div class="flash_child">{$flash->message}</div>
 		</div>
 		{include header from 'layout-header.latte'}
+		
 		<main class="main_section">
+			{include breadcrumbMenuHome from $shared_templates.'breadcrumb_home.latte'}
+			
 			<h1 class="m05p05 rounded center shadow bgcontent main_title">{$title}</h1>
 			<div class="center">
 				{include content}	

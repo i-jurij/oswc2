@@ -33,14 +33,6 @@
 			</article>
 		{/foreach}
 	{else}
-	{* proba *}
-	    {ifset $pages}
-			{foreach $pages as $value}
-				{$value}<br>
-			{/foreach}
-		{/ifset}
-	{* end proba *}	
-
 		{* output if no data in table pages from db *}	
 		{var $page_alias = 'ddd'}
 		{var $page_title = 'Title'}

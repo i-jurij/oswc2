@@ -16,7 +16,6 @@
         </a>
     </div>
 
-    {import '../Cms/menu.latte'}
-    {include menu, $menuList}
+    {include menu from $shared_templates.'menu.latte', $menuList}
 </div>
 {/block}

@@ -6,12 +6,10 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}	
-{import 'menu.latte'}
-
 <div class="container">
 <h2 class="text-center">CMS</h2>
  <br />
-    {include menu, $pageList}
+    {include menu from $shared_templates.'menu.latte', $pageList}
 </div>
 
 {*php print_r($pageList)*}

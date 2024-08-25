@@ -47,8 +47,7 @@
 
   <div class="text-center">
     <div class="btn-group" role="group" aria-label="Page editing button group">
-      {import '../menu.latte'}
-      {include menu, $menuList}
+      {include menu from $shared_templates.'menu.latte', $menuList}
     </div>
   </div>
 </div>

@@ -11,10 +11,12 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
     public function beforeRender()
     {
         $this->template->breadcrumb = $this->getBC();
+        $this->template->shared_templates = APPDIR.DIRECTORY_SEPARATOR.'UI'.DIRECTORY_SEPARATOR.'shared_templates'.DIRECTORY_SEPARATOR;
     }
 }
 
 class BaseTemplate extends \Nette\Bridges\ApplicationLatte\Template
 {
     public array $breadcrumb;
+    public string $shared_templates;
 }

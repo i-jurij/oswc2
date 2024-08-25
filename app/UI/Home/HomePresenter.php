@@ -13,8 +13,10 @@ use Nette\Utils\Html;
 /**
  * @property HomeTemplate $template
  */
-final class HomePresenter extends Nette\Application\UI\Presenter
+final class HomePresenter extends \App\UI\BasePresenter
 {
+    // use \App\UI\Accessory\LinkFromFileSystem;
+
     public function __construct(private PageFacade $db_pages)
     {
     }
@@ -25,6 +27,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         if (count($db_data) > 0) {
             $this->template->pages_data = $db_data;
         }
+        // $this->template->menuList = $this->linkFromFileSystem(__DIR__);
     }
 
     public function renderPolitic()
@@ -49,7 +52,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
         // $this->setView($db_data);
     }
 }
-class HomeTemplate extends Nette\Bridges\ApplicationLatte\Template
+class HomeTemplate extends \App\UI\BaseTemplate
 {
     public Nette\Security\User $user;
     public string $basePath;
@@ -58,4 +61,5 @@ class HomeTemplate extends Nette\Bridges\ApplicationLatte\Template
     public object $presenter;
     public object $control;
     public array $pages_data;
+    // public array $menuList;
 }
