@@ -35,9 +35,7 @@
 		}
 	})()
 	</script>
-	<style>
-	
-	</style>
+
 	{include flash from 'flash.latte'}
 	<div class="container-fluid">
 		{block nav}
@@ -45,13 +43,14 @@
 		{/block}
 		<div class="d-flex align-items-start">
 			<a 
-				class="btn btn-secondary dropdown-toggle me-4"
+				class="dropdown-toggle me-3 pt-3"
 				data-bs-toggle="collapse" 
 				href="#sidebarrr"
 				aria-controls="sidebarrr"
 				role="button"
 			>
-				<i class="bi bi-three-dots-vertical"></i>
+				{*<i class="bi bi-three-dots-vertical"></i>*}
+				Sidebar
 			</a>
 			{include breadcrumbMenu from $shared_templates.'breadcrumb.latte'}
 		</div>
@@ -62,11 +61,7 @@
 				{/block}
 			</div>
 			<div class="flex-grow-1 p-3 rounded">
-				{*block admin_menu}
-					{include admin_menu from 'admin_menu.latte'}
-				{/block*}
-				{block content}{/block}
-				
+				{block content}{/block}				
 			</div>
 		</div>
 	</div>
