@@ -1,5 +1,5 @@
 {define menu, $items}
-<div class="d-flex align-items-start justify-content-center">
+<div class="d-flex  flex-wrap align-items-start justify-content-center">
 	{foreach $items as $key => $item}
         {var $short = rtrim(Nette\Utils\Strings::after($key, ':', -2), ':')}
 		{if is_array($item) && !empty($item)}
