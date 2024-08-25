@@ -2,7 +2,11 @@
 	<div class="flex-grow-1 border-bottom">
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb" n:inner-foreach="$breadcrumb as $item">
-				<li class="breadcrumb-item">
+				{if $iterator->last}
+					<li class="breadcrumb-item active" aria-current="page">
+				{else}
+					<li class="breadcrumb-item">
+				{/if}
 					<a n:tag-if="!$iterator->last" n:href="$item['full']">{$item['short']}</a>
 				</li>
 			</ol>
