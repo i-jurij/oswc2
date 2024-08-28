@@ -7,8 +7,6 @@
 {var $data['content'] = 'CONTENT FOR DEL IN FUTURE'}
 
 {block content}
-
-
 	{ifset $pages_data}
 		{foreach $pages_data as $key => $page_data}
 			{var $page_alias = $page_data['alias'] }
@@ -34,7 +32,6 @@
 		{/foreach}
 	{else}
 		{* output if no data in table pages from db *}	
-		{var $page_alias = 'ddd'}
 		{var $page_title = 'Title'}
 		{var $page_descr = 'Description'}
 		{var $url = ''}

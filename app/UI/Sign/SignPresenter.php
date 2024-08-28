@@ -37,7 +37,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->addSubmit('send', 'Войти');
 
         $form->addGroup('--- § ---');
-        $url_politic = $this->link('Home:politic');
+        $url_politic = $this->link(':Politic:');
         $form->addButton('politic', Html::el('div')->setHtml('<a href="'.$url_politic.'">Политика обработки персональных данных</a>'))
             ->setHtmlAttribute('class', 'pseudo');
 
