@@ -7,15 +7,11 @@ window.Nette = netteForms;
 // document.addEventListener('DOMContentLoaded', naja.initialize.bind(naja));
 netteForms.initOnLoad();
 
-/// function for deleting flash message from DOM ///
-function delFlash(delay_in_seconds) {
-    setTimeout(function () {
-        let flash = document.querySelector('.flash');
-        if (!!flash) {
-            flash.remove();
-            document.removeEventListener('DOMContentLoaded', delFlash());
-        }
-    }, delay_in_seconds * 1000);
+function closeFlash() {
+
+    for_button_close_insert.innerHTML = '<button id="close_flash_message">Close</button>';
+    close_flash_message.onclick = function () {
+        flash_message.remove();
+    };
 }
-// adding delFlash to pages
-document.addEventListener('DOMContentLoaded', delFlash(10));
+document.addEventListener('DOMContentLoaded', closeFlash());

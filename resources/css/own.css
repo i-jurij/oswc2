@@ -256,29 +256,49 @@ textarea:valid {
 }
 
 .flash {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: var(--bgcolor);
+    overflow: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 333;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: all;
+    -webkit-transition: opacity 500ms ease-in;
+    -moz-transition: opacity 500ms ease-in;
+    transition: opacity 500ms ease-in;
+}
+
+.flash_child {
+    /*flex: 1 1 auto; */
+    width: 90%;
     padding: 1rem;
     margin: 1rem auto;
     text-align: center;
     vertical-align: middle;
-    box-shadow: var(--boxshadow);
     border-radius: var(--radius);
+    box-shadow: var(--boxshadow);
 }
 
-.flash.info {
-    background-color: var(--bgcolor);
-
+.flash_child .info {
+    background-color: rgb(27, 20, 121);
 }
 
-.flash.success {
+.flash_child .success {
     background-color: rgb(20, 121, 54);
 
 }
 
-.flash_child {
-    flex: 1 1 auto;
-}
-
-.flash.error {
+.flash_child .error {
     background-color: rgb(181, 0, 0);
 
 }

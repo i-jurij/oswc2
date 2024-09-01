@@ -31,10 +31,10 @@ final class SignPresenter extends Nette\Application\UI\Presenter
             ->setHtmlAttribute('class', 'form');
 
         $form->addGroup('');
-        // $form->addCaptcha('captcha', 'Captcha error. Re-enter captcha.');
+        $form->addCaptcha('captcha', 'Captcha error. Re-enter captcha.');
 
         $form->addGroup('');
-        $form->addSubmit('send', 'Войти');
+        $form->addSubmit('send', 'Signin');
 
         $form->addGroup('--- § ---');
         $url_politic = $this->link(':Politic:');
@@ -55,9 +55,9 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
         $form->addPassword('passwordVerify', '')
             ->setHtmlAttribute('placeholder', 'Confirm password:')
-            ->setRequired('Введите пароль ещё раз, чтобы проверить опечатку')
-            ->addRule($form::Equal, 'Несоответствие пароля', $form['password'])
-            ->addRule($form::MinLength, 'Пароль длиной не менее %d символов', $this->userFacade::PasswordMinLength)
+            ->setRequired('Enter password again')
+            ->addRule($form::Equal, 'Password mismatch', $form['password'])
+            ->addRule($form::MinLength, 'Minimum password length %d characters', $this->userFacade::PasswordMinLength)
             ->setMaxLength(120)
             ->setOmitted();
 
@@ -68,16 +68,17 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         $form->addCaptcha('captcha', 'Captcha error. Re-enter captcha.');
 
         $form->addGroup('');
-        $form->addSubmit('send', 'Зарегистрироваться');
+        $form->addSubmit('send', 'Signup');
 
         $form->addGroup('--- 🔓 ---');
         $url_reg = $this->link('Sign:in');
-        $form->addButton('register', Html::el('div')->setHtml('<a href="'.$url_reg.'">Войти</a>'))
-            ->setHtmlAttribute('class', 'pseudo');
+        $form->addButton('register', Html::el('div')
+            ->setHtml('<a href="'.$url_reg.'">Login</a>'));
 
         $form->addGroup('--- § ---');
-        $url_politic = $this->link('Home:politic');
-        $form->addButton('politic', Html::el('div')->setHtml('<a href="'.$url_politic.'">Политика обработки персональных данных</a>'))
+        $url_politic = $this->link(':Politic:');
+        $form->addButton('politic', Html::el('div')
+            ->setHtml('<a href="'.$url_politic.'">Политика обработки персональных данных</a>'))
             ->setHtmlAttribute('class', 'pseudo');
 
         $form->onSuccess[] = $this->processSignUpForm(...);
@@ -103,7 +104,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 
             $this->redirect('Admin:');
         } catch (Nette\Security\AuthenticationException $e) {
-            $form->addError('Неправильные логин или пароль.');
+            $form->addError('Wrong login or password.');
         }
     }
 
@@ -112,6 +113,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
         try {
             // register user
             $this->flashMessage('На ваш электронный адрес выслано письмо. Для завершения регистрации следуйте инструкции в письме.', 'info');
+            $this->redirect(':Sign:in');
         } catch (Exception $e) {
             $form->addError('Unknown error.');
         }
@@ -120,7 +122,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
     public function actionOut(): void
     {
         $this->getUser()->logout(true);
-        $this->flashMessage('Вы вышли.');
+        $this->flashMessage('Log out');
         $this->redirect('Home:');
         // $this->forward('Home:');
     }

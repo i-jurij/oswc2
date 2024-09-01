@@ -4,7 +4,9 @@ extensions:
 
 captcha:
 	autoload: yes
-	type: image # numeric | text | image
+	type: numeric # numeric | text | image
 	questions:
-		"Question Cx1?": "Cx1"
-		"Question EnterTheText2?": "EnterTheText2"    
+		"Fatherland of bush elephant?": "Africa"
+		"Fatherland of forest elephant?": "Africa"
+		"Country of asian elephant?": "India"
+		"Number &pi;?": "3.141592"    
