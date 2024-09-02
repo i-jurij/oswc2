@@ -11,7 +11,8 @@
     <p class="lead text-center">
         ALL selected permissions will be deleted.
     </p>
-    <form   n:if="($user->isInRole('admin'))" 
+    {ifset $existed_permissions}
+    <form   n:if="($user->isAllowed('Permissions', 'delete'))" 
             n:name=formPermissionsDelete 
             class="form mt-4 mx-auto" 
             style="max-width: 25rem;"
@@ -45,7 +46,11 @@
                                         id="{$data['id']}{$data['action']}"
                                         value="{$data['id']}"
                                     >
-                                    {$data['action']}
+                                    {if !empty($data['action'])}
+                                        {$data['action']}
+                                    {else}
+                                        All actions
+                                    {/if}
                                 </label>
                             {/foreach}
                         </div>
@@ -58,4 +63,7 @@
                 <input n:name=deletePermissions class="btn btn-primary">
             </div>
     </form>
+    {else}
+        <p class="text-center text-warning">Permissions not existed</p>
+    {/ifset}
 </div>

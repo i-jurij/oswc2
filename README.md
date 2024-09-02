@@ -34,7 +34,11 @@ For Apache or Nginx users, configure a virtual host pointing to your project's `
 Refer to [security warning](https://nette.org/security-warning) for more details.
 
 ## CSS 
-App use [bulma](https://bulma.io/documentation/) - a CSS framework.  
+For admins panel app use CSS framework [bootstrap](https://getbootstrap.com/).   
+For other pages app use [oswc2_styles](https://github.com/i-jurij/oswc2_styles) - collected from [BassCSS](https://basscss.com/) and [Picnic](https://picnicss.com/) using [Rollup](https://rollupjs.org/) and [rollup-plugin-css-porter](https://www.npmjs.com/package/rollup-plugin-css-porter).  
+!!! In BassCSS renamed ".flex" to ".flexx".  
+BassCSS using for functionality (typo, margin, padding, display ... ).   
+Picnic using for components (buttons, forms, cards, blocks ...).  
 
 ## Webpack
     `npm run dev` - mode development (rereads js and css on the fly, address is host_ip:3000/assets),   
@@ -56,10 +60,13 @@ for user with admin grants creating.
 Password minimal length = 7 (it can be change in app/Model/UserFacade.php).  
 
 Other users can be added from the admin panel.  
+After user creating you must create permissions (resource, action) then roles. 
+Permissions can be added automatically from classes names of models directory and their methods (you can change it from presenters and theirs methods) or manually.  
+If you set in permissions only resource without action - you allow all actions of the resource. 
 
 ***If you change columns of table "users" in file "create_sql.php" change it in "app/Model/UsersTableColumns.php" too***
 
-***Users factory can be run from "bin/factorys/user"***
+***Users factory can be run from "bin/factorys/user"***  
 
 ### Config   
 Configs files are located in "app/config". Read this [documentation](https://doc.nette.org/en/configuring).   

@@ -7,7 +7,7 @@
         <h2 class="text-center">Adding a user</h2>
         {*include ../../Accessory/basic_form.latte, form: userAddForm*}
         <form 
-            n:if="$user->isInRole('admin')" 
+            n:if="$user->isAllowed('User', 'add')" 
             n:name=userAddForm 
             class="form mt-4 mx-auto" 
             style="max-width: 22rem;"

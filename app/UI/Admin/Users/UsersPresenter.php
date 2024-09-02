@@ -175,7 +175,8 @@ final class UsersPresenter extends \App\UI\BasePresenter
         } catch (\Throwable $th) {
             $this->flashMessage($th);
         }
-        $this->redirect(':Admin:Users:');
+        // $this->redirect(':Admin:Users:');
+        $this->redirect(':Admin:Users:list');
     }
 
     public function createComponentUserAddForm(): Form

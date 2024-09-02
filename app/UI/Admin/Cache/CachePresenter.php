@@ -23,12 +23,17 @@ final class CachePresenter extends \App\UI\BasePresenter
     #[Requires(methods: 'GET')]
     public function renderDefault(): void
     {
-        $csrf = random_int(PHP_INT_MIN, PHP_INT_MAX);
+        if ($this->getUser()->isAllowed('Cache', 'list')) {
+            $csrf = random_int(PHP_INT_MIN, PHP_INT_MAX);
 
-        $this->getHttpResponse()->setCookie('csrf', "$csrf", '30');
+            $this->getHttpResponse()->setCookie('csrf', "$csrf", '30');
 
-        $this->template->data = $this->getFileList(CACHE_DIR);
-        $this->template->csrf = $csrf;
+            $this->template->data = $this->getFileList(CACHE_DIR);
+            $this->template->csrf = $csrf;
+        } else {
+            $this->flashMessage('You don\'t have permission for this', 'text-warning');
+            $this->redirect(':Admin:');
+        }
     }
 
     #[Requires(methods: 'POST')]

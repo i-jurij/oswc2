@@ -813,22 +813,8 @@ window.Nette = (nette_forms__WEBPACK_IMPORTED_MODULE_0___default());
 // document.addEventListener('DOMContentLoaded', naja.initialize.bind(naja));
 nette_forms__WEBPACK_IMPORTED_MODULE_0___default().initOnLoad();
 
-/*
-/// function for deleting flash message from DOM ///
-function delFlash(delay_in_seconds) {
-    setTimeout(function () {
-        let flash = document.querySelector('.flash');
-        if (!!flash) {
-            flash.remove();
-            document.removeEventListener('DOMContentLoaded', delFlash());
-        }
-    }, delay_in_seconds * 1000);
-}
-// adding delFlash to pages
-document.addEventListener('DOMContentLoaded', delFlash(10));
-*/
-
 function closeFlash() {
+
     for_button_close_insert.innerHTML = '<button id="close_flash_message">Close</button>';
     close_flash_message.onclick = function () {
         flash_message.remove();

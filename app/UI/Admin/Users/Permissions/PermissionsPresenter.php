@@ -48,7 +48,7 @@ final class PermissionsPresenter extends \App\UI\BasePresenter
         }
         unset($actions['Permission'], $actions['Role']);
 
-        return $this->template->actions = $actions;
+        $this->template->actions = $actions;
     }
 
     public function createComponentFormPermissionsAddAuto(): Form
@@ -82,8 +82,8 @@ final class PermissionsPresenter extends \App\UI\BasePresenter
             ->setHtmlAttribute('placeholder', 'Action in lowercase:')
             ->addRule($form::MinLength, 'Length > %d', 2)
             ->addRule($form::Pattern, 'Only 2 < lowercase letters < 25', '^[a-z]{2,25}$')
-            ->setMaxLength(25)
-            ->setRequired();
+            ->setMaxLength(25);
+        // ->setRequired();
 
         $form->addSubmit('addPermissionsManual', 'Add permissions');
 
@@ -100,26 +100,27 @@ final class PermissionsPresenter extends \App\UI\BasePresenter
         $action = $form->getHttpData($form::DataText, 'actionn') ?? null;
         if (!empty($action_array)) {
             $data['action'] = $action_array;
-        } elseif (!empty($action)) {
+        // } elseif (!empty($action)) {
+        } else {
             $data['action'] = $action;
         }
-
-        if (!empty($data['resource']) && !empty($data['action'])) {
-            try {
+        try {
+            // if (!empty($data['resource']) && !empty($data['action'])) {
+            if (!empty($data['resource'])) {
                 $this->pf->add($data);
 
                 $this->flashMessage(json_encode($data).'Permission added', 'text-success');
-            } catch (\Throwable $e) {
-                $this->flashMessage('Caught Exception!'.PHP_EOL
-                    .'Error message: '.$e->getMessage().PHP_EOL
-                    .'File: '.$e->getFile().PHP_EOL
-                    .'Line: '.$e->getLine().PHP_EOL
-                    .'Error code: '.$e->getCode().PHP_EOL
-                    .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
+            } else {
+                $this->flashMessage(json_encode($data).'An empty form was received');
+                $this->redirect(':Admin:Users:Permissions:add');
             }
-        } else {
-            $this->flashMessage(json_encode($data).'An empty form was received');
-            $this->redirect(':Admin:Users:Permissions:add');
+        } catch (\Throwable $e) {
+            $this->flashMessage('Caught Exception!'.PHP_EOL
+                .'Error message: '.$e->getMessage().PHP_EOL
+                .'File: '.$e->getFile().PHP_EOL
+                .'Line: '.$e->getLine().PHP_EOL
+                .'Error code: '.$e->getCode().PHP_EOL
+                .'Trace: '.$e->getTraceAsString().PHP_EOL, 'text-danger');
         }
 
         $this->redirect(':Admin:');
@@ -135,7 +136,7 @@ final class PermissionsPresenter extends \App\UI\BasePresenter
             ];
         }
 
-        return $this->template->existed_permissions = $existed_permissions;
+        $this->template->existed_permissions = (!empty($existed_permissions)) ? $existed_permissions : false;
     }
 
     public function createComponentFormPermissionsDelete(): Form

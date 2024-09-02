@@ -40,7 +40,12 @@
                                 n:name="permissions:$key"
                                 value="{$row['id']}"
                             >
-                            {$row['resource']}: {$row['action']}
+                            {$row['resource']}: 
+                                    {if !empty($row['action'])}
+                                        {$row['action']}
+                                    {else}
+                                        All actions
+                                    {/if}
                         </label>
                         {var $res = $row['resource']}
                     {/foreach}

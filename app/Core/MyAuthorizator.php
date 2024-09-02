@@ -18,14 +18,22 @@ class MyAuthorizator implements Nette\Security\Authorizator
         if ($role === 'admin') {
             return true;
         }
-
-        $input = [
+        // check if role has resource and empty action (allowed all for this resource)
+        $res = [
+            'role_name' => $role,
+            'resource' => $resource,
+            'action' => null,
+        ];
+        if (\in_array($res, $this->getRolePermissionData())) {
+            return true;
+        }
+        $res_act = [
             'role_name' => $role,
             'resource' => $resource,
             'action' => $action,
         ];
 
-        if (\in_array($input, $this->getRolePermissionData())) {
+        if (\in_array($res_act, $this->getRolePermissionData())) {
             return true;
         }
 

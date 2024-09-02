@@ -41,7 +41,7 @@
         --bgcolor: #126c04;
         --bgcolor-content: #2a3428;
         --bgcolor-button: #126c04;
-        --color-button: #9eb183;
+        --color-button: #d3e4bb;
         --bgcolor-button-active: #000000;
         --color-button-active: #9eb183;
         --input_bgcolor: black;
@@ -287,20 +287,24 @@ textarea:valid {
     vertical-align: middle;
     border-radius: var(--radius);
     box-shadow: var(--boxshadow);
+    color: var(--color-button);
+    text-shadow: none;
 }
 
 .flash_child .info {
-    background-color: rgb(27, 20, 121);
+    background-color: rgb(46, 35, 205);
 }
 
 .flash_child .success {
     background-color: rgb(20, 121, 54);
+}
 
+.flash_child .warning {
+    background-color: rgb(255, 115, 0);
 }
 
 .flash_child .error {
     background-color: rgb(181, 0, 0);
-
 }
 
 ul.error,

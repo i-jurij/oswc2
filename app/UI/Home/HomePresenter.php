@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Home;
 
-use App\Model\PageFacade;
+// use App\Model\PageFacade;
 use Nette;
 
 /**
@@ -13,17 +13,19 @@ use Nette;
 final class HomePresenter extends \App\UI\BasePresenter
 {
     // use \App\UI\Accessory\LinkFromFileSystem;
-
-    public function __construct(private PageFacade $db_pages)
-    {
-    }
-
+    /*
+        public function __construct(private PageFacade $db_pages)
+        {
+        }
+    */
     public function renderDefault()
     {
+        /*
         $db_data = $this->db_pages->getPagesData();
         if (count($db_data) > 0) {
             $this->template->pages_data = $db_data;
         }
+            */
         // $this->template->menuList = $this->linkFromFileSystem(__DIR__);
     }
 }

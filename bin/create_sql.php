@@ -7,7 +7,7 @@ $role = 'CREATE TABLE IF NOT EXISTS "role"
 $permission = 'CREATE TABLE IF NOT EXISTS "permission" 
 	(	"id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 		"resource" TEXT KEY NOT NULL, 
-		"action" TEXT NOT NULL
+		"action" TEXT DEFAULT NULL
 	)';
 $role_permission = 'CREATE TABLE IF NOT EXISTS "role_permission" 
 	(	"role_id" INTEGER NOT NULL, 
