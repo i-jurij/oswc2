@@ -6,4 +6,80 @@
 {var $robots = "NOINDEX,NOFOLLOW"}
 
 {block content}	
-Page create
+<div class="w-100 mb-3 clearfix">
+    <div class="float-start border rounded p-2" role="group" aria-label="radio toggle button group">
+        <div class="form-check form-check-inline">
+            <input type="radio" class="form-check-input" name="group_of_page" id="home_group_page" autocomplete="off" checked>
+            <label class="form-check-label" for="home_group_page">Home group page</label>
+        </div>
+        <div class="form-check form-check-inline">    
+            <input type="radio" class="form-check-input" name="group_of_page" id="admin_group_page" autocomplete="off">
+            <label class="form-check-label" for="admin_group_page">Admin group page</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" class="form-check-input" name="publish_page" id="publish_page" autocomplete="off">
+            <label class="form-check-label" for="publish_page">Publish page</label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary float-end" aria-label="Create" >Create</button>    
+</div>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="Template-tab" data-bs-toggle="tab" data-bs-target="#Template-tab-pane" type="button" role="tab" aria-controls="Template-tab-pane" aria-selected="true">
+            Template
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="Meta-tab" data-bs-toggle="tab" data-bs-target="#Meta-tab-pane" type="button" role="tab" aria-controls="Meta-tab-pane" aria-selected="false">
+            Meta data
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="Editor-tab" data-bs-toggle="tab" data-bs-target="#Editor-tab-pane" type="button" role="tab" aria-controls="Editor-tab-pane" aria-selected="false">
+            Editor
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="Permissions-tab" data-bs-toggle="tab" data-bs-target="#Permissions-tab-pane" type="button" role="tab" aria-controls="Permissions-tab-pane" aria-selected="false">
+            Permissions
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="Database-tab" data-bs-toggle="tab" data-bs-target="#Database-tab-pane" type="button" role="tab" aria-controls="Database-tab-pane" aria-selected="false">
+            Database
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="Upload-tab" data-bs-toggle="tab" data-bs-target="#Upload-tab-pane" type="button" role="tab" aria-controls="Upload-tab-pane" aria-selected="false">
+            Upload
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="Other-tab" data-bs-toggle="tab" data-bs-target="#Other-tab-pane" type="button" role="tab" aria-controls="Other-tab-pane" aria-selected="false">
+            Other
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade p-2 show active" id="Template-tab-pane" role="tabpanel" aria-labelledby="Template-tab" tabindex="0">
+        Basic Template and child pages templates (eg shop -> tovary -> tovar / shop -> price / shop -> korzina)
+    </div>
+    <div class="tab-pane fade p-2" id="Meta-tab-pane" role="tabpanel" aria-labelledby="Meta-tab" tabindex="0">
+        meta - title, description, keywords, robots 
+    </div>
+    <div class="tab-pane fade p-2" id="Editor-tab-pane" role="tabpanel" aria-labelledby="Editor-tab" tabindex="0">
+        редактор контента с загрузкой изображений (файлов)
+    </div>
+    <div class="tab-pane fade p-2" id="Permissions-tab-pane" role="tabpanel" aria-labelledby="Permissions-tab" tabindex="0">Permissions</div>
+    <div class="tab-pane fade p-2" id="Database-tab-pane" role="tabpanel" aria-labelledby="Database-tab" tabindex="0">
+        создание моделей
+    </div>
+    <div class="tab-pane fade p-2" id="Upload-tab-pane" role="tabpanel" aria-labelledby="Upload-tab" tabindex="0">Upload</div>
+    <div class="tab-pane fade p-2" id="Other-tab-pane" role="tabpanel" aria-labelledby="Other-tab" tabindex="0">
+        выбор модулей - перезвон и тд <br>
+        who can edit (roles and resource,
+        permission after page created) <br>
+    </div>
+</div>
