@@ -814,11 +814,13 @@ window.Nette = (nette_forms__WEBPACK_IMPORTED_MODULE_0___default());
 nette_forms__WEBPACK_IMPORTED_MODULE_0___default().initOnLoad();
 
 function closeFlash() {
-
-    for_button_close_insert.innerHTML = '<button id="close_flash_message">Close</button>';
-    close_flash_message.onclick = function () {
-        flash_message.remove();
-    };
+    let fbci = document.querySelector('#for_button_close_insert')
+    if (fbci) {
+        fbci.innerHTML = '<button id="close_flash_message">Close</button>';
+        close_flash_message.onclick = function () {
+            flash_message.remove();
+        };
+    }
 }
 document.addEventListener('DOMContentLoaded', closeFlash());
 })();
