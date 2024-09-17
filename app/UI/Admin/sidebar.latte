@@ -20,6 +20,7 @@
   transform: rotate(90deg);
 }
 </style>
+
 <div class="collapse flex-column align-items-center align-items-sm-start px-3 pt-2 text-white mh-100"
      id="sidebarrr"
 >
@@ -29,6 +30,9 @@
                 <i class="fs-4 bi-table"></i>
                 <span class="ms-1">CMS</span>
             </a>
+        </li>
+        <li n:ifset="$dirList[':Admin:'][':Admin:Cms:']">
+          {include menu_sidebar from $shared_templates.'menu_sidebar.latte', $dirList[':Admin:'][':Admin:Cms:']}
         </li>
     </ul>
 </div>

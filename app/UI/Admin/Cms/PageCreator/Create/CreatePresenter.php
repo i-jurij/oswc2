@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Admin\Cms\PageCreator\Create;
 
+use Nette\Application\UI\Form;
 use Nette\Security\User;
 
 final class CreatePresenter extends \App\UI\BasePresenter
@@ -14,11 +15,39 @@ final class CreatePresenter extends \App\UI\BasePresenter
 
     public function renderDefault()
     {
+        if (!$this->getUser()->isAllowed('Page', 'Create')) {
+            $this->error('Forbidden', 403);
+        }
         // for linkfromfilesystem
         $home_dir = APPDIR.DIRECTORY_SEPARATOR.'UI'.DIRECTORY_SEPARATOR.'Home';
         $this->template->homeTree = $this->linkFromFileSystem($home_dir);
         // for admincmsmenu
         $cms_dir = APPDIR.DIRECTORY_SEPARATOR.'UI'.DIRECTORY_SEPARATOR.'Admin'.DIRECTORY_SEPARATOR.'Cms';
         $this->template->cmsTree = $this->linkFromFileSystem($cms_dir);
+    }
+
+    public function createComponentFormPageCreatorCreate(): Form
+    {
+        $form = new Form();
+        $form->addProtection();
+        $form->setHtmlAttribute('id', 'formPageCreatorCreate')
+           ->setHtmlAttribute('class', 'form');
+
+        $form->addSubmit('PageCreatorCreate', 'Create');
+
+        $form->onSuccess[] = [$this, 'create'];
+
+        return $form;
+    }
+
+    #[Requires(methods: 'POST')]
+    public function create(Form $form): void
+    {
+        if (!$this->getUser()->isAllowed('Page', 'Create')) {
+            $this->error('Forbidden', 403);
+        }
+
+        $this->flashMessage(json_encode($_POST).'Page added', 'text-success');
+        $this->redirect(':Admin:Cms:PageCreator:');
     }
 }

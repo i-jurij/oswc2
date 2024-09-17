@@ -17,8 +17,6 @@ final class UsersPresenter extends \App\UI\BasePresenter
     // Incorporates methods to check user login status
     use RequireLoggedUser;
 
-    use \App\UI\Accessory\LinkFromFileSystem;
-
     protected $user_data;
     public $postsearch;
 
@@ -26,11 +24,11 @@ final class UsersPresenter extends \App\UI\BasePresenter
         protected UserFacade $userfacade,
         private FormFactory $formFactory)
     {
+        parent::__construct();
     }
 
     public function renderDefault()
     {
-        $this->template->menuList = $this->linkFromFileSystem(__DIR__);
     }
 
     public function renderList(int $page = 1): void

@@ -59,8 +59,9 @@ Then run:
 for user with admin grants creating.  
 Password minimal length = 7 (it can be change in app/Model/UserFacade.php).  
 
+*** After user with specific permissions adding you must first permissions added then a ***
 Other users can be added from the admin panel.  
-After user creating you must create permissions (resource, action) then roles. 
+Before user creating you can create permissions (resource, action) then roles. 
 Permissions can be added automatically from classes names of models directory and their methods (you can change it from presenters and theirs methods) or manually.  
 If you set in permissions only resource without action - you allow all actions of the resource. 
 
@@ -109,7 +110,7 @@ Permissions for user is ["Cms", "menu"].
 
 ## Admins Basic pages
 
-### Admins nav menu
+### Admins nav menu 
 #### Users
 Add, edit, delete users and their roles.  
 
@@ -127,4 +128,6 @@ List, show, clear logs
 
 ## Admins additional pages and sidebar menu
 #### CMS
-Create, update, delete pages (SEO, content, user permissions etc)
+Create, update, delete pages (SEO, content, user permissions etc)   
+Allow user create page: add permissions manual ['Page', 'Create'].   
+Check in presenter: `$this->getUser()->isAllowed('Page', 'Create')`.  

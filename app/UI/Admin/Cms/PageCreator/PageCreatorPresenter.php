@@ -11,8 +11,8 @@ final class PageCreatorPresenter extends \App\UI\BasePresenter
 
     public function renderDefault()
     {
-        if ($this->getUser()->isAllowed('PageCreator', 'update')) {
-            $this->template->menuList = $this->linkFromFileSystem(__DIR__);
+        if (!$this->getUser()->isAllowed('PageCreator')) {
+            $this->error('Forbidden', 403);
         }
     }
 }

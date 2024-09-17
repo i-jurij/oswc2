@@ -22,6 +22,7 @@ final class PermissionsPresenter extends \App\UI\BasePresenter
     public function __construct(
         private PermissionFacade $pf)
     {
+        parent::__construct();
     }
 
     protected function startup()
@@ -75,7 +76,7 @@ final class PermissionsPresenter extends \App\UI\BasePresenter
         $form->addText('resource', 'Resource:')
             ->setHtmlAttribute('placeholder', 'Resource with a capital letter:')
             ->addRule($form::MinLength, 'Length > %d', 2)
-            ->addRule($form::Pattern, 'Only 2 < letters < 25', '^[A-Z][a-z]{2,25}$')
+            ->addRule($form::Pattern, 'Only 2 < letters < 25', '^[A-Z][a-zA-Z]{2,25}$')
             ->setMaxLength(25)
             ->setRequired();
         $form->addText('actionn', 'Action:')
@@ -92,6 +93,7 @@ final class PermissionsPresenter extends \App\UI\BasePresenter
         return $form;
     }
 
+    #[Requires(methods: 'POST')]
     public function add(Form $form): void
     {
         $data['resource'] = $form->getHttpData($form::DataText, 'resource');

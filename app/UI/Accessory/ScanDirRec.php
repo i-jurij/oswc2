@@ -6,7 +6,7 @@ namespace App\UI\Accessory;
 
 trait ScanDirRec
 {
-    private function scanDirRec($directory, $sub_folders = '')
+    public function scanDirRec($directory, $sub_folders = '')
     {
         $directory_tree = [];
         $directory = rtrim($directory, DIRECTORY_SEPARATOR);

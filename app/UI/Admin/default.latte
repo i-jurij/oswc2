@@ -5,10 +5,10 @@
 {var $keywords = "Keywords of Admin page"}
 {var $robots = "NOINDEX,NOFOLLOW"}
 
-{block content}	
-	{ifset $menuList}
-		{include menu from $shared_templates.'menu.latte', $menuList}
+{block content}
+	{if (!empty($currentPageMenu) && is_array($currentPageMenu))}
+		{include menu from $shared_templates.'menu.latte', $currentPageMenu}
 	{else}
 		Admin main page
-	{/ifset}
+	{/if}
 {/block}

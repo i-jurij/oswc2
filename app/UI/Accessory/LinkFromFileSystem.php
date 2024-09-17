@@ -8,7 +8,7 @@ use Nette\Utils\Finder;
 
 trait LinkFromFileSystem
 {
-    private function linkFromFileSystem(string $directory)
+    public function linkFromFileSystem(string $directory): array
     {
         $directory_tree = [];
 
@@ -28,7 +28,7 @@ trait LinkFromFileSystem
                 if (\iterator_count($ar) > 0) {
                     $directory_tree[$link] = $ar;
                 } else {
-                    $directory_tree[$link] = null;
+                    $directory_tree[$link] = [];
                 }
             }
         }

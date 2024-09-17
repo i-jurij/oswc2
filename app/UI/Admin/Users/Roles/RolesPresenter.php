@@ -10,9 +10,6 @@ use App\UI\Accessory\FormFactory;
 use App\UI\Accessory\RequireLoggedUser;
 use Nette\Application\UI\Form;
 
-/**
- * @property UsersTemplate $template
- */
 final class RolesPresenter extends \App\UI\BasePresenter
 {
     // Incorporates methods to check user login status
@@ -26,6 +23,7 @@ final class RolesPresenter extends \App\UI\BasePresenter
         private PermissionFacade $pf,
         private RoleFacade $rf
     ) {
+        parent::__construct();
     }
 
     protected function startup()

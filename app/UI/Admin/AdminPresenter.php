@@ -18,7 +18,6 @@ final class AdminPresenter extends \App\UI\BasePresenter
 
     public function renderDefault()
     {
-        $this->template->menuList = $this->linkFromFileSystem(__DIR__);
     }
 }
 
@@ -31,5 +30,5 @@ class AdminTemplate extends \App\UI\BaseTemplate
     public object $presenter;
     public object $control;
     public array $sql;
-    public array $menuList;
+    public array $cmsList;
 }
