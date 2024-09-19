@@ -18,12 +18,9 @@ final class CreatePresenter extends \App\UI\BasePresenter
         if (!$this->getUser()->isAllowed('Page', 'Create')) {
             $this->error('Forbidden', 403);
         }
-        // for linkfromfilesystem
-        $home_dir = APPDIR.DIRECTORY_SEPARATOR.'UI'.DIRECTORY_SEPARATOR.'Home'.DIRECTORY_SEPARATOR.'Pages';
-        $this->template->homeTree = $this->linkFromFileSystem($home_dir);
 
-        $admin_dir = APPDIR.DIRECTORY_SEPARATOR.'UI'.DIRECTORY_SEPARATOR.'Admin'.DIRECTORY_SEPARATOR.'Pages';
-        $this->template->adminTree = $this->linkFromFileSystem($admin_dir);
+        $this->template->homeTree = $this->getKeyValueRec(':Home:Pages:', $this->dirList);
+        $this->template->adminTree = $this->getKeyValueRec(':Admin:Pages:', $this->dirList);
     }
 
     public function createComponentFormPageCreatorCreate(): Form

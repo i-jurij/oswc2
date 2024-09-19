@@ -23,7 +23,7 @@ trait Breadcrumb
         return $first.$res;
     }
 
-    public function getBC()
+    public function getBC(): array
     {
         $httpRequest = $this->getHttpRequest();
         $url_path = trim($httpRequest->getUrl()->path, " \/");
