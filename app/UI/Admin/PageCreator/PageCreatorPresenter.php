@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UI\Admin\Cms\PageCreator;
+namespace App\UI\Admin\PageCreator;
 
 final class PageCreatorPresenter extends \App\UI\BasePresenter
 {

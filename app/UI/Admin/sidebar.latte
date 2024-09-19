@@ -19,20 +19,21 @@
 .btn_toggle[aria-expanded="true"]::before {
   transform: rotate(90deg);
 }
+a.dropdown-toggle {
+   border: none;
+   outline: none;
+   text-decoration: none;
+}
 </style>
 
-<div class="collapse flex-column align-items-center align-items-sm-start px-3 pt-2 text-white mh-100"
-     id="sidebarrr"
+<div  class="collapse  show  flex-column align-items-center align-items-sm-start px-3 pt-2 mh-100 border-end"
+      id="sidebar"
 >
-    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-        <li>
-            <a n:href=":Admin:Cms:" class="nav-link px-0 align-middle">
-                <i class="fs-4 bi-table"></i>
-                <span class="ms-1">CMS</span>
-            </a>
-        </li>
-        <li n:ifset="$dirList[':Admin:'][':Admin:Cms:']">
-          {include menu_sidebar from $shared_templates.'menu_sidebar.latte', $dirList[':Admin:'][':Admin:Cms:']}
+    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="sidebar_ul_first">
+        <li n:ifset="$dirList[':Admin:'][':Admin:PageCreator:']">
+          <p class="text-primary-emphasis my-2">PageCreator:</p>
+          {include menu_sidebar from $shared_templates.'menu_sidebar.latte', $dirList[':Admin:'][':Admin:PageCreator:']}
+          <hr class="hr hr-blurry" />
         </li>
     </ul>
 </div>
