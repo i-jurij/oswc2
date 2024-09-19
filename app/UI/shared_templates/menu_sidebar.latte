@@ -3,16 +3,17 @@
         {var $short = rtrim(Nette\Utils\Strings::after($key, ':', -2), ':')}
 		{var $pre_id = str_replace(":", "_", $key)}
 		{if is_array($item) && !empty($item)}
-            <a n:href="$key" class="nav-link px-0 align-middle">
+			<a n:href="$key" class="dropdown-toggle nav-link px-0 align-middle mt-3">
 				<span class="">{$short} </span>
 			</a>
-			<ul class="nav flex-column ms-1" id="{$pre_id}">
+			<ul class="nav flex-column ms-2" id="{$pre_id}">
 				{include menu_sidebar, $item}
 			</ul>
+			
 		{elseif is_array($item) && empty($item)}
 			<li>
 				<a n:href="$key" class="nav-link px-0 align-middle">
-					<span class="ms-1">{$short}</span>
+					<span class="">{$short}</span>
 				</a>
 			</li>
 		{/if}
