@@ -56,7 +56,9 @@
 	<div !n:if="$user->isLoggedIn()"class="center">
 		<a n:href=":Admin:" style="color:var(--bgcolor-content);">-&nbsp;&nbsp;&nbsp;</a>
 	</div>
-	
-	<script src="{webpack js/main.js}"></script>
+
+	{block scripts}
+		<script src="{webpack js/main.js}"></script>
+	{/block}
 </body>
 </html>

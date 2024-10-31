@@ -32,17 +32,16 @@
 
 	<div class="header_main">
 		<div n:if="$user->isLoggedIn()" style="text-align:right;">
-			<a n:href="Sign:out">Выйти</a>
+			<a n:href="Sign:out">Logout</a>
 		</div>
 
-		{include header from '@layout-header.latte'}
+		<header>Header</header>
+		<hr>
 		
-		<main class="main_section">
-			{include breadcrumbMenuHome from $shared_templates.'breadcrumb_home.latte'}
-			
-			<h1 class="m05p05 rounded center shadow bgcontent main_title">{$title}</h1>
+		<main class="main_section">			
+			<h1>{$title}</h1>
 			<div class="center">
-				{include content}	
+				{include content}	Content
 			</div>
 		</main>
 	</div>
@@ -50,15 +49,10 @@
 	<div class="spacer"></div>
 
 	<footer class="main_footer">
-		{include footer from '@layout-footer.latte'} 
+		Footer
 	</footer>
 
-	<div !n:if="$user->isLoggedIn()"class="center">
-		<a n:href=":Admin:" style="color:var(--bgcolor-content);">-&nbsp;&nbsp;&nbsp;</a>
-	</div>
-
-	{block scripts}
-		<script src="{webpack js/main.js}"></script>
-	{/block}
+	<script src=""></script>
+	{block scripts}{/block}
 </body>
 </html>

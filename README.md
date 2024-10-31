@@ -59,7 +59,7 @@ Then run:
 for user with admin grants creating.  
 Password minimal length = 7 (it can be change in app/Model/UserFacade.php).  
 
-*** After user with specific permissions adding you must first permissions added then a ***
+***After user with specific permissions adding you must first permissions added***   
 Other users can be added from the admin panel.  
 Before user creating you can create permissions (resource, action) then roles. 
 Permissions can be added automatically from classes names of models directory and their methods (you can change it from presenters and theirs methods) or manually.  

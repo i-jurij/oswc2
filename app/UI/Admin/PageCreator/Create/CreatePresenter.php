@@ -45,6 +45,7 @@ final class CreatePresenter extends \App\UI\BasePresenter
         }
 
         $this->flashMessage(json_encode($_POST).'Page added', 'text-success');
+
         $this->redirect(':Admin:Cms:PageCreator:');
     }
 }
