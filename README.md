@@ -1,4 +1,4 @@
-# Simple CMS project
+# OSWC2 project
 
 This is a application built using [Nette](https://nette.org).
 
