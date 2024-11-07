@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use App\Model\UserFacade;
-use App\Model\UsersTableColumns;
+// use App\Model\UserTableColumns;
 use Nette;
 use Nette\Database\Explorer;
 use Nette\Security\AuthenticationException;
@@ -19,7 +19,7 @@ final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Secur
     public function __construct(
         private Explorer $sqlite,
         private Passwords $passwords,
-        private UsersTableColumns $u_T_C,
+        // private UserTableColumns $u_T_C,
         private UserFacade $userfacade,
     ) {
     }
@@ -31,51 +31,51 @@ final class MyAuthenticator implements Nette\Security\Authenticator, Nette\Secur
     public function authenticate(string $username, string $password): SimpleIdentity
     {
         // Fetch the user details from the database by username
-        $user = $this->sqlite->table($this->u_T_C::TableName)
-            ->where($this->u_T_C::ColumnName, $username)
+        $user = $this->sqlite->table($this->userfacade::TableName)
+            ->where($this->userfacade::ColumnName, $username)
             ->fetch();
 
         // Authentication checks
         if (!$user) {
-            throw new AuthenticationException('The username is incorrect.', $this->u_T_C::IdentityNotFound);
-        } elseif (!$this->passwords->verify($password, $user[$this->u_T_C::ColumnPasswordHash])) {
+            throw new AuthenticationException('The username is incorrect.', $this->userfacade::IdentityNotFound);
+        } elseif (!$this->passwords->verify($password, $user[$this->userfacade::ColumnPasswordHash])) {
             throw new AuthenticationException('The password is incorrect.', self::InvalidCredential);
-        } elseif ($this->passwords->needsRehash($user[$this->u_T_C::ColumnPasswordHash])) {
+        } elseif ($this->passwords->needsRehash($user[$this->userfacade::ColumnPasswordHash])) {
             $user->update([
-                $this->u_T_C::ColumnPasswordHash => $this->passwords->hash($password),
+                $this->userfacade::ColumnPasswordHash => $this->passwords->hash($password),
             ]);
         }
 
         // Return user identity without the password hash
         $arr = $user->toArray();
-        unset($arr[$this->u_T_C::ColumnPasswordHash]);
+        unset($arr[$this->userfacade::ColumnPasswordHash]);
 
-        $roles = $this->userfacade->getRoless($user[$this->u_T_C::ColumnId]);
+        $roles = $this->userfacade->getRoless($user[$this->userfacade::ColumnId]);
 
-        return new SimpleIdentity($user[$this->u_T_C::ColumnId], $roles, $arr);
-        // return new Nette\Security\SimpleIdentity($row[$this->u_T_C::ColumnId], $row[$this->u_T_C::ColumnRole], $arr);
+        return new SimpleIdentity($user[$this->userfacade::ColumnId], $roles, $arr);
+        // return new Nette\Security\SimpleIdentity($row[$this->userfacade::ColumnId], $row[$this->userfacade::ColumnRole], $arr);
     }
 
     public function sleepIdentity(IIdentity $identity): SimpleIdentity
     {
         // мы возвращаем идентификатор прокси, где в качестве идентификатора выступает auth_token
-        return new SimpleIdentity($identity->{$this->u_T_C::ColumnAuthToken});
+        return new SimpleIdentity($identity->{$this->userfacade::ColumnAuthToken});
     }
 
     public function wakeupIdentity(IIdentity $identity): ?SimpleIdentity
     {
         // заменить идентификатор прокси на полный идентификатор, как в authenticate()
-        $row = $this->sqlite->table($this->u_T_C::TableName)
-            ->where($this->u_T_C::ColumnAuthToken, $identity->getId())
+        $row = $this->sqlite->table($this->userfacade::TableName)
+            ->where($this->userfacade::ColumnAuthToken, $identity->getId())
             ->fetch();
         if (!empty($row)) {
             $arr = $row->toArray();
-            unset($arr[$this->u_T_C::ColumnPasswordHash]);
-            $roles = $this->userfacade->getRoless($row[$this->u_T_C::ColumnId]);
+            unset($arr[$this->userfacade::ColumnPasswordHash]);
+            $roles = $this->userfacade->getRoless($row[$this->userfacade::ColumnId]);
         }
 
         return $row
-            ? new SimpleIdentity($row[$this->u_T_C::ColumnId], $roles, $arr)
+            ? new SimpleIdentity($row[$this->userfacade::ColumnId], $roles, $arr)
             : null;
     }
 }

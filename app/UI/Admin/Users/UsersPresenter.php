@@ -255,13 +255,13 @@ final class UsersPresenter extends \App\UI\BasePresenter
         }
         $form->addCheckboxList('roles', 'Roles:', $roles_array);
         $form->addSubmit('searchUser', 'Search');
-        $form->onSuccess[] = [$this, 'renderSearch'];
+        $form->onSuccess[] = [$this, 'postSearch'];
 
         return $form;
     }
 
-    // public function renderSearch(Form $form = null): void
-    public function renderSearch(?Form $form = null): void
+    #[Requires(methods: 'POST')]
+    public function postSearch(?Form $form = null): void
     {
         if (!$this->getUser()->isAllowed('User', 'search')) {
             $this->error('Forbidden', 403);
@@ -271,14 +271,13 @@ final class UsersPresenter extends \App\UI\BasePresenter
 
         if ($httpRequest->isMethod('POST') && !empty($form)) {
             try {
+                // get data from db
                 $users_data = $this->userfacade->search($form->getValues());
-                $this->template->show = $users_data; // get data from db
+                $this->template->show = $users_data;
                 // $this->flashMessage(json_encode($users_data), 'text-success');
             } catch (\Exception $e) {
                 $this->flashMessage("Not find.\nError: ".$e->getMessage(), 'text-danger');
             }
-
-            // $this->redirect('this');
         }
     }
 }
