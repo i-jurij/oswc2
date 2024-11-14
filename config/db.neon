@@ -1,13 +1,14 @@
 database:
-	sqlite:
-		dsn: "sqlite:%appDir%/Db/sqlite.db"
-		# autowired: true
+	mysql:
+		dsn: 'mysql:host=127.0.0.1;dbname=oswc2'
+		user: 'root'
+		password: ''
+		autowired: false
 		options:
 			lazy: yes
-	mysql:
-		dsn: 'mysql:host=127.0.0.1;dbname=xxx'
-		user: 'xxx'
-		password: 'xxx'
-		# autowired: false
+
+	sqlite:
+		dsn: "sqlite:%appDir%/Db/oswc2.db"
+		autowired: true
 		options:
 			lazy: yes

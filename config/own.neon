@@ -1,9 +1,12 @@
 constants:
 	APPDIR: %appDir%
 	WWWDIR: %wwwDir%
-	SITE_NAME: 'oswc2www'
+	SITE_NAME: 'OSWC2'
 	DEFAULT_IMAGE: 'images/ddd.jpg' # in www folder
 	CACHE_DIR: '../temp/cache'
+	PASSWORD_MIN_LENGTH: 7
+	USER_TABLE: 'user'
+	CLIENT_TABLE: 'client'
 routing:
 	# cache: true
    

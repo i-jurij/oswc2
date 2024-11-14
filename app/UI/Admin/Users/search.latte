@@ -16,8 +16,6 @@ sss
         Fill in only the required fields.
     </p>
 
-<p n:class="empty($show), text-warning">User was NOT found</p>
-
     <form 
         n:if="$user->isAllowed('User', 'search')" 
         n:name="userSearchForm" 
